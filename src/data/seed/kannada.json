@@ -41,5 +41,6 @@
     { "id": "k-eradu", "word": "ಎರಡು", "transliteration": "eradu", "imagePath": "/assets/images/two.svg", "emoji": "2️⃣", "audioPath": "/assets/audio/kannada/eradu.mp3", "category": "numbers", "difficulty": ["lkg", "class2"] },
     { "id": "k-mooru", "word": "ಮೂರು", "transliteration": "mooru", "imagePath": "/assets/images/three.svg", "emoji": "3️⃣", "audioPath": "/assets/audio/kannada/mooru.mp3", "category": "numbers", "difficulty": ["class2"] },
     { "id": "k-nalku", "word": "ನಾಲ್ಕು", "transliteration": "nalku", "imagePath": "/assets/images/four.svg", "emoji": "4️⃣", "audioPath": "/assets/audio/kannada/nalku.mp3", "category": "numbers", "difficulty": ["class2"] }
-  ]
+  ],
+  "practiceQuestions": []
 }

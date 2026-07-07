@@ -1,6 +1,6 @@
 import { ArrowLeft, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { getProfileById } from '../../data/profiles'
+import { dataService } from '../../data'
 import { useAppStore } from '../../store/useAppStore'
 
 interface AppShellProps {
@@ -20,7 +20,7 @@ export function AppShell({
 }: AppShellProps) {
   const navigate = useNavigate()
   const profileId = useAppStore((state) => state.profileId)
-  const profile = getProfileById(profileId)
+  const profile = dataService.getProfileById(profileId)
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-6 md:px-8">

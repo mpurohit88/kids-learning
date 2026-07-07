@@ -2,108 +2,84 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BigButton } from '../components/BigButton'
 import { AppShell } from '../components/layout/AppShell'
-import { getLanguageContent } from '../data'
-import { getProfileById } from '../data/profiles'
+import { dataService } from '../data'
 import { useAppStore } from '../store/useAppStore'
-import type { AgeGroup } from '../types'
-
-const baseActivities = [
-  {
-    id: 'letter-recognition',
-    title: 'Find the Letter',
-    emoji: '🔤',
-    color: '#66bb6a',
-    path: '/games/letter-recognition',
-    description: 'Listen and tap the matching letter',
-    ageGroups: ['lkg', 'class2'] as AgeGroup[],
-  },
-  {
-    id: 'picture-word-match',
-    title: 'Picture Match',
-    emoji: '🖼️',
-    color: '#42a5f5',
-    path: '/games/picture-word-match',
-    description: 'Match the picture to the right word',
-    ageGroups: ['lkg', 'class2'] as AgeGroup[],
-  },
-  {
-    id: 'letter-tracing',
-    title: 'Trace the Letter',
-    emoji: '✏️',
-    color: '#ab47bc',
-    path: '/games/letter-tracing',
-    description: 'Draw the letter shape on screen',
-    ageGroups: ['lkg', 'class2'] as AgeGroup[],
-  },
-  {
-    id: 'exam-practice',
-    title: 'Exam Practice',
-    emoji: '📝',
-    color: '#ef5350',
-    path: '/games/exam-practice',
-    description: 'Class 2 exam-style letter questions',
-    ageGroups: ['class2'] as AgeGroup[],
-  },
-] as const
 
 export function ActivityMenuScreen() {
   const navigate = useNavigate()
   const profileId = useAppStore((state) => state.profileId)
-  const language = useAppStore((state) => state.language)
-  const profile = getProfileById(profileId)
+  const subject = useAppStore((state) => state.subject)
+  const profile = dataService.getProfileById(profileId)
 
   useEffect(() => {
     if (!profileId) {
       navigate('/', { replace: true })
       return
     }
-    if (!language) {
+    if (!subject) {
       navigate('/home', { replace: true })
     }
-  }, [profileId, language, navigate])
+  }, [profileId, subject, navigate])
 
-  if (!language || !profile) return null
+  if (!subject || !profile) return null
 
-  const content = getLanguageContent(language)
-  const activities = baseActivities.filter((activity) =>
-    activity.ageGroups.includes(profile.ageGroup),
-  )
+  const subjectInfo = dataService.getSubject(subject)
+  const challenges = dataService.getChallenges(subject, profile.ageGroup)
 
   return (
-    <AppShell title={`${content.nativeName} Games`} showBack backTo="/home">
+    <AppShell
+      title={`${subjectInfo?.nativeName ?? subject} Challenges`}
+      showBack
+      backTo="/home"
+    >
       <div className="flex flex-1 flex-col gap-6">
         <p className="text-center text-xl text-slate-600">
-          Pick a mini-game to play!
+          Pick a challenge to play!
         </p>
 
-        <div
-          className={`grid grid-cols-1 gap-5 ${
-            activities.length >= 4 ? 'md:grid-cols-2' : 'md:grid-cols-3'
-          }`}
-        >
-          {activities.map((activity) => (
-            <button
-              key={activity.id}
-              type="button"
-              onClick={() => navigate(activity.path)}
-              className="group relative flex min-h-52 flex-col items-center justify-center rounded-[2rem] border-4 border-white p-6 text-white shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
-              style={{ backgroundColor: activity.color }}
-            >
-              {activity.id === 'exam-practice' ? (
-                <span className="absolute right-4 top-4 rounded-full bg-white/25 px-3 py-1 text-sm font-bold">
-                  Class 2
+        {challenges.length === 0 ? (
+          <div className="rounded-[2rem] border-4 border-dashed border-white bg-white/70 p-10 text-center">
+            <p className="text-5xl">🚧</p>
+            <p className="mt-4 text-2xl font-bold text-slate-700">Coming soon!</p>
+            <p className="mt-2 text-slate-500">
+              Challenges for {subjectInfo?.title ?? subject} are being added.
+            </p>
+          </div>
+        ) : (
+          <div
+            className={`grid grid-cols-1 gap-5 ${
+              challenges.length >= 4 ? 'md:grid-cols-2' : 'md:grid-cols-3'
+            }`}
+          >
+            {challenges.map((challenge) => (
+              <button
+                key={challenge.id}
+                type="button"
+                onClick={() => navigate(challenge.route)}
+                className="group relative flex min-h-52 flex-col items-center justify-center rounded-[2rem] border-4 border-white p-6 text-white shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
+                style={{ backgroundColor: challenge.color }}
+              >
+                {challenge.badge ? (
+                  <span className="absolute right-4 top-4 rounded-full bg-white/25 px-3 py-1 text-sm font-bold">
+                    {challenge.badge}
+                  </span>
+                ) : null}
+                <span className="text-5xl transition group-hover:animate-bounce-soft">
+                  {challenge.emoji}
+                </span>
+                <span className="mt-4 text-2xl font-bold">{challenge.title}</span>
+              <span className="mt-2 text-center text-base font-normal opacity-90">
+                {challenge.description}
+              </span>
+              {challenge.bookReference ? (
+                <span className="mt-1 text-center text-xs font-normal opacity-80">
+                  {challenge.bookReference}
                 </span>
               ) : null}
-              <span className="text-5xl transition group-hover:animate-bounce-soft">
-                {activity.emoji}
-              </span>
-              <span className="mt-4 text-2xl font-bold">{activity.title}</span>
-              <span className="mt-2 text-center text-base font-normal opacity-90">
-                {activity.description}
-              </span>
-            </button>
-          ))}
-        </div>
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="mt-auto flex justify-center">
           <BigButton color="#ffb74d" onClick={() => navigate('/progress')} className="max-w-md">

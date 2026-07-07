@@ -75,5 +75,6 @@
     { "id": "h-do", "word": "दो", "transliteration": "do", "imagePath": "/assets/images/two.svg", "emoji": "2️⃣", "audioPath": "/assets/audio/hindi/do.mp3", "category": "numbers", "difficulty": ["lkg", "class2"] },
     { "id": "h-teen", "word": "तीन", "transliteration": "teen", "imagePath": "/assets/images/three.svg", "emoji": "3️⃣", "audioPath": "/assets/audio/hindi/teen.mp3", "category": "numbers", "difficulty": ["class2"] },
     { "id": "h-chaar", "word": "चार", "transliteration": "chaar", "imagePath": "/assets/images/four.svg", "emoji": "4️⃣", "audioPath": "/assets/audio/hindi/chaar.mp3", "category": "numbers", "difficulty": ["class2"] }
-  ]
+  ],
+  "practiceQuestions": []
 }

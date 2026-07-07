@@ -1,79 +1,40 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import type { ActivityType, Language, ProgressMap } from '../types'
+import { dataService } from '../data'
+import type { ProgressMap, Subject } from '../types'
 
 interface AppState {
   profileId: string | null
-  language: Language | null
+  subject: Subject | null
   progress: ProgressMap
   setProfile: (profileId: string) => void
   clearProfile: () => void
-  setLanguage: (language: Language) => void
-  addStars: (
-    profileId: string,
-    language: Language,
-    activity: ActivityType,
-    stars: number,
-  ) => void
+  setSubject: (subject: Subject) => void
+  saveGameResult: (input: {
+    profileId: string
+    subject: Subject
+    challengeId: string
+    correct: number
+    total: number
+    stars: number
+  }) => void
   getTotalStars: (profileId: string) => number
 }
 
-export const useAppStore = create<AppState>()(
-  persist(
-    (set, get) => ({
-      profileId: null,
-      language: null,
-      progress: {},
+export const useAppStore = create<AppState>((set, get) => ({
+  profileId: null,
+  subject: null,
+  progress: dataService.getProgress(),
 
-      setProfile: (profileId) => set({ profileId, language: null }),
+  setProfile: (profileId) => set({ profileId, subject: null }),
 
-      clearProfile: () => set({ profileId: null, language: null }),
+  clearProfile: () => set({ profileId: null, subject: null }),
 
-      setLanguage: (language) => set({ language }),
+  setSubject: (subject) => set({ subject }),
 
-      addStars: (profileId, language, activity, stars) => {
-        set((state) => {
-          const profileProgress = state.progress[profileId] ?? {}
-          const languageProgress = profileProgress[language] ?? {}
-          const activityProgress = languageProgress[activity] ?? {
-            stars: 0,
-            timesPlayed: 0,
-          }
+  saveGameResult: (input) => {
+    const progress = dataService.saveGameResult(input)
+    set({ progress })
+  },
 
-          return {
-            progress: {
-              ...state.progress,
-              [profileId]: {
-                ...profileProgress,
-                [language]: {
-                  ...languageProgress,
-                  [activity]: {
-                    stars: activityProgress.stars + stars,
-                    timesPlayed: activityProgress.timesPlayed + 1,
-                  },
-                },
-              },
-            },
-          }
-        })
-      },
-
-      getTotalStars: (profileId) => {
-        const profileProgress = get().progress[profileId]
-        if (!profileProgress) return 0
-
-        return Object.values(profileProgress).reduce((languageTotal, activities) => {
-          const activityTotal = Object.values(activities ?? {}).reduce(
-            (sum, entry) => sum + (entry?.stars ?? 0),
-            0,
-          )
-          return languageTotal + activityTotal
-        }, 0)
-      },
-    }),
-    {
-      name: 'kids-language-learning-progress',
-      partialize: (state) => ({ progress: state.progress }),
-    },
-  ),
-)
+  getTotalStars: (profileId) => dataService.getTotalStars(profileId, get().progress),
+}))

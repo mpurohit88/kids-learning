@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
+import { getMaxWrongAllowed, getRequiredCorrect } from './challengeUtils'
 
 export interface TigerGoatRescueProps {
   totalQuestions: number
@@ -12,14 +13,6 @@ export interface TigerGoatRescueProps {
 
 const GOAT_TOP_PERCENT = 6
 const TIGER_START_TOP_PERCENT = 76
-
-function getRequiredCorrect(totalQuestions: number, passThreshold: number) {
-  return Math.ceil(totalQuestions * passThreshold)
-}
-
-function getMaxWrongAllowed(totalQuestions: number, passThreshold: number) {
-  return Math.max(totalQuestions - getRequiredCorrect(totalQuestions, passThreshold), 1)
-}
 
 export function TigerGoatRescue({
   totalQuestions,
@@ -85,7 +78,6 @@ export function TigerGoatRescue({
       <div className="relative mx-auto flex min-h-[220px] flex-1 w-full max-w-[88px] overflow-hidden rounded-2xl bg-gradient-to-b from-sky-100 via-emerald-50 to-emerald-200">
         <div className="absolute bottom-3 left-2 top-3 w-1.5 rounded-full bg-emerald-400/80" />
 
-        {/* Goat */}
         <motion.div
           animate={{
             opacity: showGoat ? 1 : 0,
@@ -134,7 +126,6 @@ export function TigerGoatRescue({
           ) : null}
         </AnimatePresence>
 
-        {/* Tiger climbs toward goat */}
         <motion.div
           animate={{ top: `${tigerTopPercent}%` }}
           transition={{ type: 'spring', stiffness: isEaten ? 180 : 90, damping: isEaten ? 16 : 14 }}
@@ -261,5 +252,3 @@ function HorizontalTrack({
     </div>
   )
 }
-
-export { getRequiredCorrect, getMaxWrongAllowed }

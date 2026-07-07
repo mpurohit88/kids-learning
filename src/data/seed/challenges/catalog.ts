@@ -1,0 +1,198 @@
+import type { ChallengeDefinition } from '../../../types'
+
+const LANGUAGE_CHALLENGE_TEMPLATES: Omit<ChallengeDefinition, 'subject'>[] = [
+  {
+    id: 'letter-recognition',
+    topic: 'letters',
+    title: 'Find the Letter',
+    emoji: '🔤',
+    color: '#66bb6a',
+    route: '/games/letter-recognition',
+    description: 'Listen and tap the matching letter',
+    gradeLevels: ['lkg', 'class1', 'class2'],
+    source: 'bank',
+    bankType: 'letter-recognition',
+  },
+  {
+    id: 'picture-word-match',
+    topic: 'vocabulary',
+    title: 'Picture Match',
+    emoji: '🖼️',
+    color: '#42a5f5',
+    route: '/games/picture-word-match',
+    description: 'Match the picture to the right word',
+    gradeLevels: ['lkg', 'class1', 'class2'],
+    source: 'bank',
+    bankType: 'picture-word-match',
+  },
+  {
+    id: 'letter-tracing',
+    topic: 'letters',
+    title: 'Trace the Letter',
+    emoji: '✏️',
+    color: '#ab47bc',
+    route: '/games/letter-tracing',
+    description: 'Draw the letter shape on screen',
+    gradeLevels: ['lkg', 'class1', 'class2'],
+    source: 'bank',
+    bankType: 'letter-tracing',
+  },
+  {
+    id: 'exam-practice',
+    topic: 'exam',
+    title: 'Exam Practice',
+    emoji: '📝',
+    color: '#ef5350',
+    route: '/games/exam-practice',
+    description: 'Class 2 exam-style letter questions',
+    gradeLevels: ['class2'],
+    source: 'bank',
+    bankType: 'exam-practice',
+    badge: 'Class 2',
+  },
+]
+
+function buildLanguageChallenges(
+  subject: 'hindi' | 'kannada' | 'english',
+): ChallengeDefinition[] {
+  if (subject === 'english') {
+    return []
+  }
+
+  return LANGUAGE_CHALLENGE_TEMPLATES.map((template) => ({
+    ...template,
+    subject,
+  }))
+}
+
+const MATHS_LKG_CHALLENGES: ChallengeDefinition[] = [
+  {
+    id: 'heavy-and-light',
+    subject: 'maths',
+    topic: 'measurement',
+    title: 'Heavy and Light',
+    emoji: '⚖️',
+    color: '#8d6e63',
+    route: '/games/challenge/heavy-and-light',
+    description: 'Learn heavy and light objects',
+    gradeLevels: ['lkg'],
+    source: 'bank',
+    bankId: 'heavy-and-light',
+    badge: 'LKG',
+  },
+  {
+    id: 'on-and-under',
+    subject: 'maths',
+    topic: 'position',
+    title: 'On and Under',
+    emoji: '📦',
+    color: '#7e57c2',
+    route: '/games/challenge/on-and-under',
+    description: 'Learn on and under positions',
+    gradeLevels: ['lkg'],
+    source: 'bank',
+    bankId: 'on-and-under',
+    badge: 'LKG',
+  },
+  {
+    id: 'shapes',
+    subject: 'maths',
+    topic: 'shapes',
+    title: 'Shapes',
+    emoji: '🔺',
+    color: '#26c6da',
+    route: '/games/challenge/shapes',
+    description: 'Circle, triangle, square and rectangle',
+    gradeLevels: ['lkg'],
+    source: 'bank',
+    bankId: 'shapes',
+    badge: 'LKG',
+  },
+  {
+    id: 'numeracy-skills',
+    subject: 'maths',
+    topic: 'numeracy',
+    title: 'Numeracy Skills',
+    emoji: '📗',
+    color: '#66bb6a',
+    route: '/games/challenge/numeracy-skills',
+    description: 'Counting and number practice',
+    gradeLevels: ['lkg'],
+    source: 'bank',
+    bankId: 'numeracy-skills',
+    badge: 'LKG',
+    bookReference: 'Numeracy Skills Book · Pages 4–10',
+  },
+  {
+    id: 'refresh-homework',
+    subject: 'maths',
+    topic: 'numeracy',
+    title: 'Refresh Homework',
+    emoji: '📘',
+    color: '#42a5f5',
+    route: '/games/challenge/refresh-homework',
+    description: 'Number and counting revision',
+    gradeLevels: ['lkg'],
+    source: 'bank',
+    bankId: 'refresh-homework',
+    badge: 'LKG',
+    bookReference: 'Refresh Homework Book · Pages 3–13',
+  },
+  {
+    id: 'addition-within-10',
+    subject: 'maths',
+    topic: 'addition',
+    title: 'Addition within 10',
+    emoji: '➕',
+    color: '#ffb74d',
+    route: '/games/challenge/addition-within-10',
+    description: 'Add numbers up to 10',
+    gradeLevels: ['lkg'],
+    source: 'generator',
+    generatorId: 'addition-within-10',
+    badge: 'LKG',
+  },
+  {
+    id: 'counting-objects',
+    subject: 'maths',
+    topic: 'counting',
+    title: 'Count the Objects',
+    emoji: '🍎',
+    color: '#81c784',
+    route: '/games/challenge/counting-objects',
+    description: 'Count objects and pick the number',
+    gradeLevels: ['lkg'],
+    source: 'generator',
+    generatorId: 'counting-objects',
+    badge: 'LKG',
+  },
+  {
+    id: 'number-recognition',
+    subject: 'maths',
+    topic: 'numbers',
+    title: 'Number Match',
+    emoji: '🔢',
+    color: '#64b5f6',
+    route: '/games/challenge/number-recognition',
+    description: 'Match the number to its name',
+    gradeLevels: ['lkg'],
+    source: 'generator',
+    generatorId: 'number-recognition',
+    badge: 'LKG',
+  },
+]
+
+export const CHALLENGE_CATALOG: ChallengeDefinition[] = [
+  ...buildLanguageChallenges('hindi'),
+  ...buildLanguageChallenges('kannada'),
+  ...MATHS_LKG_CHALLENGES,
+]
+
+export function getChallengeFromCatalog(
+  subject: ChallengeDefinition['subject'],
+  challengeId: string,
+): ChallengeDefinition | undefined {
+  return CHALLENGE_CATALOG.find(
+    (challenge) => challenge.subject === subject && challenge.id === challengeId,
+  )
+}

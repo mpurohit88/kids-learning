@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { getRequiredCorrect } from './TigerGoatRescue'
+import { getRequiredCorrect } from './challengeUtils'
 
 export interface MangoTreeCollectProps {
   totalQuestions: number

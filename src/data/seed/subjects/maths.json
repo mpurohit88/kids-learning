@@ -1,0 +1,18 @@
+{
+  "subject": "maths",
+  "generators": {
+    "addition-within-10": {
+      "maxSum": 10,
+      "minOperand": 0
+    },
+    "counting-objects": {
+      "minCount": 1,
+      "maxCount": 10
+    },
+    "number-recognition": {
+      "minNumber": 1,
+      "maxNumber": 20
+    }
+  },
+  "practiceQuestions": []
+}

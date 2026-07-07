@@ -1,68 +1,50 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Volume2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { AppShell } from '../components/layout/AppShell'
-import { GameSideLayout } from '../components/layout/GameSideLayout'
-import { AnswerFeedbackOverlay, type AnswerFeedbackType } from '../components/AnswerFeedbackOverlay'
-import { ConfettiBurst } from '../components/ConfettiBurst'
-import { GameCompleteModal } from '../components/GameCompleteModal'
-import { Mascot } from '../components/Mascot'
-import { GameChallengeSidebar } from '../components/GameChallengeSidebar'
-import { getLanguageContent, getVocabularyForProfile } from '../data'
-import { getProfileById } from '../data/profiles'
+import { AnswerOptionButton } from '../components/game/AnswerOptionButton'
+import { QuizGameShell } from '../components/game/QuizGameShell'
+import { dataService } from '../data'
+import { useGameSession } from '../hooks/useGameSession'
 import { useAppStore } from '../store/useAppStore'
-import {
-  playAudio,
-  playCelebrationSound,
-  playEncouragementSound,
-} from '../utils/audioPlayer'
-import {
-  buildRoundResult,
-  getOptionCount,
-  getRoundCount,
-  pickDistractors,
-  shuffleArray,
-} from '../utils/gameHelpers'
+import { playAudio } from '../utils/audioPlayer'
+import { pickDistractors, shuffleArray } from '../utils/arrayUtils'
 import type { VocabularyWord } from '../types'
+import { isLanguageSubject } from '../types'
 
 export function PictureWordMatchGame() {
   const navigate = useNavigate()
   const profileId = useAppStore((state) => state.profileId)
-  const language = useAppStore((state) => state.language)
-  const addStars = useAppStore((state) => state.addStars)
+  const subject = useAppStore((state) => state.subject)
 
-  const profile = getProfileById(profileId)
-  const content = language ? getLanguageContent(language) : null
+  const profile = dataService.getProfileById(profileId)
+  const content =
+    subject && isLanguageSubject(subject)
+      ? dataService.getLanguageContent(subject)
+      : null
   const vocabulary = useMemo(() => {
-    if (!language || !profile) return []
-    return getVocabularyForProfile(language, profile.ageGroup)
-  }, [language, profile])
+    if (!subject || !profile || !isLanguageSubject(subject)) return []
+    return dataService.getVocabularyForProfile(subject, profile.ageGroup)
+  }, [subject, profile])
 
-  const roundCount = profile ? getRoundCount(profile.ageGroup) : 5
-  const optionCount = profile ? getOptionCount(profile.ageGroup) : 3
+  const roundCount = profile && subject ? dataService.getRoundCount(profile.ageGroup, subject) : 5
+  const optionCount = profile && subject ? dataService.getOptionCount(profile.ageGroup, subject) : 3
 
-  const [roundIndex, setRoundIndex] = useState(0)
-  const [correctCount, setCorrectCount] = useState(0)
-  const [wrongCount, setWrongCount] = useState(0)
   const [roundWords, setRoundWords] = useState<VocabularyWord[]>([])
   const [targetWord, setTargetWord] = useState<VocabularyWord | null>(null)
   const [options, setOptions] = useState<VocabularyWord[]>([])
-  const [mood, setMood] = useState<'idle' | 'happy' | 'sad'>('idle')
-  const [message, setMessage] = useState('What word matches the picture?')
-  const [showConfetti, setShowConfetti] = useState(false)
-  const [feedbackType, setFeedbackType] = useState<AnswerFeedbackType>(null)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [isLocked, setIsLocked] = useState(false)
-  const [isComplete, setIsComplete] = useState(false)
-  const [challengeSession, setChallengeSession] = useState(0)
-  const [result, setResult] = useState(buildRoundResult(0, roundCount))
+
+  const session = useGameSession({
+    roundCount,
+    challengeId: 'picture-word-match',
+  })
+
+  const { resetSession, resetRoundUi, recordAnswer, handlePlayAgain } = session
 
   useEffect(() => {
-    if (!profileId || !language) {
+    if (!profileId || !subject) {
       navigate('/', { replace: true })
     }
-  }, [profileId, language, navigate])
+  }, [profileId, subject, navigate])
 
   const setupRound = useCallback(
     (index: number, wordsPool: VocabularyWord[]) => {
@@ -72,12 +54,7 @@ export function PictureWordMatchGame() {
 
       setTargetWord(target)
       setOptions(nextOptions)
-      setSelectedId(null)
-      setIsLocked(false)
-      setMood('idle')
-      setMessage('What word matches the picture?')
-      setShowConfetti(false)
-      setFeedbackType(null)
+      resetRoundUi('What word matches the picture?')
 
       void playAudio(
         target.audioPath,
@@ -86,68 +63,32 @@ export function PictureWordMatchGame() {
         target.transliteration,
       )
     },
-    [content?.speechLang, optionCount],
+    [content?.speechLang, optionCount, resetRoundUi],
   )
 
   const startGame = useCallback(() => {
     if (vocabulary.length === 0) return
     const shuffled = shuffleArray(vocabulary).slice(0, roundCount)
-    setRoundWords(shuffled.length > 0 ? shuffled : vocabulary)
-    setRoundIndex(0)
-    setCorrectCount(0)
-    setWrongCount(0)
-    setIsComplete(false)
-    setupRound(0, shuffled.length > 0 ? shuffled : vocabulary)
-  }, [vocabulary, roundCount, setupRound])
-
-  const handlePlayAgain = () => {
-    setChallengeSession((session) => session + 1)
-    startGame()
-  }
+    const pool = shuffled.length > 0 ? shuffled : vocabulary
+    setRoundWords(pool)
+    resetSession()
+    setupRound(0, pool)
+  }, [vocabulary, roundCount, resetSession, setupRound])
 
   useEffect(() => {
     startGame()
   }, [startGame])
 
-  const handleSelect = (word: VocabularyWord) => {
-    if (isLocked || !targetWord) return
+  const handleSelect = (wordId: string) => {
+    if (!targetWord) return
 
-    setSelectedId(word.id)
-    setIsLocked(true)
-
-    const isCorrect = word.id === targetWord.id
-
-    if (isCorrect) {
-      setCorrectCount((count) => count + 1)
-      setMood('happy')
-      setMessage('Wonderful! You got it!')
-      setShowConfetti(true)
-      setFeedbackType('success')
-      playCelebrationSound()
-    } else {
-      setWrongCount((count) => count + 1)
-      setMood('sad')
-      setMessage('Nice try! It was ' + targetWord.word)
-      setFeedbackType('wrong')
-      playEncouragementSound()
-    }
-
-    window.setTimeout(() => {
-      const nextIndex = roundIndex + 1
-      if (nextIndex >= roundCount) {
-        const finalCorrect = correctCount + (isCorrect ? 1 : 0)
-        const roundResult = buildRoundResult(finalCorrect, roundCount)
-        setResult(roundResult)
-        setIsComplete(true)
-        if (profileId && language) {
-          addStars(profileId, language, 'picture-word-match', roundResult.stars)
-        }
-        return
-      }
-
-      setRoundIndex(nextIndex)
-      setupRound(nextIndex, roundWords)
-    }, 1500)
+    recordAnswer({
+      selectedId: wordId,
+      correctId: targetWord.id,
+      correctMessage: 'Wonderful! You got it!',
+      wrongMessage: 'Nice try! It was ' + targetWord.word,
+      onAdvance: (nextIndex) => setupRound(nextIndex, roundWords),
+    })
   }
 
   const replayAudio = () => {
@@ -164,97 +105,59 @@ export function PictureWordMatchGame() {
   if (!profile || !content || !targetWord) return null
 
   return (
-    <AppShell title="Picture Match" showBack backTo="/activities">
-      <AnswerFeedbackOverlay type={feedbackType} />
-      <div className="relative flex flex-1 flex-col gap-4">
-        <ConfettiBurst active={showConfetti} />
-
-        <GameSideLayout
-          sidePanel={
-            <GameChallengeSidebar
-              key={challengeSession}
-              totalQuestions={roundCount}
-              correctCount={correctCount}
-              wrongCount={wrongCount}
-              isComplete={isComplete}
-            />
-          }
-        >
-          <div className="flex w-full items-center justify-between">
-            <p className="rounded-full bg-white/80 px-4 py-2 font-semibold text-slate-600 shadow">
-              Round {Math.min(roundIndex + 1, roundCount)} / {roundCount}
-            </p>
-            <button
-              type="button"
-              onClick={replayAudio}
-              className="flex items-center gap-2 rounded-2xl bg-orange-400 px-4 py-3 font-semibold text-white shadow-md transition hover:bg-orange-300"
-            >
-              <Volume2 size={20} />
-              Hear Word
-            </button>
-          </div>
-
-          <Mascot mood={mood} message={message} />
-
-          <motion.div
-            key={targetWord.id}
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="flex h-48 w-48 flex-col items-center justify-center rounded-[2rem] border-4 border-white bg-white shadow-xl md:h-56 md:w-56"
-          >
-            <img
-              src={targetWord.imagePath}
-              alt=""
-              className="h-28 w-28 object-contain"
-              onError={(event) => {
-                event.currentTarget.style.display = 'none'
-              }}
-            />
-            <span className="text-7xl md:text-8xl">{targetWord.emoji}</span>
-          </motion.div>
-
-          <div
-            className={`grid w-full max-w-3xl gap-4 ${
-              optionCount === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-2'
-            }`}
-          >
-            {options.map((word) => {
-              const isSelected = selectedId === word.id
-              const isCorrectOption = word.id === targetWord.id
-              let buttonClass = 'bg-white text-slate-800 hover:bg-blue-50'
-
-              if (isLocked && isSelected && isCorrectOption) {
-                buttonClass = 'bg-green-400 text-white'
-              } else if (isLocked && isSelected && !isCorrectOption) {
-                buttonClass = 'bg-red-300 text-white'
-              } else if (isLocked && isCorrectOption) {
-                buttonClass = 'bg-green-300 text-white'
-              }
-
-              return (
-                <motion.button
-                  key={word.id}
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  disabled={isLocked}
-                  onClick={() => handleSelect(word)}
-                  className={`min-h-24 rounded-3xl border-4 border-white px-4 py-4 text-3xl font-bold shadow-lg transition md:min-h-28 md:text-4xl ${buttonClass}`}
-                >
-                  {word.word}
-                </motion.button>
-              )
-            })}
-          </div>
-        </GameSideLayout>
-      </div>
-
-      {isComplete ? (
-        <GameCompleteModal
-          result={result}
-          onPlayAgain={handlePlayAgain}
-          onBackToMenu={() => navigate('/activities')}
+    <QuizGameShell
+      title="Picture Match"
+      roundIndex={session.roundIndex}
+      roundCount={roundCount}
+      correctCount={session.correctCount}
+      wrongCount={session.wrongCount}
+      isComplete={session.isComplete}
+      challengeSession={session.challengeSession}
+      feedbackType={session.feedbackType}
+      showConfetti={session.showConfetti}
+      mood={session.mood}
+      message={session.message}
+      result={session.result}
+      onPlayAgain={() => handlePlayAgain(startGame)}
+      onHearAgain={replayAudio}
+      hearAgainLabel="Hear Word"
+    >
+      <motion.div
+        key={targetWord.id}
+        initial={{ scale: 0.85, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="flex h-48 w-48 flex-col items-center justify-center rounded-[2rem] border-4 border-white bg-white shadow-xl md:h-56 md:w-56"
+      >
+        <img
+          src={targetWord.imagePath}
+          alt=""
+          className="h-28 w-28 object-contain"
+          onError={(event) => {
+            event.currentTarget.style.display = 'none'
+          }}
         />
-      ) : null}
-    </AppShell>
+        <span className="text-7xl md:text-8xl">{targetWord.emoji}</span>
+      </motion.div>
+
+      <div
+        className={`grid w-full max-w-3xl gap-4 ${
+          optionCount === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-2'
+        }`}
+      >
+        {options.map((word) => (
+          <AnswerOptionButton
+            key={word.id}
+            id={word.id}
+            correctId={targetWord.id}
+            selectedId={session.selectedId}
+            isLocked={session.isLocked}
+            onClick={handleSelect}
+            className="min-h-24 rounded-3xl border-4 border-white px-4 py-4 text-3xl font-bold shadow-lg transition md:min-h-28 md:text-4xl"
+          >
+            {word.word}
+          </AnswerOptionButton>
+        ))}
+      </div>
+    </QuizGameShell>
   )
 }

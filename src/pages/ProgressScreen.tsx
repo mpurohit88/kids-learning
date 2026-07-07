@@ -1,26 +1,16 @@
 import { useNavigate } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { StarDisplay } from '../components/StarDisplay'
-import { profiles } from '../data/profiles'
+import { dataService } from '../data'
 import { useAppStore } from '../store/useAppStore'
-import type { ActivityType, Language } from '../types'
-
-const activityLabels: Record<ActivityType, string> = {
-  'letter-recognition': 'Find the Letter',
-  'picture-word-match': 'Picture Match',
-  'letter-tracing': 'Trace the Letter',
-  'exam-practice': 'Exam Practice',
-}
-
-const languageLabels: Record<Language, string> = {
-  hindi: 'Hindi',
-  kannada: 'Kannada',
-}
+import type { Subject } from '../types'
 
 export function ProgressScreen() {
   const navigate = useNavigate()
   const progress = useAppStore((state) => state.progress)
   const getTotalStars = useAppStore((state) => state.getTotalStars)
+  const profiles = dataService.getProfiles()
+  const subjects = dataService.getSubjects()
 
   return (
     <AppShell title="Stars Earned" showBack backTo="/home" showProgressLink={false}>
@@ -59,29 +49,32 @@ export function ProgressScreen() {
                   <p className="text-4xl font-extrabold text-amber-600">{totalStars} ⭐</p>
                 </div>
 
-                {(['hindi', 'kannada'] as Language[]).map((language) => {
-                  const languageProgress = profileProgress[language] ?? {}
+                {subjects.map((subjectEntry) => {
+                  const subjectProgress = profileProgress[subjectEntry.id as Subject] ?? {}
+                  const challenges = dataService
+                    .getChallenges(subjectEntry.id, profile.ageGroup)
+                    .filter((challenge) => subjectProgress[challenge.id])
+
+                  if (challenges.length === 0) return null
 
                   return (
-                    <div key={language} className="mb-4 last:mb-0">
+                    <div key={subjectEntry.id} className="mb-4 last:mb-0">
                       <h3 className="mb-2 text-lg font-bold text-slate-700">
-                        {languageLabels[language]}
+                        {subjectEntry.title}
                       </h3>
                       <div className="space-y-2">
-                        {(Object.keys(activityLabels) as ActivityType[]).map((activity) => {
-                          const entry = languageProgress[activity]
+                        {challenges.map((challenge) => {
+                          const entry = subjectProgress[challenge.id]
                           const stars = entry?.stars ?? 0
                           const timesPlayed = entry?.timesPlayed ?? 0
 
                           return (
                             <div
-                              key={activity}
+                              key={challenge.id}
                               className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3"
                             >
                               <div>
-                                <p className="font-semibold text-slate-700">
-                                  {activityLabels[activity]}
-                                </p>
+                                <p className="font-semibold text-slate-700">{challenge.title}</p>
                                 <p className="text-sm text-slate-500">
                                   Played {timesPlayed} time{timesPlayed === 1 ? '' : 's'}
                                 </p>

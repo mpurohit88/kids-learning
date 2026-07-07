@@ -1,0 +1,345 @@
+{
+  "subject": "maths",
+  "questionBanks": {
+    "heavy-and-light": [
+      {
+        "id": "hl-1",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is heavier?",
+        "emoji": "🪨   🪶",
+        "options": [
+          { "id": "rock", "text": "Rock 🪨" },
+          { "id": "feather", "text": "Feather 🪶" }
+        ],
+        "correctOptionId": "rock",
+        "explanation": "A rock is heavier than a feather."
+      },
+      {
+        "id": "hl-2",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is lighter?",
+        "emoji": "🎈   📚",
+        "options": [
+          { "id": "balloon", "text": "Balloon 🎈" },
+          { "id": "book", "text": "Book 📚" }
+        ],
+        "correctOptionId": "balloon",
+        "explanation": "A balloon is lighter than a book."
+      },
+      {
+        "id": "hl-3",
+        "gradeLevels": ["lkg"],
+        "prompt": "Pick the heavy object.",
+        "emoji": "🐘   🐁",
+        "options": [
+          { "id": "elephant", "text": "Elephant 🐘" },
+          { "id": "mouse", "text": "Mouse 🐁" }
+        ],
+        "correctOptionId": "elephant",
+        "explanation": "An elephant is heavy."
+      },
+      {
+        "id": "hl-4",
+        "gradeLevels": ["lkg"],
+        "prompt": "Pick the light object.",
+        "emoji": "🍃   🧱",
+        "options": [
+          { "id": "leaf", "text": "Leaf 🍃" },
+          { "id": "brick", "text": "Brick 🧱" }
+        ],
+        "correctOptionId": "leaf",
+        "explanation": "A leaf is light."
+      },
+      {
+        "id": "hl-5",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is heavier?",
+        "emoji": "🏋️   🧸",
+        "options": [
+          { "id": "weights", "text": "Weights 🏋️" },
+          { "id": "teddy", "text": "Teddy 🧸" }
+        ],
+        "correctOptionId": "weights",
+        "explanation": "Weights are heavier than a teddy bear."
+      }
+    ],
+    "on-and-under": [
+      {
+        "id": "ou-1",
+        "gradeLevels": ["lkg"],
+        "prompt": "Where is the cat?",
+        "emoji": "🐱📦",
+        "options": [
+          { "id": "on", "text": "On" },
+          { "id": "under", "text": "Under" }
+        ],
+        "correctOptionId": "on",
+        "explanation": "The cat is on the box."
+      },
+      {
+        "id": "ou-2",
+        "gradeLevels": ["lkg"],
+        "prompt": "Where is the ball?",
+        "emoji": "⚽🪑",
+        "options": [
+          { "id": "on", "text": "On" },
+          { "id": "under", "text": "Under" }
+        ],
+        "correctOptionId": "under",
+        "explanation": "The ball is under the chair."
+      },
+      {
+        "id": "ou-3",
+        "gradeLevels": ["lkg"],
+        "prompt": "Where is the book?",
+        "emoji": "📖🗄️",
+        "options": [
+          { "id": "on", "text": "On the shelf" },
+          { "id": "under", "text": "Under the shelf" }
+        ],
+        "correctOptionId": "on",
+        "explanation": "The book is on the shelf."
+      },
+      {
+        "id": "ou-4",
+        "gradeLevels": ["lkg"],
+        "prompt": "Where is the dog?",
+        "emoji": "🐕🛏️",
+        "options": [
+          { "id": "on", "text": "On the bed" },
+          { "id": "under", "text": "Under the bed" }
+        ],
+        "correctOptionId": "under",
+        "explanation": "The dog is under the bed."
+      },
+      {
+        "id": "ou-5",
+        "gradeLevels": ["lkg"],
+        "prompt": "Where is the apple?",
+        "emoji": "🍎🍽️",
+        "options": [
+          { "id": "on", "text": "On the plate" },
+          { "id": "under", "text": "Under the plate" }
+        ],
+        "correctOptionId": "on",
+        "explanation": "The apple is on the plate."
+      }
+    ],
+    "shapes": [
+      {
+        "id": "sh-1",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which shape is a circle?",
+        "emoji": "🔵 🔺 ⬜ ▭",
+        "options": [
+          { "id": "circle", "text": "Circle" },
+          { "id": "triangle", "text": "Triangle" },
+          { "id": "square", "text": "Square" },
+          { "id": "rectangle", "text": "Rectangle" }
+        ],
+        "correctOptionId": "circle",
+        "explanation": "A circle is round like a ball."
+      },
+      {
+        "id": "sh-2",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which shape is a triangle?",
+        "emoji": "🔺",
+        "options": [
+          { "id": "circle", "text": "Circle ⭕" },
+          { "id": "triangle", "text": "Triangle 🔺" },
+          { "id": "square", "text": "Square ⬜" },
+          { "id": "rectangle", "text": "Rectangle ▭" }
+        ],
+        "correctOptionId": "triangle",
+        "explanation": "A triangle has 3 sides."
+      },
+      {
+        "id": "sh-3",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which shape is a square?",
+        "emoji": "⬜",
+        "options": [
+          { "id": "circle", "text": "Circle" },
+          { "id": "triangle", "text": "Triangle" },
+          { "id": "square", "text": "Square" },
+          { "id": "rectangle", "text": "Rectangle" }
+        ],
+        "correctOptionId": "square",
+        "explanation": "A square has 4 equal sides."
+      },
+      {
+        "id": "sh-4",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which shape is a rectangle?",
+        "emoji": "▭",
+        "options": [
+          { "id": "circle", "text": "Circle" },
+          { "id": "triangle", "text": "Triangle" },
+          { "id": "square", "text": "Square" },
+          { "id": "rectangle", "text": "Rectangle" }
+        ],
+        "correctOptionId": "rectangle",
+        "explanation": "A rectangle has 4 sides — 2 long and 2 short."
+      },
+      {
+        "id": "sh-5",
+        "gradeLevels": ["lkg"],
+        "prompt": "A wheel looks like which shape?",
+        "emoji": "🛞",
+        "options": [
+          { "id": "circle", "text": "Circle" },
+          { "id": "triangle", "text": "Triangle" },
+          { "id": "square", "text": "Square" },
+          { "id": "rectangle", "text": "Rectangle" }
+        ],
+        "correctOptionId": "circle",
+        "explanation": "A wheel is shaped like a circle."
+      }
+    ],
+    "numeracy-skills": [
+      {
+        "id": "ns-1",
+        "gradeLevels": ["lkg"],
+        "prompt": "Count the apples.",
+        "emoji": "🍎🍎🍎",
+        "options": [
+          { "id": "2", "text": "2" },
+          { "id": "3", "text": "3" },
+          { "id": "4", "text": "4" },
+          { "id": "5", "text": "5" }
+        ],
+        "correctOptionId": "3",
+        "explanation": "There are 3 apples."
+      },
+      {
+        "id": "ns-2",
+        "gradeLevels": ["lkg"],
+        "prompt": "How many stars do you see?",
+        "emoji": "⭐⭐⭐⭐⭐",
+        "options": [
+          { "id": "4", "text": "4" },
+          { "id": "5", "text": "5" },
+          { "id": "6", "text": "6" },
+          { "id": "3", "text": "3" }
+        ],
+        "correctOptionId": "5",
+        "explanation": "There are 5 stars."
+      },
+      {
+        "id": "ns-3",
+        "gradeLevels": ["lkg"],
+        "prompt": "What comes after 1?",
+        "emoji": "1️⃣ ➡️ ❓",
+        "options": [
+          { "id": "0", "text": "0" },
+          { "id": "2", "text": "2" },
+          { "id": "3", "text": "3" },
+          { "id": "4", "text": "4" }
+        ],
+        "correctOptionId": "2",
+        "explanation": "After 1 comes 2."
+      },
+      {
+        "id": "ns-4",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which group has more flowers?",
+        "emoji": "🌸🌸🌸🌸  vs  🌸🌸",
+        "options": [
+          { "id": "four", "text": "4 flowers" },
+          { "id": "two", "text": "2 flowers" },
+          { "id": "same", "text": "Same" },
+          { "id": "none", "text": "None" }
+        ],
+        "correctOptionId": "four",
+        "explanation": "4 flowers is more than 2 flowers."
+      },
+      {
+        "id": "ns-5",
+        "gradeLevels": ["lkg"],
+        "prompt": "Count the ducks.",
+        "emoji": "🦆🦆",
+        "options": [
+          { "id": "1", "text": "1" },
+          { "id": "2", "text": "2" },
+          { "id": "3", "text": "3" },
+          { "id": "4", "text": "4" }
+        ],
+        "correctOptionId": "2",
+        "explanation": "There are 2 ducks."
+      }
+    ],
+    "refresh-homework": [
+      {
+        "id": "rh-1",
+        "gradeLevels": ["lkg"],
+        "prompt": "Count the balls.",
+        "emoji": "⚽⚽⚽",
+        "options": [
+          { "id": "2", "text": "2" },
+          { "id": "3", "text": "3" },
+          { "id": "4", "text": "4" },
+          { "id": "5", "text": "5" }
+        ],
+        "correctOptionId": "3",
+        "explanation": "There are 3 balls."
+      },
+      {
+        "id": "rh-2",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which number is 4?",
+        "emoji": "4️⃣",
+        "options": [
+          { "id": "2", "text": "2" },
+          { "id": "3", "text": "3" },
+          { "id": "4", "text": "4" },
+          { "id": "5", "text": "5" }
+        ],
+        "correctOptionId": "4",
+        "explanation": "This is the number 4."
+      },
+      {
+        "id": "rh-3",
+        "gradeLevels": ["lkg"],
+        "prompt": "Complete the pattern: 1, 2, ___",
+        "emoji": "1️⃣ 2️⃣ ❓",
+        "options": [
+          { "id": "1", "text": "1" },
+          { "id": "2", "text": "2" },
+          { "id": "3", "text": "3" },
+          { "id": "4", "text": "4" }
+        ],
+        "correctOptionId": "3",
+        "explanation": "After 1 and 2 comes 3."
+      },
+      {
+        "id": "rh-4",
+        "gradeLevels": ["lkg"],
+        "prompt": "How many fingers on one hand?",
+        "emoji": "✋",
+        "options": [
+          { "id": "3", "text": "3" },
+          { "id": "4", "text": "4" },
+          { "id": "5", "text": "5" },
+          { "id": "6", "text": "6" }
+        ],
+        "correctOptionId": "5",
+        "explanation": "One hand has 5 fingers."
+      },
+      {
+        "id": "rh-5",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which number is smaller?",
+        "emoji": "8️⃣   2️⃣",
+        "options": [
+          { "id": "8", "text": "8" },
+          { "id": "2", "text": "2" },
+          { "id": "same", "text": "Same" },
+          { "id": "0", "text": "0" }
+        ],
+        "correctOptionId": "2",
+        "explanation": "2 is smaller than 8."
+      }
+    ]
+  }
+}

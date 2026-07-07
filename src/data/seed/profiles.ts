@@ -1,4 +1,4 @@
-import type { Profile } from '../types'
+import type { Profile } from '../../types'
 
 export const profiles: Profile[] = [
   {
@@ -18,7 +18,3 @@ export const profiles: Profile[] = [
     description: 'Age 7 · Class 2',
   },
 ]
-
-export function getProfileById(id: string | null): Profile | undefined {
-  return profiles.find((profile) => profile.id === id)
-}

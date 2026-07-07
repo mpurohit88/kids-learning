@@ -6,12 +6,14 @@ import { AppShell } from '../components/layout/AppShell'
 import { ConfettiBurst } from '../components/ConfettiBurst'
 import { GameCompleteModal } from '../components/GameCompleteModal'
 import { Mascot } from '../components/Mascot'
-import { getLanguageContent, getLettersForLetterGames } from '../data'
-import { getProfileById } from '../data/profiles'
+import { KannadaSoundHints } from '../components/game/KannadaSoundHints'
+import { dataService } from '../data'
 import { useAppStore } from '../store/useAppStore'
 import { playAudio, playCelebrationSound } from '../utils/audioPlayer'
-import { buildRoundResult, getRoundCount, shuffleArray } from '../utils/gameHelpers'
+import { playKannadaLetterAudio } from '../utils/kannadaLetterAudio'
+import { buildRoundResult, shuffleArray } from '../utils/gameHelpers'
 import type { Letter } from '../types'
+import { isLanguageSubject } from '../types'
 
 export function LetterTracingGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -19,17 +21,21 @@ export function LetterTracingGame() {
   const navigate = useNavigate()
 
   const profileId = useAppStore((state) => state.profileId)
-  const language = useAppStore((state) => state.language)
-  const addStars = useAppStore((state) => state.addStars)
+  const subject = useAppStore((state) => state.subject)
+  const saveGameResult = useAppStore((state) => state.saveGameResult)
 
-  const profile = getProfileById(profileId)
-  const content = language ? getLanguageContent(language) : null
+  const profile = dataService.getProfileById(profileId)
+  const content =
+    subject && isLanguageSubject(subject)
+      ? dataService.getLanguageContent(subject)
+      : null
   const letters = useMemo(() => {
-    if (!language || !profile) return []
-    return getLettersForLetterGames(language, profile.ageGroup)
-  }, [language, profile])
+    if (!subject || !profile || !isLanguageSubject(subject)) return []
+    return dataService.getLettersForLetterGames(subject, profile.ageGroup)
+  }, [subject, profile])
 
-  const roundCount = profile && language ? getRoundCount(profile.ageGroup, language) : 5
+  const roundCount =
+    profile && subject ? dataService.getRoundCount(profile.ageGroup, subject) : 5
 
   const [roundIndex, setRoundIndex] = useState(0)
   const [completedCount, setCompletedCount] = useState(0)
@@ -43,10 +49,10 @@ export function LetterTracingGame() {
   const [result, setResult] = useState(buildRoundResult(0, roundCount))
 
   useEffect(() => {
-    if (!profileId || !language) {
+    if (!profileId || !subject) {
       navigate('/', { replace: true })
     }
-  }, [profileId, language, navigate])
+  }, [profileId, subject, navigate])
 
   const clearCanvas = useCallback(() => {
     const canvas = canvasRef.current
@@ -68,6 +74,25 @@ export function LetterTracingGame() {
     }
   }, [currentLetter])
 
+  const showSoundHints = subject === 'kannada'
+
+  const playLetterAudio = useCallback(
+    (letter: Letter) => {
+      if (showSoundHints) {
+        playKannadaLetterAudio(letter, content?.speechLang)
+        return
+      }
+
+      void playAudio(
+        letter.audioPath,
+        letter.character,
+        content?.speechLang,
+        letter.name,
+      )
+    },
+    [content?.speechLang, showSoundHints],
+  )
+
   const setupRound = useCallback(
     (index: number, lettersPool: Letter[]) => {
       const letter = lettersPool[index % lettersPool.length]
@@ -76,14 +101,9 @@ export function LetterTracingGame() {
       setMood('idle')
       setMessage('Trace the letter with your finger or mouse!')
       setShowConfetti(false)
-      void playAudio(
-        letter.audioPath,
-        letter.character,
-        content?.speechLang,
-        letter.name,
-      )
+      playLetterAudio(letter)
     },
-    [content?.speechLang],
+    [playLetterAudio],
   )
 
   const startGame = useCallback(() => {
@@ -182,8 +202,15 @@ export function LetterTracingGame() {
         const roundResult = buildRoundResult(finalCompleted, roundCount)
         setResult(roundResult)
         setIsComplete(true)
-        if (profileId && language) {
-          addStars(profileId, language, 'letter-tracing', roundResult.stars)
+        if (profileId && subject) {
+          saveGameResult({
+            profileId,
+            subject,
+            challengeId: 'letter-tracing',
+            correct: finalCompleted,
+            total: roundCount,
+            stars: roundResult.stars,
+          })
         }
         return
       }
@@ -202,12 +229,7 @@ export function LetterTracingGame() {
 
   const replayAudio = () => {
     if (currentLetter) {
-      void playAudio(
-        currentLetter.audioPath,
-        currentLetter.character,
-        content?.speechLang,
-        currentLetter.name,
-      )
+      playLetterAudio(currentLetter)
     }
   }
 
@@ -225,6 +247,10 @@ export function LetterTracingGame() {
         </div>
 
         <Mascot mood={mood} message={message} />
+
+        {showSoundHints ? (
+          <KannadaSoundHints letter={currentLetter} layout="inline" />
+        ) : null}
 
         <motion.div
           key={currentLetter.id}
