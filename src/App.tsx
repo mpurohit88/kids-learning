@@ -9,7 +9,7 @@ import { ProgressScreen } from './pages/ProgressScreen'
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<LaunchScreen />} />
         <Route path="/home" element={<HomeScreen />} />

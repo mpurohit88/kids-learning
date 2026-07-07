@@ -29,6 +29,18 @@ npm run build
 npm run preview
 ```
 
+## Deploy on GitHub Pages (free)
+
+This repo includes a GitHub Actions workflow that deploys automatically on every push to `main`.
+
+1. Open **GitHub repo → Settings → Pages**
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**
+3. Push to `main` — the workflow builds and publishes the site
+
+**Live URL:** https://skilltect-technologies.github.io/kids-learning/
+
+Local development is unchanged (`npm run dev` at `http://localhost:5173`).
+
 ## Audio Notes
 
 Audio file paths are defined in `src/data/hindi.json` and `src/data/kannada.json`. When MP3 files are missing, the app falls back to the browser **Speech Synthesis API** (Hindi: `hi-IN`, Kannada: `kn-IN`).
