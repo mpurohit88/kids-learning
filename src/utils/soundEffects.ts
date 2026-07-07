@@ -42,10 +42,12 @@ export async function playSuccessSound() {
     const context = await ensureAudioReady()
     const now = context.currentTime
 
-    playTone(523.25, now, 0.12)
-    playTone(659.25, now + 0.08, 0.12)
-    playTone(783.99, now + 0.16, 0.18)
-    playTone(1046.5, now + 0.28, 0.35, 'triangle', 0.16)
+    playTone(523.25, now, 0.1)
+    playTone(659.25, now + 0.07, 0.1)
+    playTone(783.99, now + 0.14, 0.12)
+    playTone(1046.5, now + 0.21, 0.15, 'triangle', 0.17)
+    playTone(1318.5, now + 0.3, 0.22, 'triangle', 0.14)
+    playTone(1567.9, now + 0.38, 0.4, 'sine', 0.12)
   } catch {
     // Audio may be blocked until user interaction; fail silently.
   }

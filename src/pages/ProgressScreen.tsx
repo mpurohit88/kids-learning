@@ -9,6 +9,7 @@ const activityLabels: Record<ActivityType, string> = {
   'letter-recognition': 'Find the Letter',
   'picture-word-match': 'Picture Match',
   'letter-tracing': 'Trace the Letter',
+  'exam-practice': 'Exam Practice',
 }
 
 const languageLabels: Record<Language, string> = {

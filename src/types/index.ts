@@ -4,6 +4,7 @@ export type ActivityType =
   | 'letter-recognition'
   | 'picture-word-match'
   | 'letter-tracing'
+  | 'exam-practice'
 
 export interface Profile {
   id: string

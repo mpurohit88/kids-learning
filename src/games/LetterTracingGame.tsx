@@ -6,7 +6,7 @@ import { AppShell } from '../components/layout/AppShell'
 import { ConfettiBurst } from '../components/ConfettiBurst'
 import { GameCompleteModal } from '../components/GameCompleteModal'
 import { Mascot } from '../components/Mascot'
-import { getLanguageContent, getLettersForProfile } from '../data'
+import { getLanguageContent, getLettersForLetterGames } from '../data'
 import { getProfileById } from '../data/profiles'
 import { useAppStore } from '../store/useAppStore'
 import { playAudio, playCelebrationSound } from '../utils/audioPlayer'
@@ -26,10 +26,10 @@ export function LetterTracingGame() {
   const content = language ? getLanguageContent(language) : null
   const letters = useMemo(() => {
     if (!language || !profile) return []
-    return getLettersForProfile(language, profile.ageGroup)
+    return getLettersForLetterGames(language, profile.ageGroup)
   }, [language, profile])
 
-  const roundCount = profile ? getRoundCount(profile.ageGroup) : 5
+  const roundCount = profile && language ? getRoundCount(profile.ageGroup, language) : 5
 
   const [roundIndex, setRoundIndex] = useState(0)
   const [completedCount, setCompletedCount] = useState(0)
@@ -59,7 +59,8 @@ export function LetterTracingGame() {
     context.fillRect(0, 0, canvas.width, canvas.height)
 
     if (currentLetter) {
-      context.font = 'bold 220px Segoe UI, Nirmala UI, Tunga, sans-serif'
+      const fontSize = currentLetter.character.length > 1 ? 150 : 220
+      context.font = `bold ${fontSize}px Segoe UI, Nirmala UI, Tunga, sans-serif`
       context.fillStyle = '#e2e8f0'
       context.textAlign = 'center'
       context.textBaseline = 'middle'

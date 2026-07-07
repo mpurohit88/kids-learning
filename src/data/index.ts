@@ -17,6 +17,17 @@ export function getLettersForProfile(language: Language, ageGroup: AgeGroup) {
   )
 }
 
+export function getAllLetters(language: Language) {
+  return getLanguageContent(language).letters
+}
+
+export function getLettersForLetterGames(language: Language, ageGroup: AgeGroup) {
+  if (language === 'hindi') {
+    return getAllLetters(language)
+  }
+  return getLettersForProfile(language, ageGroup)
+}
+
 export function getVocabularyForProfile(language: Language, ageGroup: AgeGroup) {
   return getLanguageContent(language).vocabulary.filter((word) =>
     word.difficulty.includes(ageGroup),

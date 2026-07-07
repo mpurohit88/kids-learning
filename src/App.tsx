@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { ExamPracticeGame } from './games/ExamPracticeGame'
 import { LetterRecognitionGame } from './games/LetterRecognitionGame'
 import { LetterTracingGame } from './games/LetterTracingGame'
 import { PictureWordMatchGame } from './games/PictureWordMatchGame'
@@ -15,6 +16,7 @@ function App() {
         <Route path="/home" element={<HomeScreen />} />
         <Route path="/activities" element={<ActivityMenuScreen />} />
         <Route path="/progress" element={<ProgressScreen />} />
+        <Route path="/games/exam-practice" element={<ExamPracticeGame />} />
         <Route path="/games/letter-recognition" element={<LetterRecognitionGame />} />
         <Route path="/games/picture-word-match" element={<PictureWordMatchGame />} />
         <Route path="/games/letter-tracing" element={<LetterTracingGame />} />
