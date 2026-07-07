@@ -43,16 +43,6 @@ The repo includes `vercel.json` for SPA routing. Vercel auto-detects Vite.
 
 Your site will be live at a URL like `https://kids-learning.vercel.app` within ~1 minute. Every push to `main` redeploys automatically.
 
-## Deploy on GitHub Pages (public repo only)
-
-GitHub Pages is free only for **public** repositories. If the repo is private, use Vercel instead.
-
-1. Open **GitHub repo → Settings → Pages**
-2. Under **Build and deployment**, set **Source** to **GitHub Actions**
-3. Push to `main`
-
-**Live URL:** https://mpurohit88.github.io/kids-learning/
-
 ## Audio Notes
 
 Audio file paths are defined in `src/data/hindi.json` and `src/data/kannada.json`. When MP3 files are missing, the app falls back to the browser **Speech Synthesis API** (Hindi: `hi-IN`, Kannada: `kn-IN`).
