@@ -30,6 +30,7 @@ export interface ContentRepository {
   getLettersForLetterGames(language: Language, ageGroup: AgeGroup): LanguageContent['letters']
   getVocabularyForProfile(language: Language, ageGroup: AgeGroup): LanguageContent['vocabulary']
   getPracticeQuestionsForProfile(language: Language, ageGroup: AgeGroup): PracticeQuestion[]
+  getLetterReference(language: Language, ageGroup: AgeGroup): LanguageContent['letters']
 }
 
 export interface MathsRepository {

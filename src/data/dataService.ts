@@ -104,6 +104,10 @@ class DataService {
     return this.repositories.content.getPracticeQuestionsForProfile(language, ageGroup)
   }
 
+  getLetterReference(language: Language, ageGroup: AgeGroup) {
+    return this.repositories.content.getLetterReference(language, ageGroup)
+  }
+
   getGames() {
     return this.repositories.gameCatalog.getAllGames()
   }

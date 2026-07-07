@@ -27,6 +27,13 @@ export interface Profile {
   description: string
 }
 
+export interface LetterExample {
+  word: string
+  transliteration: string
+  emoji: string
+  imagePath?: string
+}
+
 export interface Letter {
   id: string
   character: string
@@ -34,6 +41,8 @@ export interface Letter {
   type: 'vowel' | 'consonant'
   audioPath: string
   difficulty: AgeGroup[]
+  lowerCase?: string
+  example?: LetterExample
 }
 
 export interface VocabularyWord {

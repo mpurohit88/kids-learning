@@ -65,7 +65,7 @@ function buildLanguageChallenges(
   }))
 }
 
-const MATHS_LKG_CHALLENGES: ChallengeDefinition[] = [
+const MATHS_CHALLENGES: ChallengeDefinition[] = [
   {
     id: 'heavy-and-light',
     subject: 'maths',
@@ -147,10 +147,10 @@ const MATHS_LKG_CHALLENGES: ChallengeDefinition[] = [
     color: '#ffb74d',
     route: '/games/challenge/addition-within-10',
     description: 'Add numbers up to 10',
-    gradeLevels: ['lkg'],
+    gradeLevels: ['class2'],
     source: 'generator',
     generatorId: 'addition-within-10',
-    badge: 'LKG',
+    badge: 'Class 2',
   },
   {
     id: 'counting-objects',
@@ -185,7 +185,7 @@ const MATHS_LKG_CHALLENGES: ChallengeDefinition[] = [
 export const CHALLENGE_CATALOG: ChallengeDefinition[] = [
   ...buildLanguageChallenges('hindi'),
   ...buildLanguageChallenges('kannada'),
-  ...MATHS_LKG_CHALLENGES,
+  ...MATHS_CHALLENGES,
 ]
 
 export function getChallengeFromCatalog(

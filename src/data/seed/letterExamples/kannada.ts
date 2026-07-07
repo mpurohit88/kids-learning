@@ -1,0 +1,60 @@
+import type { LetterExample } from '../../../types'
+
+/** Example words for the full Kannada aksharamala (keyed by letter id). */
+export const KANNADA_LETTER_EXAMPLES: Record<string, LetterExample> = {
+  'k-a': { word: 'ಅಮ್ಮ', transliteration: 'amma', emoji: '👩', imagePath: '/assets/images/mother.svg' },
+  'k-aa': { word: 'ಆನೆ', transliteration: 'aane', emoji: '🐘', imagePath: '/assets/images/elephant.svg' },
+  'k-i': { word: 'ಇಲಿ', transliteration: 'ili', emoji: '🐭' },
+  'k-ii': { word: 'ಈರುಳ್ಳಿ', transliteration: 'eerulli', emoji: '🧅' },
+  'k-u': { word: 'ಉಪ್ಪು', transliteration: 'uppu', emoji: '🧂' },
+  'k-uu': { word: 'ಊರು', transliteration: 'ooru', emoji: '🏘️' },
+  'k-ri': { word: 'ಋಷಿ', transliteration: 'rishi', emoji: '🧘' },
+  'k-e': { word: 'ಎಲಿ', transliteration: 'eli', emoji: '🐭' },
+  'k-ae': { word: 'ಏಣಿ', transliteration: 'aeni', emoji: '🪜' },
+  'k-ai': { word: 'ಐಸ್', transliteration: 'ice', emoji: '🍦' },
+  'k-o': { word: 'ಒಂದು', transliteration: 'ondu', emoji: '1️⃣', imagePath: '/assets/images/one.svg' },
+  'k-oh': { word: 'ಓಟ', transliteration: 'ota', emoji: '🏃' },
+  'k-au': { word: 'ಔಷಧ', transliteration: 'aushadha', emoji: '💊' },
+  'k-am': { word: 'ಅಂಗ', transliteration: 'anga', emoji: '💪' },
+  'k-ah': { word: 'ಅಃ', transliteration: 'ah', emoji: '💨' },
+
+  'k-ka': { word: 'ಕೈ', transliteration: 'kai', emoji: '✋' },
+  'k-kha': { word: 'ಖಡಗ', transliteration: 'khadaga', emoji: '🗡️' },
+  'k-ga': { word: 'ಗಿಳಿ', transliteration: 'gili', emoji: '🦜' },
+  'k-gha': { word: 'ಘಂಟೆ', transliteration: 'ghante', emoji: '🔔' },
+  'k-nga': { word: 'ಅಂಗ', transliteration: 'anga', emoji: '💪' },
+
+  'k-cha': { word: 'ಚಪಾತಿ', transliteration: 'chapati', emoji: '🫓' },
+  'k-chha': { word: 'ಛತ್ರ', transliteration: 'chhatra', emoji: '☂️' },
+  'k-ja': { word: 'ಜನ', transliteration: 'jana', emoji: '👥' },
+  'k-jha': { word: 'ಝರಿ', transliteration: 'jhari', emoji: '💧' },
+  'k-nya': { word: 'ಚಂಚಲ', transliteration: 'chanchala', emoji: '😊' },
+
+  'k-ta-retro': { word: 'ಟಮಾಟರ', transliteration: 'tamatar', emoji: '🍅' },
+  'k-tha-retro': { word: 'ಠೇಕು', transliteration: 'theku', emoji: '📦' },
+  'k-da-retro': { word: 'ಡಮರು', transliteration: 'damaru', emoji: '🥁' },
+  'k-dha-retro': { word: 'ಢಕ್ಕನ', transliteration: 'dhakkana', emoji: '🫙' },
+  'k-na-retro': { word: 'ಕಣ್ಣು', transliteration: 'kannu', emoji: '👁️' },
+
+  'k-ta': { word: 'ತಂಗಿ', transliteration: 'tangi', emoji: '👧', imagePath: '/assets/images/sister.svg' },
+  'k-tha': { word: 'ಥಳ', transliteration: 'thala', emoji: '🏞️' },
+  'k-da': { word: 'ದನ', transliteration: 'dana', emoji: '🐄' },
+  'k-dha': { word: 'ಧನ್ಯ', transliteration: 'dhanya', emoji: '🌾' },
+  'k-na': { word: 'ನಾಯಿ', transliteration: 'nai', emoji: '🐶', imagePath: '/assets/images/dog.svg' },
+
+  'k-pa': { word: 'ಪತಂಗ', transliteration: 'patanga', emoji: '🪁' },
+  'k-pha': { word: 'ಫಲ', transliteration: 'phala', emoji: '🍎', imagePath: '/assets/images/apple.svg' },
+  'k-ba': { word: 'ಬಾಳೆ', transliteration: 'bale', emoji: '🍌', imagePath: '/assets/images/banana.svg' },
+  'k-bha': { word: 'ಭಾರ', transliteration: 'bhara', emoji: '⚖️' },
+  'k-ma': { word: 'ಮರ', transliteration: 'mara', emoji: '🌳' },
+
+  'k-ya': { word: 'ಯಾನ', transliteration: 'yaana', emoji: '🚗' },
+  'k-ra': { word: 'ರಥ', transliteration: 'ratha', emoji: '🛞' },
+  'k-la': { word: 'ಲಿಟರ', transliteration: 'litar', emoji: '🥛' },
+  'k-va': { word: 'ವನ', transliteration: 'vana', emoji: '🌲' },
+  'k-sha': { word: 'ಶೇರು', transliteration: 'sheru', emoji: '🦁', imagePath: '/assets/images/lion.svg' },
+  'k-sha2': { word: 'ಷಟ್ಕೋನ', transliteration: 'shatkona', emoji: '⬡' },
+  'k-sa': { word: 'ಸೇಬು', transliteration: 'sebu', emoji: '🍎', imagePath: '/assets/images/apple.svg' },
+  'k-ha': { word: 'ಹಸು', transliteration: 'hasu', emoji: '🐄', imagePath: '/assets/images/cow.svg' },
+  'k-lla': { word: 'ನೆಲ್ಲಿಕಾಯಿ', transliteration: 'nellikai', emoji: '🫐' },
+}

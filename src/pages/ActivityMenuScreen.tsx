@@ -1,15 +1,20 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BigButton } from '../components/BigButton'
+import { LetterReferenceTable } from '../components/letters/LetterReferenceTable'
 import { AppShell } from '../components/layout/AppShell'
 import { dataService } from '../data'
 import { useAppStore } from '../store/useAppStore'
+import { isLanguageSubject } from '../types'
+
+type ActivityTab = 'practice' | 'letters'
 
 export function ActivityMenuScreen() {
   const navigate = useNavigate()
   const profileId = useAppStore((state) => state.profileId)
   const subject = useAppStore((state) => state.subject)
   const profile = dataService.getProfileById(profileId)
+  const [activeTab, setActiveTab] = useState<ActivityTab>('practice')
 
   useEffect(() => {
     if (!profileId) {
@@ -25,6 +30,12 @@ export function ActivityMenuScreen() {
 
   const subjectInfo = dataService.getSubject(subject)
   const challenges = dataService.getChallenges(subject, profile.ageGroup)
+  const showLetterTab = isLanguageSubject(subject)
+  const languageContent = showLetterTab ? dataService.getLanguageContent(subject) : null
+  const letterReference =
+    showLetterTab && activeTab === 'letters'
+      ? dataService.getLetterReference(subject, profile.ageGroup)
+      : []
 
   return (
     <AppShell
@@ -34,16 +45,60 @@ export function ActivityMenuScreen() {
     >
       <div className="flex flex-1 flex-col gap-6">
         <p className="text-center text-xl text-slate-600">
-          Pick a challenge to play!
+          {activeTab === 'letters'
+            ? 'See all letters with examples before you practice!'
+            : 'Pick a challenge to play!'}
         </p>
 
-        {challenges.length === 0 ? (
+        {showLetterTab ? (
+          <div className="flex justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => setActiveTab('practice')}
+              className={`rounded-full px-6 py-3 text-lg font-bold transition ${
+                activeTab === 'practice'
+                  ? 'bg-white text-slate-800 shadow-lg'
+                  : 'bg-white/50 text-slate-600 hover:bg-white/70'
+              }`}
+            >
+              🎮 Practice
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('letters')}
+              className={`rounded-full px-6 py-3 text-lg font-bold transition ${
+                activeTab === 'letters'
+                  ? 'bg-white text-slate-800 shadow-lg'
+                  : 'bg-white/50 text-slate-600 hover:bg-white/70'
+              }`}
+            >
+              📋 All Letters
+            </button>
+          </div>
+        ) : null}
+
+        {activeTab === 'letters' && showLetterTab && languageContent ? (
+          <LetterReferenceTable
+            subject={subject}
+            letters={letterReference}
+            speechLang={languageContent.speechLang}
+          />
+        ) : challenges.length === 0 ? (
           <div className="rounded-[2rem] border-4 border-dashed border-white bg-white/70 p-10 text-center">
             <p className="text-5xl">🚧</p>
             <p className="mt-4 text-2xl font-bold text-slate-700">Coming soon!</p>
             <p className="mt-2 text-slate-500">
               Challenges for {subjectInfo?.title ?? subject} are being added.
             </p>
+            {showLetterTab ? (
+              <button
+                type="button"
+                onClick={() => setActiveTab('letters')}
+                className="mt-6 rounded-full bg-teal-500 px-6 py-3 text-lg font-bold text-white shadow transition hover:bg-teal-400"
+              >
+                View All Letters →
+              </button>
+            ) : null}
           </div>
         ) : (
           <div
@@ -68,14 +123,14 @@ export function ActivityMenuScreen() {
                   {challenge.emoji}
                 </span>
                 <span className="mt-4 text-2xl font-bold">{challenge.title}</span>
-              <span className="mt-2 text-center text-base font-normal opacity-90">
-                {challenge.description}
-              </span>
-              {challenge.bookReference ? (
-                <span className="mt-1 text-center text-xs font-normal opacity-80">
-                  {challenge.bookReference}
+                <span className="mt-2 text-center text-base font-normal opacity-90">
+                  {challenge.description}
                 </span>
-              ) : null}
+                {challenge.bookReference ? (
+                  <span className="mt-1 text-center text-xs font-normal opacity-80">
+                    {challenge.bookReference}
+                  </span>
+                ) : null}
               </button>
             ))}
           </div>
