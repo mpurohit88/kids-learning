@@ -34,7 +34,7 @@ npm run preview
 The repo includes `vercel.json` for SPA routing. Vercel auto-detects Vite.
 
 1. Go to [vercel.com/new](https://vercel.com/new) and sign in with GitHub
-2. Click **Import** next to `skilltect-technologies/kids-learning`
+2. Click **Import** next to `mpurohit88/kids-learning`
 3. Keep the defaults:
    - **Framework Preset:** Vite
    - **Build Command:** `npm run build`
@@ -51,7 +51,7 @@ GitHub Pages is free only for **public** repositories. If the repo is private, u
 2. Under **Build and deployment**, set **Source** to **GitHub Actions**
 3. Push to `main`
 
-**Live URL:** https://skilltect-technologies.github.io/kids-learning/
+**Live URL:** https://mpurohit88.github.io/kids-learning/
 
 ## Audio Notes
 
