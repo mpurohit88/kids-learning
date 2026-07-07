@@ -75,7 +75,12 @@ export function LetterRecognitionGame() {
       setShowConfetti(false)
       setFeedbackType(null)
 
-      void playAudio(target.audioPath, target.character, content?.speechLang)
+      void playAudio(
+        target.audioPath,
+        target.character,
+        content?.speechLang,
+        target.name,
+      )
     },
     [content?.speechLang, optionCount],
   )
@@ -136,7 +141,12 @@ export function LetterRecognitionGame() {
 
   const replayAudio = () => {
     if (targetLetter) {
-      void playAudio(targetLetter.audioPath, targetLetter.character, content?.speechLang)
+      void playAudio(
+        targetLetter.audioPath,
+        targetLetter.character,
+        content?.speechLang,
+        targetLetter.name,
+      )
     }
   }
 

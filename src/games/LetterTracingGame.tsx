@@ -75,7 +75,12 @@ export function LetterTracingGame() {
       setMood('idle')
       setMessage('Trace the letter with your finger or mouse!')
       setShowConfetti(false)
-      void playAudio(letter.audioPath, letter.character, content?.speechLang)
+      void playAudio(
+        letter.audioPath,
+        letter.character,
+        content?.speechLang,
+        letter.name,
+      )
     },
     [content?.speechLang],
   )
@@ -196,7 +201,12 @@ export function LetterTracingGame() {
 
   const replayAudio = () => {
     if (currentLetter) {
-      void playAudio(currentLetter.audioPath, currentLetter.character, content?.speechLang)
+      void playAudio(
+        currentLetter.audioPath,
+        currentLetter.character,
+        content?.speechLang,
+        currentLetter.name,
+      )
     }
   }
 

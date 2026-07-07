@@ -75,7 +75,12 @@ export function PictureWordMatchGame() {
       setShowConfetti(false)
       setFeedbackType(null)
 
-      void playAudio(target.audioPath, target.word, content?.speechLang)
+      void playAudio(
+        target.audioPath,
+        target.word,
+        content?.speechLang,
+        target.transliteration,
+      )
     },
     [content?.speechLang, optionCount],
   )
@@ -136,7 +141,12 @@ export function PictureWordMatchGame() {
 
   const replayAudio = () => {
     if (targetWord) {
-      void playAudio(targetWord.audioPath, targetWord.word, content?.speechLang)
+      void playAudio(
+        targetWord.audioPath,
+        targetWord.word,
+        content?.speechLang,
+        targetWord.transliteration,
+      )
     }
   }
 
