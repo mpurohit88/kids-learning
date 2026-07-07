@@ -29,17 +29,29 @@ npm run build
 npm run preview
 ```
 
-## Deploy on GitHub Pages (free)
+## Deploy on Vercel (free, works with private repo)
 
-This repo includes a GitHub Actions workflow that deploys automatically on every push to `main`.
+The repo includes `vercel.json` for SPA routing. Vercel auto-detects Vite.
+
+1. Go to [vercel.com/new](https://vercel.com/new) and sign in with GitHub
+2. Click **Import** next to `skilltect-technologies/kids-learning`
+3. Keep the defaults:
+   - **Framework Preset:** Vite
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+4. Click **Deploy**
+
+Your site will be live at a URL like `https://kids-learning.vercel.app` within ~1 minute. Every push to `main` redeploys automatically.
+
+## Deploy on GitHub Pages (public repo only)
+
+GitHub Pages is free only for **public** repositories. If the repo is private, use Vercel instead.
 
 1. Open **GitHub repo → Settings → Pages**
 2. Under **Build and deployment**, set **Source** to **GitHub Actions**
-3. Push to `main` — the workflow builds and publishes the site
+3. Push to `main`
 
 **Live URL:** https://skilltect-technologies.github.io/kids-learning/
-
-Local development is unchanged (`npm run dev` at `http://localhost:5173`).
 
 ## Audio Notes
 
