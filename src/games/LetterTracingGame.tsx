@@ -187,6 +187,13 @@ export function LetterTracingGame() {
     }, 1200)
   }
 
+  const handleErase = () => {
+    clearCanvas()
+    setHasDrawn(false)
+    setMood('idle')
+    setMessage('Trace the letter with your finger or mouse!')
+  }
+
   const replayAudio = () => {
     if (currentLetter) {
       void playAudio(currentLetter.audioPath, currentLetter.character, content?.speechLang)
@@ -204,24 +211,6 @@ export function LetterTracingGame() {
           <p className="rounded-full bg-white/80 px-4 py-2 font-semibold text-slate-600 shadow">
             Letter {Math.min(roundIndex + 1, roundCount)} / {roundCount}
           </p>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={replayAudio}
-              className="flex items-center gap-2 rounded-2xl bg-orange-400 px-4 py-3 font-semibold text-white shadow-md transition hover:bg-orange-300"
-            >
-              <Volume2 size={20} />
-              Hear Letter
-            </button>
-            <button
-              type="button"
-              onClick={clearCanvas}
-              className="flex items-center gap-2 rounded-2xl bg-slate-500 px-4 py-3 font-semibold text-white shadow-md transition hover:bg-slate-400"
-            >
-              <Eraser size={20} />
-              Clear
-            </button>
-          </div>
         </div>
 
         <Mascot mood={mood} message={message} />
@@ -242,13 +231,33 @@ export function LetterTracingGame() {
           />
         </motion.div>
 
-        <button
-          type="button"
-          onClick={handleDone}
-          className="rounded-3xl bg-purple-500 px-10 py-5 text-2xl font-bold text-white shadow-lg transition hover:bg-purple-400"
-        >
-          Done! ⭐
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            aria-label="Hear letter sound"
+            onClick={replayAudio}
+            className="flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white bg-orange-400 text-white shadow-lg transition hover:bg-orange-300 md:h-24 md:w-24"
+          >
+            <Volume2 size={36} strokeWidth={2.5} />
+          </button>
+
+          <button
+            type="button"
+            aria-label="Erase and try again"
+            onClick={handleErase}
+            className="flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white bg-slate-500 text-white shadow-lg transition hover:bg-slate-400 md:h-24 md:w-24"
+          >
+            <Eraser size={36} strokeWidth={2.5} />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDone}
+            className="rounded-3xl bg-purple-500 px-10 py-5 text-2xl font-bold text-white shadow-lg transition hover:bg-purple-400"
+          >
+            Done! ⭐
+          </button>
+        </div>
       </div>
 
       {isComplete ? (
