@@ -1,4 +1,11 @@
 import { pickRandomItems, shuffleArray } from '../../utils/arrayUtils'
+import {
+  generateAdditionThreeDigit,
+  generateAdditionThreeDigitTwoDigit,
+  generateAdditionThreeTwoDigitNumbers,
+  generateAdditionTwoDigit,
+  generateAdditionWithin10,
+} from '../../utils/additionProblems'
 import type { SessionQuestion } from '../../types'
 
 const COUNTING_EMOJIS = ['🍎', '⭐', '🌸', '🐶', '🎈', '🍌', '🦋', '🍊']
@@ -57,6 +64,15 @@ export function generateMathsQuestions(
   switch (generatorId) {
     case 'addition-within-10':
       return generateAdditionWithin10(count, optionCount)
+    case 'addition-within-100':
+    case 'addition-two-digit':
+      return generateAdditionTwoDigit(count, optionCount)
+    case 'addition-three-digit':
+      return generateAdditionThreeDigit(count, optionCount)
+    case 'addition-three-digit-two-digit':
+      return generateAdditionThreeDigitTwoDigit(count, optionCount)
+    case 'addition-three-two-digit-numbers':
+      return generateAdditionThreeTwoDigitNumbers(count, optionCount)
     case 'counting-objects':
       return generateCountingObjects(count, optionCount)
     case 'number-recognition':
@@ -64,26 +80,6 @@ export function generateMathsQuestions(
     default:
       return []
   }
-}
-
-function generateAdditionWithin10(count: number, optionCount: number): SessionQuestion[] {
-  const questions: SessionQuestion[] = []
-
-  for (let index = 0; index < count; index += 1) {
-    const a = Math.floor(Math.random() * 11)
-    const b = Math.floor(Math.random() * (11 - a))
-    const answer = a + b
-    questions.push({
-      id: `add-${index}-${a}-${b}`,
-      prompt: `${a} + ${b} = ?`,
-      emoji: '➕',
-      options: buildNumericOptions(answer, optionCount, 10),
-      correctOptionId: String(answer),
-      explanation: `${a} + ${b} = ${answer}`,
-    })
-  }
-
-  return questions
 }
 
 function generateCountingObjects(count: number, optionCount: number): SessionQuestion[] {

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Mascot } from './Mascot'
 import { StarDisplay } from './StarDisplay'
+import { useTranslation } from '../hooks/useTranslation'
 import type { GameRoundResult } from '../types'
 
 interface GameCompleteModalProps {
@@ -16,12 +17,13 @@ export function GameCompleteModal({
   onBackToMenu,
 }: GameCompleteModalProps) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const message =
     result.stars === 3
-      ? 'Amazing! You are a star!'
+      ? t('feedback.stars3')
       : result.stars === 2
-        ? 'Great job! Keep going!'
-        : 'Good try! Practice makes perfect!'
+        ? t('feedback.stars2')
+        : t('feedback.stars1')
 
   return (
     <motion.div
@@ -39,7 +41,7 @@ export function GameCompleteModal({
           <StarDisplay count={result.stars} size="lg" />
         </div>
         <p className="text-xl font-semibold text-slate-700">
-          {result.correct} out of {result.total} correct
+          {t('feedback.score', { correct: result.correct, total: result.total })}
         </p>
 
         <div className="mt-8 flex flex-col gap-3">
@@ -48,21 +50,21 @@ export function GameCompleteModal({
             onClick={onPlayAgain}
             className="rounded-2xl bg-green-500 px-6 py-4 text-lg font-bold text-white shadow-md transition hover:bg-green-400"
           >
-            Play Again
+            {t('common.playAgain')}
           </button>
           <button
             type="button"
             onClick={onBackToMenu}
             className="rounded-2xl bg-blue-500 px-6 py-4 text-lg font-bold text-white shadow-md transition hover:bg-blue-400"
           >
-            Back to Games
+            {t('common.backToGames')}
           </button>
           <button
             type="button"
             onClick={() => navigate('/progress')}
             className="rounded-2xl bg-amber-400 px-6 py-4 text-lg font-bold text-amber-900 shadow-md transition hover:bg-amber-300"
           >
-            See My Stars
+            {t('activities.seeMyStars')}
           </button>
         </div>
       </motion.div>

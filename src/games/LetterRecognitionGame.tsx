@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Volume2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { AnswerOptionButton } from '../components/game/AnswerOptionButton'
 import { LetterOptionLabel } from '../components/game/LetterOptionLabel'
 import { QuizGameShell } from '../components/game/QuizGameShell'
 import { dataService } from '../data'
 import { useGameSession } from '../hooks/useGameSession'
+import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
 import { playAudio } from '../utils/audioPlayer'
 import { playKannadaLetterAudio } from '../utils/kannadaLetterAudio'
@@ -17,6 +17,7 @@ import { isLanguageSubject } from '../types'
 
 export function LetterRecognitionGame() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const profileId = useAppStore((state) => state.profileId)
   const subject = useAppStore((state) => state.subject)
 
@@ -79,7 +80,7 @@ export function LetterRecognitionGame() {
 
       setTargetLetter(target)
       setOptions(nextOptions)
-      resetRoundUi('Listen and find the letter!')
+      resetRoundUi(t('games.findLetter.prompt'))
 
       playTargetLetterAudio(target)
     },
@@ -105,8 +106,8 @@ export function LetterRecognitionGame() {
     recordAnswer({
       selectedId: letterId,
       correctId: targetLetter.id,
-      correctMessage: 'Yes! Great job!',
-      wrongMessage: 'Good try! The answer was ' + targetLetter.character,
+      correctMessage: t('feedback.letterCorrect'),
+      wrongMessage: t('feedback.letterWrong', { letter: targetLetter.character }),
       onAdvance: (nextIndex) => setupRound(nextIndex, roundLetters),
     })
   }
@@ -121,7 +122,7 @@ export function LetterRecognitionGame() {
 
   return (
     <QuizGameShell
-      title="Find the Letter"
+      title={t('games.findLetter.title')}
       roundIndex={session.roundIndex}
       roundCount={roundCount}
       correctCount={session.correctCount}
@@ -134,31 +135,22 @@ export function LetterRecognitionGame() {
       message={session.message}
       result={session.result}
       onPlayAgain={() => handlePlayAgain(startGame)}
+      onHearAgain={session.isLocked ? undefined : replayAudio}
+      hearAgainLabel={t('common.hearAgain')}
     >
-      <div className="flex items-center gap-4">
-        <motion.div
-          key={targetLetter.id}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="flex h-36 w-36 items-center justify-center rounded-[2rem] bg-white text-7xl font-bold text-slate-800 shadow-xl md:h-44 md:w-44 md:text-8xl"
-        >
-          ?
-        </motion.div>
-
-            <button
-              type="button"
-              aria-label="Hear again"
-              onClick={replayAudio}
-              className="flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white bg-orange-400 text-white shadow-lg transition hover:bg-orange-300 md:h-24 md:w-24"
-            >
-              <Volume2 size={36} strokeWidth={2.5} />
-            </button>
-          </div>
+      <motion.div
+        key={targetLetter.id}
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="flex h-36 w-36 items-center justify-center rounded-[2rem] bg-white text-7xl font-bold text-slate-800 shadow-xl md:h-44 md:w-44 md:text-8xl"
+      >
+        ?
+      </motion.div>
 
       <p className="text-lg text-slate-600">
         {showSoundHints
-          ? 'Tap the matching letter. Hindi and English hints are shown below each option.'
-          : 'Tap the matching letter.'}
+          ? t('games.findLetter.instructionWithHints')
+          : t('games.findLetter.instruction')}
       </p>
 
       <div className={`grid w-full max-w-5xl gap-3 ${getOptionGridClass(optionCount)}`}>

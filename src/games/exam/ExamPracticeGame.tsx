@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { QuizGameShell } from '../../components/game/QuizGameShell'
 import { dataService } from '../../data'
 import { useGameSession } from '../../hooks/useGameSession'
+import { useTranslation } from '../../hooks/useTranslation'
 import { useAppStore } from '../../store/useAppStore'
 import { playAudio } from '../../utils/audioPlayer'
 import { buildExamQuestions } from './buildExamQuestions'
@@ -13,6 +14,7 @@ import { isLanguageSubject } from '../../types'
 
 export function ExamPracticeGame() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const profileId = useAppStore((state) => state.profileId)
   const subject = useAppStore((state) => state.subject)
 
@@ -157,8 +159,7 @@ export function ExamPracticeGame() {
       message={message}
       result={result}
       onPlayAgain={() => handlePlayAgain(startGame)}
-      onHearAgain={replayPrompt}
-      roundLabel="Question"
+      roundLabel={t('common.question', undefined, 'Question')}
     >
       {currentQuestion.type === 'first-letter' ? (
         <FirstLetterQuestionView
@@ -166,6 +167,8 @@ export function ExamPracticeGame() {
           selectedId={selectedId}
           isLocked={isLocked}
           onAnswer={handleAnswer}
+          onHearAgain={isLocked ? undefined : replayPrompt}
+          hearAgainLabel={t('common.hearAgain')}
         />
       ) : (
         <LetterTypeQuestionView
@@ -173,6 +176,8 @@ export function ExamPracticeGame() {
           selectedId={selectedId}
           isLocked={isLocked}
           onAnswer={handleAnswer}
+          onHearAgain={isLocked ? undefined : replayPrompt}
+          hearAgainLabel={t('common.hearAgain')}
         />
       )}
     </QuizGameShell>

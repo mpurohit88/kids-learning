@@ -5,6 +5,7 @@ import { AnswerOptionButton } from '../components/game/AnswerOptionButton'
 import { QuizGameShell } from '../components/game/QuizGameShell'
 import { dataService } from '../data'
 import { useGameSession } from '../hooks/useGameSession'
+import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
 import { playAudio } from '../utils/audioPlayer'
 import { pickDistractors, shuffleArray } from '../utils/arrayUtils'
@@ -13,6 +14,7 @@ import { isLanguageSubject } from '../types'
 
 export function PictureWordMatchGame() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const profileId = useAppStore((state) => state.profileId)
   const subject = useAppStore((state) => state.subject)
 
@@ -54,7 +56,7 @@ export function PictureWordMatchGame() {
 
       setTargetWord(target)
       setOptions(nextOptions)
-      resetRoundUi('What word matches the picture?')
+      resetRoundUi(t('games.pictureMatch.prompt', undefined, 'What word matches the picture?'))
 
       void playAudio(
         target.audioPath,
@@ -63,7 +65,7 @@ export function PictureWordMatchGame() {
         target.transliteration,
       )
     },
-    [content?.speechLang, optionCount, resetRoundUi],
+    [content?.speechLang, optionCount, resetRoundUi, t],
   )
 
   const startGame = useCallback(() => {
@@ -106,7 +108,7 @@ export function PictureWordMatchGame() {
 
   return (
     <QuizGameShell
-      title="Picture Match"
+      title={t('games.pictureMatch.title', undefined, 'Picture Match')}
       roundIndex={session.roundIndex}
       roundCount={roundCount}
       correctCount={session.correctCount}
@@ -119,8 +121,8 @@ export function PictureWordMatchGame() {
       message={session.message}
       result={session.result}
       onPlayAgain={() => handlePlayAgain(startGame)}
-      onHearAgain={replayAudio}
-      hearAgainLabel="Hear Word"
+      onHearAgain={session.isLocked ? undefined : replayAudio}
+      hearAgainLabel={t('common.hearWord', undefined, 'Hear Word')}
     >
       <motion.div
         key={targetWord.id}

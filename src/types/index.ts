@@ -2,6 +2,20 @@ export type GradeLevel = 'lkg' | 'class1' | 'class2' | 'class3' | 'class4' | 'cl
 export type AgeGroup = Extract<GradeLevel, 'lkg' | 'class2'>
 export type Language = 'hindi' | 'kannada' | 'english'
 export type Subject = Language | 'maths'
+export type UiLocale = 'en' | 'hi' | 'kn'
+
+export interface MotherTongueLanguage {
+  id: UiLocale
+  label: string
+  nativeLabel: string
+  emoji: string
+  isDefault?: boolean
+}
+
+export type TranslationValue = string | TranslationDictionary
+export interface TranslationDictionary {
+  [key: string]: TranslationValue
+}
 
 export type ActivityType =
   | 'letter-recognition'
@@ -10,7 +24,7 @@ export type ActivityType =
   | 'exam-practice'
   | 'class-practice'
 
-export type ChallengeSource = 'bank' | 'generator'
+export type ChallengeSource = 'bank' | 'generator' | 'group'
 
 export type PracticeQuestionType =
   | 'fill-in-blank'
@@ -99,6 +113,13 @@ export interface ChallengeDefinition {
   bankId?: string
   badge?: string
   bookReference?: string
+  menuGroup?: string
+}
+
+export interface QuestionVisualItem {
+  label: string
+  emoji?: string
+  imagePath?: string
 }
 
 export interface MathsQuestionBankEntry {
@@ -107,6 +128,7 @@ export interface MathsQuestionBankEntry {
   prompt: string
   promptHint?: string
   emoji?: string
+  visualItems?: QuestionVisualItem[]
   options: SessionQuestionOption[]
   correctOptionId: string
   explanation?: string
@@ -130,6 +152,7 @@ export interface SessionQuestionOption {
   id: string
   text: string
   emoji?: string
+  imagePath?: string
 }
 
 export interface SessionQuestion {
@@ -139,6 +162,8 @@ export interface SessionQuestion {
   audioPath?: string
   emoji?: string
   imagePath?: string
+  visualItems?: QuestionVisualItem[]
+  addends?: number[]
   options: SessionQuestionOption[]
   correctOptionId: string
   explanation?: string

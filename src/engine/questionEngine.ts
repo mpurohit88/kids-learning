@@ -28,6 +28,10 @@ export function generateSession(
   const challenge = deps.challenges.getChallenge(input.subject, input.challengeId)
   if (!challenge) return []
 
+  if (challenge.source === 'group') {
+    return []
+  }
+
   const count =
     input.count ??
     deps.gameSettings.getRoundCount(input.grade, input.subject)

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Eraser, Volume2 } from 'lucide-react'
+import { Eraser } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { ConfettiBurst } from '../components/ConfettiBurst'
@@ -8,6 +8,7 @@ import { GameCompleteModal } from '../components/GameCompleteModal'
 import { Mascot } from '../components/Mascot'
 import { KannadaSoundHints } from '../components/game/KannadaSoundHints'
 import { dataService } from '../data'
+import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
 import { playAudio, playCelebrationSound } from '../utils/audioPlayer'
 import { playKannadaLetterAudio } from '../utils/kannadaLetterAudio'
@@ -19,6 +20,7 @@ export function LetterTracingGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const isDrawingRef = useRef(false)
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const profileId = useAppStore((state) => state.profileId)
   const subject = useAppStore((state) => state.subject)
@@ -43,7 +45,7 @@ export function LetterTracingGame() {
   const [currentLetter, setCurrentLetter] = useState<Letter | null>(null)
   const [hasDrawn, setHasDrawn] = useState(false)
   const [mood, setMood] = useState<'idle' | 'happy' | 'encourage'>('idle')
-  const [message, setMessage] = useState('Trace the letter with your finger or mouse!')
+  const [message, setMessage] = useState(t('games.traceLetter.prompt'))
   const [showConfetti, setShowConfetti] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
   const [result, setResult] = useState(buildRoundResult(0, roundCount))
@@ -99,7 +101,7 @@ export function LetterTracingGame() {
       setCurrentLetter(letter)
       setHasDrawn(false)
       setMood('idle')
-      setMessage('Trace the letter with your finger or mouse!')
+      setMessage(t('games.traceLetter.prompt'))
       setShowConfetti(false)
       playLetterAudio(letter)
     },
@@ -191,7 +193,7 @@ export function LetterTracingGame() {
 
     setCompletedCount((count) => count + 1)
     setMood('happy')
-    setMessage(hasDrawn ? 'Great job tracing!' : 'Good try! You can trace more next time!')
+    setMessage(hasDrawn ? t('games.traceLetter.traceSuccess') : t('games.traceLetter.traceEmpty'))
     setShowConfetti(true)
     playCelebrationSound()
 
@@ -224,7 +226,7 @@ export function LetterTracingGame() {
     clearCanvas()
     setHasDrawn(false)
     setMood('idle')
-    setMessage('Trace the letter with your finger or mouse!')
+    setMessage(t('games.traceLetter.prompt'))
   }
 
   const replayAudio = () => {
@@ -236,17 +238,22 @@ export function LetterTracingGame() {
   if (!profile || !content || !currentLetter) return null
 
   return (
-    <AppShell title="Trace the Letter" showBack backTo="/activities">
+    <AppShell title={t('games.traceLetter.title')} showBack backTo="/activities">
       <div className="relative flex flex-1 flex-col items-center gap-5">
         <ConfettiBurst active={showConfetti} />
 
         <div className="flex w-full items-center justify-between">
           <p className="rounded-full bg-white/80 px-4 py-2 font-semibold text-slate-600 shadow">
-            Letter {Math.min(roundIndex + 1, roundCount)} / {roundCount}
+            {t('common.letter')} {Math.min(roundIndex + 1, roundCount)} / {roundCount}
           </p>
         </div>
 
-        <Mascot mood={mood} message={message} />
+        <Mascot
+          mood={mood}
+          message={message}
+          onHearAgain={replayAudio}
+          hearAgainLabel={t('common.hearAgain')}
+        />
 
         {showSoundHints ? (
           <KannadaSoundHints letter={currentLetter} layout="inline" />
@@ -271,15 +278,6 @@ export function LetterTracingGame() {
         <div className="flex items-center gap-4">
           <button
             type="button"
-            aria-label="Hear letter sound"
-            onClick={replayAudio}
-            className="flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white bg-orange-400 text-white shadow-lg transition hover:bg-orange-300 md:h-24 md:w-24"
-          >
-            <Volume2 size={36} strokeWidth={2.5} />
-          </button>
-
-          <button
-            type="button"
             aria-label="Erase and try again"
             onClick={handleErase}
             className="flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white bg-slate-500 text-white shadow-lg transition hover:bg-slate-400 md:h-24 md:w-24"
@@ -292,7 +290,7 @@ export function LetterTracingGame() {
             onClick={handleDone}
             className="rounded-3xl bg-purple-500 px-10 py-5 text-2xl font-bold text-white shadow-lg transition hover:bg-purple-400"
           >
-            Done! ⭐
+            {t('common.done')}
           </button>
         </div>
       </div>

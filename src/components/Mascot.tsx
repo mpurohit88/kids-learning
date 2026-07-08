@@ -1,13 +1,16 @@
 import { motion, AnimatePresence } from 'framer-motion'
+import { QuestionHearButton } from './game/QuestionHearButton'
 
 export type MascotMood = 'idle' | 'happy' | 'sad' | 'encourage'
 
 interface MascotProps {
   mood: MascotMood
   message?: string
+  onHearAgain?: () => void
+  hearAgainLabel?: string
 }
 
-export function Mascot({ mood, message }: MascotProps) {
+export function Mascot({ mood, message, onHearAgain, hearAgainLabel = 'Hear again' }: MascotProps) {
   const isHappy = mood === 'happy'
   const isSad = mood === 'sad' || mood === 'encourage'
 
@@ -76,15 +79,20 @@ export function Mascot({ mood, message }: MascotProps) {
 
       <AnimatePresence mode="wait">
         {message ? (
-          <motion.p
-            key={message}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="max-w-sm rounded-2xl bg-white/90 px-5 py-3 text-center text-lg font-semibold text-slate-700 shadow-md"
-          >
-            {message}
-          </motion.p>
+          <div className="flex max-w-md items-center justify-center gap-3">
+            <motion.p
+              key={message}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="rounded-2xl bg-white/90 px-5 py-3 text-center text-lg font-semibold text-slate-700 shadow-md"
+            >
+              {message}
+            </motion.p>
+            {onHearAgain ? (
+              <QuestionHearButton onClick={onHearAgain} ariaLabel={hearAgainLabel} />
+            ) : null}
+          </div>
         ) : null}
       </AnimatePresence>
     </div>

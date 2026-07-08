@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { Volume2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { AnswerFeedbackOverlay, type AnswerFeedbackType } from '../AnswerFeedbackOverlay'
 import { ConfettiBurst } from '../ConfettiBurst'
@@ -68,25 +67,18 @@ export function QuizGameShell({
             />
           }
         >
-          <div
-            className={`flex w-full items-center ${onHearAgain ? 'justify-between' : 'justify-start'}`}
-          >
+          <div className="flex w-full items-center justify-start">
             <p className="rounded-full bg-white/80 px-4 py-2 font-semibold text-slate-600 shadow">
               {roundLabel} {Math.min(roundIndex + 1, roundCount)} / {roundCount}
             </p>
-            {onHearAgain ? (
-              <button
-                type="button"
-                onClick={onHearAgain}
-                className="flex items-center gap-2 rounded-2xl bg-orange-400 px-4 py-3 font-semibold text-white shadow-md transition hover:bg-orange-300"
-              >
-                <Volume2 size={20} />
-                {hearAgainLabel}
-              </button>
-            ) : null}
           </div>
 
-          <Mascot mood={mood} message={message} />
+          <Mascot
+            mood={mood}
+            message={message}
+            onHearAgain={onHearAgain}
+            hearAgainLabel={hearAgainLabel}
+          />
           {children}
         </GameSideLayout>
       </div>

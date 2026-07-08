@@ -19,6 +19,7 @@ export class LocalMathsRepository {
       prompt: entry.prompt,
       promptHint: entry.promptHint,
       emoji: entry.emoji,
+      visualItems: entry.visualItems,
       options: shuffleArray(entry.options),
       correctOptionId: entry.correctOptionId,
       explanation: entry.explanation,

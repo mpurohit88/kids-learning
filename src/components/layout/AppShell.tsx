@@ -1,6 +1,7 @@
-import { ArrowLeft, Star } from 'lucide-react'
+import { ArrowLeft, Languages, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { dataService } from '../../data'
+import { useTranslation } from '../../hooks/useTranslation'
 import { useAppStore } from '../../store/useAppStore'
 
 interface AppShellProps {
@@ -9,6 +10,7 @@ interface AppShellProps {
   showBack?: boolean
   backTo?: string
   showProgressLink?: boolean
+  showLanguageButton?: boolean
 }
 
 export function AppShell({
@@ -17,9 +19,12 @@ export function AppShell({
   showBack = true,
   backTo = '/home',
   showProgressLink = true,
+  showLanguageButton = true,
 }: AppShellProps) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const profileId = useAppStore((state) => state.profileId)
+  const uiLocale = useAppStore((state) => state.uiLocale)
   const profile = dataService.getProfileById(profileId)
 
   return (
@@ -29,7 +34,7 @@ export function AppShell({
           {showBack ? (
             <button
               type="button"
-              aria-label="Go back"
+              aria-label={t('common.goBack')}
               onClick={() => navigate(backTo)}
               className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/90 text-slate-700 shadow-md transition hover:bg-white"
             >
@@ -39,7 +44,7 @@ export function AppShell({
             <div className="h-12 w-12" />
           )}
           <div>
-            <p className="text-sm font-medium text-slate-500">Fun Letters</p>
+            <p className="text-sm font-medium text-slate-500">{t('app.tagline')}</p>
             <h1 className="text-2xl font-bold text-slate-800 md:text-3xl">{title}</h1>
           </div>
         </div>
@@ -54,10 +59,21 @@ export function AppShell({
               <span className="font-semibold">{profile.name}</span>
             </div>
           ) : null}
+          {showLanguageButton && uiLocale ? (
+            <button
+              type="button"
+              aria-label={t('common.changeLanguage')}
+              title={t('common.changeLanguage')}
+              onClick={() => navigate('/language')}
+              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-400 text-teal-950 shadow-md transition hover:bg-teal-300"
+            >
+              <Languages size={22} strokeWidth={2.5} />
+            </button>
+          ) : null}
           {showProgressLink && profile ? (
             <button
               type="button"
-              aria-label="View progress"
+              aria-label={t('common.viewProgress')}
               onClick={() => navigate('/progress')}
               className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-300 text-amber-900 shadow-md transition hover:bg-amber-200"
             >

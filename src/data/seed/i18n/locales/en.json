@@ -1,0 +1,241 @@
+{
+  "app": {
+    "name": "Kids Language Learning",
+    "tagline": "Fun Letters",
+    "loading": "Loading..."
+  },
+  "motherTongue": {
+    "title": "What is your mother tongue?",
+    "subtitle": "Menus and instructions will appear in your chosen language",
+    "continue": "Continue"
+  },
+  "launch": {
+    "heading": "Who is learning today?",
+    "subtitle": "Pick your profile to start"
+  },
+  "home": {
+    "title": "Pick a Subject",
+    "greeting": "Hi {{name}}! What would you like to learn today?",
+    "chooseSubject": "Choose {{subject}}"
+  },
+  "activities": {
+    "challengesTitle": "{{subject}} Challenges",
+    "pickChallenge": "Pick a challenge to play!",
+    "lettersIntro": "See all letters with examples before you practice!",
+    "tabPractice": "Practice",
+    "tabLetters": "All Letters",
+    "comingSoon": "Coming soon!",
+    "comingSoonDetail": "Challenges for {{subject}} are being added.",
+    "viewAllLetters": "View All Letters →",
+    "seeMyStars": "See My Stars"
+  },
+  "progress": {
+    "title": "Stars Earned",
+    "subtitle": "Here is how many stars each child has earned!",
+    "totalStars": "Total Stars",
+    "playedTimes_one": "Played {{count}} time",
+    "playedTimes_other": "Played {{count}} times",
+    "starsCount": "{{count}} stars",
+    "switchProfile": "Switch Child Profile"
+  },
+  "common": {
+    "goBack": "Go back",
+    "viewProgress": "View progress",
+    "hearAgain": "Hear again",
+    "hearWord": "Hear Word",
+    "hearLetter": "Hear letter {{name}}",
+    "round": "Round",
+    "question": "Question",
+    "letter": "Letter",
+    "done": "Done! ⭐",
+    "correct": "Correct!",
+    "tryAgain": "Try again!",
+    "playAgain": "Play Again",
+    "backToGames": "Back to Games",
+    "soundsLike": "Sounds like",
+    "changeLanguage": "Change Language"
+  },
+  "feedback": {
+    "score": "{{correct}} out of {{total}} correct",
+    "stars3": "Amazing! You are a star!",
+    "stars2": "Great job! Keep going!",
+    "stars1": "Good try! Practice makes perfect!",
+    "letterCorrect": "Yes! Great job!",
+    "letterWrong": "Good try! The answer was {{letter}}",
+    "greatJob": "Great job!",
+    "letsBegin": "Let's begin!"
+  },
+  "games": {
+    "findLetter": {
+      "title": "Find the Letter",
+      "prompt": "Listen and find the letter!",
+      "instruction": "Tap the matching letter.",
+      "instructionWithHints": "Tap the matching letter. Hindi and English hints are shown below each option."
+    },
+    "traceLetter": {
+      "title": "Trace the Letter",
+      "prompt": "Trace the letter with your finger or mouse!",
+      "traceSuccess": "Great job tracing!",
+      "traceEmpty": "Good try! You can trace more next time!"
+    },
+    "pictureMatch": {
+      "title": "Picture Match",
+      "prompt": "What word matches the picture?"
+    },
+    "examPractice": {
+      "title": "Exam Practice"
+    }
+  },
+  "exam": {
+    "firstLetter": "Which letter does this word start with?",
+    "letterType": "Is this letter a Swar (vowel) or Vyanjan (consonant)?",
+    "swar": "Swar (Vowel)",
+    "vyanjan": "Vyanjan (Consonant)"
+  },
+  "maths": {
+    "whichIsHeavier": "Which is heavier?",
+    "whichIsLighter": "Which is lighter?",
+    "or": "or",
+    "hearQuestion": "Listen to question",
+    "additionPickPractice": "Pick an addition practice!",
+    "notes": "Notes",
+    "clearNotes": "Clear notes"
+  },
+  "lettersTable": {
+    "capital": "Capital",
+    "small": "Small",
+    "letter": "Letter",
+    "sound": "Sound",
+    "example": "Example",
+    "type": "Type",
+    "listen": "Listen",
+    "swar": "Swar",
+    "vyanjan": "Vyanjan",
+    "swara": "Swara",
+    "vyanjana": "Vyanjana",
+    "vowel": "Vowel",
+    "consonant": "Consonant"
+  },
+  "challenges": {
+    "letter-recognition": {
+      "title": "Find the Letter",
+      "description": "Listen and tap the matching letter"
+    },
+    "picture-word-match": {
+      "title": "Picture Match",
+      "description": "Match the picture to the right word"
+    },
+    "letter-tracing": {
+      "title": "Trace the Letter",
+      "description": "Draw the letter shape on screen"
+    },
+    "exam-practice": {
+      "title": "Exam Practice",
+      "description": "Class 2 exam-style letter questions",
+      "badge": "Class 2"
+    },
+    "heavy-and-light": {
+      "title": "Heavy and Light",
+      "description": "Learn heavy and light objects",
+      "badge": "LKG"
+    },
+    "on-and-under": {
+      "title": "On and Under",
+      "description": "Learn on and under positions",
+      "badge": "LKG"
+    },
+    "shapes": {
+      "title": "Shapes",
+      "description": "Circle, triangle, square and rectangle",
+      "badge": "LKG"
+    },
+    "numeracy-skills": {
+      "title": "Numeracy Skills",
+      "description": "Counting and number practice",
+      "badge": "LKG",
+      "bookReference": "Numeracy Skills Book · Pages 4–10"
+    },
+    "refresh-homework": {
+      "title": "Refresh Homework",
+      "description": "Number and counting revision",
+      "badge": "LKG",
+      "bookReference": "Refresh Homework Book · Pages 3–13"
+    },
+    "addition-within-10": {
+      "title": "Addition within 10",
+      "description": "Add small numbers up to 10"
+    },
+    "addition-within-100": {
+      "title": "Two Digit Addition",
+      "description": "Add two 2-digit numbers like 44 + 55"
+    },
+    "addition-three-digit": {
+      "title": "Three Digit Addition",
+      "description": "Add two 3-digit numbers like 736 + 213"
+    },
+    "addition-three-digit-two-digit": {
+      "title": "Three + Two Digit",
+      "description": "Add a 3-digit and 2-digit number like 315 + 53"
+    },
+    "addition-three-two-digit-numbers": {
+      "title": "Add Three Numbers",
+      "description": "Add three 2-digit numbers like 38 + 79 + 12"
+    },
+    "addition": {
+      "title": "Addition",
+      "description": "Practice column addition step by step",
+      "badge": "Class 2"
+    },
+    "counting-objects": {
+      "title": "Count the Objects",
+      "description": "Count objects and pick the number",
+      "badge": "LKG"
+    },
+    "number-recognition": {
+      "title": "Number Match",
+      "description": "Match the number to its name",
+      "badge": "LKG"
+    }
+  },
+  "subjects": {
+    "hindi": {
+      "title": "Hindi",
+      "description": "Letters, words, and reading"
+    },
+    "kannada": {
+      "title": "Kannada",
+      "description": "Letters, words, and reading"
+    },
+    "english": {
+      "title": "English",
+      "description": "Words and reading practice"
+    },
+    "maths": {
+      "title": "Maths",
+      "description": "Numbers, counting, and addition"
+    }
+  },
+  "profiles": {
+    "aarav": {
+      "description": "Age 4 · LKG"
+    },
+    "diya": {
+      "description": "Age 7 · Class 2"
+    }
+  },
+  "sideGames": {
+    "mango": {
+      "title": "Collect the Mangoes",
+      "goal": "Collect 3+ mangoes!",
+      "allCollected": "All mangoes collected!",
+      "soClose": "So close! Try again!",
+      "keepGoing": "Keep going!"
+    },
+    "goat": {
+      "title": "Save the Goat",
+      "safe": "Ganu is safe!",
+      "chomp": "Chomp!",
+      "saveGanu": "Save Ganu! {{count}}+ correct"
+    }
+  }
+}

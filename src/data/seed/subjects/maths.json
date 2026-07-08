@@ -5,6 +5,25 @@
       "maxSum": 10,
       "minOperand": 0
     },
+    "addition-within-100": {
+      "maxSum": 100,
+      "minOperand": 10
+    },
+    "addition-three-digit": {
+      "minOperand": 100,
+      "maxOperand": 999,
+      "noCarry": true
+    },
+    "addition-three-digit-two-digit": {
+      "leftDigits": 3,
+      "rightDigits": 2,
+      "noCarry": true
+    },
+    "addition-three-two-digit-numbers": {
+      "addendCount": 3,
+      "minOperand": 10,
+      "maxOperand": 99
+    },
     "counting-objects": {
       "minCount": 1,
       "maxCount": 10

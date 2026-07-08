@@ -1,0 +1,163 @@
+{
+  "app": {
+    "name": "बच्चों की भाषा सीखना",
+    "tagline": "मज़ेदार अक्षर",
+    "loading": "लोड हो रहा है..."
+  },
+  "motherTongue": {
+    "title": "आपकी मातृभाषा क्या है?",
+    "subtitle": "मेनू और निर्देश आपकी चुनी भाषा में दिखेंगे",
+    "continue": "आगे बढ़ें"
+  },
+  "launch": {
+    "heading": "आज कौन सीख रहा है?",
+    "subtitle": "शुरू करने के लिए प्रोफ़ाइल चुनें"
+  },
+  "home": {
+    "title": "विषय चुनें",
+    "greeting": "नमस्ते {{name}}! आज आप क्या सीखना चाहते हैं?",
+    "chooseSubject": "{{subject}} चुनें"
+  },
+  "activities": {
+    "challengesTitle": "{{subject}} चुनौतियाँ",
+    "pickChallenge": "खेलने के लिए एक चुनौती चुनें!",
+    "lettersIntro": "अभ्यास से पहले सभी अक्षर उदाहरण सहित देखें!",
+    "tabPractice": "अभ्यास",
+    "tabLetters": "सभी अक्षर",
+    "comingSoon": "जल्द आ रहा है!",
+    "comingSoonDetail": "{{subject}} के लिए चुनौतियाँ जोड़ी जा रही हैं।",
+    "viewAllLetters": "सभी अक्षर देखें →",
+    "seeMyStars": "मेरे सितारे देखें"
+  },
+  "progress": {
+    "title": "कमाए सितारे",
+    "subtitle": "देखें हर बच्चे ने कितने सितारे कमाए!",
+    "totalStars": "कुल सितारे",
+    "playedTimes_one": "{{count}} बार खेला",
+    "playedTimes_other": "{{count}} बार खेला",
+    "starsCount": "{{count}} सितारे",
+    "switchProfile": "बच्चा बदलें"
+  },
+  "common": {
+    "goBack": "वापस जाएँ",
+    "viewProgress": "प्रगति देखें",
+    "hearAgain": "फिर सुनें",
+    "hearWord": "शब्द सुनें",
+    "hearLetter": "अक्षर {{name}} सुनें",
+    "round": "राउंड",
+    "question": "प्रश्न",
+    "letter": "अक्षर",
+    "done": "हो गया! ⭐",
+    "correct": "सही!",
+    "tryAgain": "फिर कोशिश करें!",
+    "playAgain": "फिर खेलें",
+    "backToGames": "खेलों पर वापस",
+    "soundsLike": "ऐसा सुनाई देता है",
+    "changeLanguage": "भाषा बदलें"
+  },
+  "feedback": {
+    "score": "{{correct}} में से {{total}} सही",
+    "stars3": "शानदार! आप सितारे हैं!",
+    "stars2": "बहुत अच्छा! ऐसे ही करते रहो!",
+    "stars1": "अच्छी कोशिश! अभ्यास से सब सीख जाओगे!",
+    "letterCorrect": "हाँ! बहुत अच्छा!",
+    "letterWrong": "अच्छी कोशिश! सही जवाब था {{letter}}",
+    "greatJob": "बहुत अच्छा!",
+    "letsBegin": "चलो शुरू करें!"
+  },
+  "games": {
+    "findLetter": {
+      "title": "अक्षर ढूँढो",
+      "prompt": "सुनो और सही अक्षर ढूँढो!",
+      "instruction": "सही अक्षर पर टैप करो।",
+      "instructionWithHints": "सही अक्षर पर टैप करो। हर विकल्प के नीचे हिन्दी और अंग्रेज़ी संकेत हैं।"
+    },
+    "traceLetter": {
+      "title": "अक्षर बनाओ",
+      "prompt": "उँगली या माउस से अक्षर बनाओ!",
+      "traceSuccess": "बहुत अच्छा! अक्षर बनाया!",
+      "traceEmpty": "अच्छी कोशिश! अगली बार और बनाओ!"
+    },
+    "pictureMatch": {
+      "title": "चित्र मिलाओ",
+      "prompt": "कौन सा शब्द चित्र से मेल खाता है?"
+    },
+    "examPractice": {
+      "title": "परीक्षा अभ्यास"
+    }
+  },
+  "exam": {
+    "firstLetter": "यह शब्द किस अक्षर से शुरू होता है?",
+    "letterType": "क्या यह स्वर है या व्यंजन?",
+    "swar": "स्वर",
+    "vyanjan": "व्यंजन"
+  },
+  "lettersTable": {
+    "capital": "बड़ा",
+    "small": "छोटा",
+    "letter": "अक्षर",
+    "sound": "ध्वनि",
+    "example": "उदाहरण",
+    "type": "प्रकार",
+    "listen": "सुनें",
+    "swar": "स्वर",
+    "vyanjan": "व्यंजन",
+    "swara": "स्वर",
+    "vyanjana": "व्यंजन",
+    "vowel": "स्वर",
+    "consonant": "व्यंजन"
+  },
+  "maths": {
+    "whichIsHeavier": "कौन सा ज़्यादा भारी है?",
+    "whichIsLighter": "कौन सा ज़्यादा हल्का है?",
+    "or": "या",
+    "hearQuestion": "प्रश्न सुनें",
+    "additionPickPractice": "जोड़ का अभ्यास चुनें!",
+    "notes": "नोट्स",
+    "clearNotes": "नोट्स मिटाएँ"
+  },
+  "challenges": {
+    "letter-recognition": { "title": "अक्षर ढूँढो", "description": "सुनो और सही अक्षर चुनो" },
+    "picture-word-match": { "title": "चित्र मिलाओ", "description": "चित्र से सही शब्द मिलाओ" },
+    "letter-tracing": { "title": "अक्षर बनाओ", "description": "स्क्रीन पर अक्षर बनाओ" },
+    "exam-practice": { "title": "परीक्षा अभ्यास", "description": "कक्षा 2 जैसे अक्षर प्रश्न", "badge": "कक्षा 2" },
+    "heavy-and-light": { "title": "भारी और हल्का", "description": "भारी और हल्की चीज़ें सीखो", "badge": "LKG" },
+    "on-and-under": { "title": "ऊपर और नीचे", "description": "ऊपर और नीचे की स्थिति सीखो", "badge": "LKG" },
+    "shapes": { "title": "आकार", "description": "गोला, त्रिकोण, वर्ग और आयत", "badge": "LKG" },
+    "numeracy-skills": { "title": "संख्या कौशल", "description": "गिनती और संख्या अभ्यास", "badge": "LKG", "bookReference": "Numeracy Skills Book · पृष्ठ 4–10" },
+    "refresh-homework": { "title": "Refresh Homework", "description": "संख्या और गिनती दोहराओ", "badge": "LKG", "bookReference": "Refresh Homework Book · पृष्ठ 3–13" },
+    "addition-within-10": { "title": "10 तक जोड़", "description": "10 तक की छोटी संख्याएँ जोड़ो" },
+    "addition-within-100": { "title": "दो अंक जोड़", "description": "44 + 55 जैसे दो अंकों की संख्याएँ जोड़ो" },
+    "addition-three-digit": { "title": "तीन अंक जोड़", "description": "736 + 213 जैसी 3-अंकीय संख्याएँ जोड़ो" },
+    "addition-three-digit-two-digit": { "title": "तीन + दो अंक", "description": "315 + 53 जैसी 3 और 2 अंक की संख्याएँ जोड़ो" },
+    "addition-three-two-digit-numbers": { "title": "तीन संख्याएँ जोड़ो", "description": "38 + 79 + 12 जैसी तीन 2-अंकीय संख्याएँ जोड़ो" },
+    "addition": { "title": "जोड़", "description": "स्तंभ जोड़ का अभ्यास करें", "badge": "कक्षा 2" },
+    "counting-objects": { "title": "वस्तुएँ गिनो", "description": "वस्तुएँ गिनकर संख्या चुनो", "badge": "LKG" },
+    "number-recognition": { "title": "संख्या मिलाओ", "description": "संख्या का नाम मिलाओ", "badge": "LKG" }
+  },
+  "subjects": {
+    "hindi": { "title": "हिन्दी", "description": "अक्षर, शब्द और पढ़ना" },
+    "kannada": { "title": "कन्नड़", "description": "अक्षर, शब्द और पढ़ना" },
+    "english": { "title": "अंग्रेज़ी", "description": "शब्द और पढ़ने का अभ्यास" },
+    "maths": { "title": "गणित", "description": "संख्या, गिनती और जोड़" }
+  },
+  "profiles": {
+    "aarav": { "description": "उम्र 4 · LKG" },
+    "diya": { "description": "उम्र 7 · कक्षा 2" }
+  },
+  "sideGames": {
+    "mango": {
+      "title": "आम इकट्ठा करो",
+      "goal": "3+ आम इकट्ठा करो!",
+      "allCollected": "सारे आम इकट्ठा!",
+      "soClose": "बस थोड़ा और! फिर कोशिश करो!",
+      "keepGoing": "ऐसे ही करते रहो!"
+    },
+    "goat": {
+      "title": "बकरी बचाओ",
+      "safe": "गनु सुरक्षित है!",
+      "chomp": "चomp!",
+      "saveGanu": "गनु को बचाओ! {{count}}+ सही"
+    }
+  }
+}

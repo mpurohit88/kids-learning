@@ -12,6 +12,9 @@ import type {
   SessionQuestion,
   Subject,
   SubjectDefinition,
+  MotherTongueLanguage,
+  TranslationDictionary,
+  UiLocale,
 } from '../../types'
 
 export interface SaveGameResultInput {
@@ -63,12 +66,22 @@ export interface GameCatalogRepository {
 export interface ChallengeRepository {
   getAllChallenges(): ChallengeDefinition[]
   getChallenges(subject: Subject, grade: AgeGroup): ChallengeDefinition[]
+  getGroupedChallenges(subject: Subject, menuGroup: string, grade: AgeGroup): ChallengeDefinition[]
   getChallenge(subject: Subject, challengeId: string): ChallengeDefinition | undefined
 }
 
 export interface SubjectRepository {
   getAllSubjects(): SubjectDefinition[]
   getSubject(id: Subject): SubjectDefinition | undefined
+}
+
+export interface LocaleRepository {
+  getMotherTongueLanguages(): MotherTongueLanguage[]
+  getDefaultLocale(): UiLocale
+  getTranslations(locale: UiLocale): TranslationDictionary
+  getSavedLocale(): UiLocale | null
+  saveLocale(locale: UiLocale): void
+  clearSavedLocale(): void
 }
 
 export interface DataRepositories {
@@ -80,6 +93,7 @@ export interface DataRepositories {
   challenges: ChallengeRepository
   subjects: SubjectRepository
   maths: MathsRepository
+  locale: LocaleRepository
 }
 
 export type { GenerateSessionInput, SessionQuestion }

@@ -1,8 +1,10 @@
 import { Volume2 } from 'lucide-react'
 import type { Language, Letter } from '../../types'
+import { useTranslation } from '../../hooks/useTranslation'
 import { playAudio } from '../../utils/audioPlayer'
 import { playKannadaLetterAudio } from '../../utils/kannadaLetterAudio'
 import { getKannadaSoundHints } from '../../utils/kannadaLetterHints'
+import type { TranslateFn } from '../../utils/translate'
 
 interface LetterReferenceTableProps {
   subject: Extract<Language, 'hindi' | 'english' | 'kannada'>
@@ -62,10 +64,12 @@ function LetterAudioButton({
   letter,
   subject,
   speechLang,
+  t,
 }: {
   letter: Letter
   subject: LetterReferenceTableProps['subject']
   speechLang: string
+  t: TranslateFn
 }) {
   const handlePlay = () => {
     if (subject === 'kannada') {
@@ -84,7 +88,7 @@ function LetterAudioButton({
   return (
     <button
       type="button"
-      aria-label={`Hear letter ${letter.name}`}
+      aria-label={t('common.hearLetter', { name: letter.name })}
       onClick={handlePlay}
       className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-orange-200 bg-orange-400 text-white shadow transition hover:bg-orange-300"
     >
@@ -93,14 +97,14 @@ function LetterAudioButton({
   )
 }
 
-function getTypeLabel(subject: Language, type: Letter['type']) {
+function getTypeLabel(subject: Language, type: Letter['type'], t: TranslateFn) {
   if (subject === 'hindi') {
-    return type === 'vowel' ? 'Swar' : 'Vyanjan'
+    return type === 'vowel' ? t('lettersTable.swar') : t('lettersTable.vyanjan')
   }
   if (subject === 'kannada') {
-    return type === 'vowel' ? 'Swara' : 'Vyanjana'
+    return type === 'vowel' ? t('lettersTable.swara') : t('lettersTable.vyanjana')
   }
-  return type === 'vowel' ? 'Vowel' : 'Consonant'
+  return type === 'vowel' ? t('lettersTable.vowel') : t('lettersTable.consonant')
 }
 
 export function LetterReferenceTable({
@@ -108,6 +112,7 @@ export function LetterReferenceTable({
   letters,
   speechLang,
 }: LetterReferenceTableProps) {
+  const { t } = useTranslation()
   const isEnglish = subject === 'english'
 
   return (
@@ -118,16 +123,16 @@ export function LetterReferenceTable({
             <tr className="bg-slate-100 text-sm uppercase tracking-wide text-slate-600">
               {isEnglish ? (
                 <>
-                  <th className="px-4 py-3 font-bold">Capital</th>
-                  <th className="px-4 py-3 font-bold">Small</th>
+                  <th className="px-4 py-3 font-bold">{t('lettersTable.capital')}</th>
+                  <th className="px-4 py-3 font-bold">{t('lettersTable.small')}</th>
                 </>
               ) : (
-                <th className="px-4 py-3 font-bold">Letter</th>
+                <th className="px-4 py-3 font-bold">{t('lettersTable.letter')}</th>
               )}
-              <th className="px-4 py-3 font-bold">Sound</th>
-              <th className="px-4 py-3 font-bold">Example</th>
-              <th className="px-4 py-3 font-bold">Type</th>
-              <th className="px-4 py-3 font-bold">Listen</th>
+              <th className="px-4 py-3 font-bold">{t('lettersTable.sound')}</th>
+              <th className="px-4 py-3 font-bold">{t('lettersTable.example')}</th>
+              <th className="px-4 py-3 font-bold">{t('lettersTable.type')}</th>
+              <th className="px-4 py-3 font-bold">{t('lettersTable.listen')}</th>
             </tr>
           </thead>
           <tbody>
@@ -164,7 +169,7 @@ export function LetterReferenceTable({
                         : 'bg-purple-100 text-purple-700'
                     }`}
                   >
-                    {getTypeLabel(subject, letter.type)}
+                    {getTypeLabel(subject, letter.type, t)}
                   </span>
                 </td>
                 <td className="px-4 py-3">
@@ -172,6 +177,7 @@ export function LetterReferenceTable({
                     letter={letter}
                     subject={subject}
                     speechLang={speechLang}
+                    t={t}
                   />
                 </td>
               </tr>

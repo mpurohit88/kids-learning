@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { AnswerOptionButton } from '../../components/game/AnswerOptionButton'
+import { QuestionPromptRow } from '../../components/game/QuestionPromptRow'
 import type { LetterTypeQuestion } from './types'
 
 interface LetterTypeQuestionViewProps {
@@ -7,6 +8,8 @@ interface LetterTypeQuestionViewProps {
   selectedId: string | null
   isLocked: boolean
   onAnswer: (choiceId: string) => void
+  onHearAgain?: () => void
+  hearAgainLabel?: string
 }
 
 export function LetterTypeQuestionView({
@@ -14,6 +17,8 @@ export function LetterTypeQuestionView({
   selectedId,
   isLocked,
   onAnswer,
+  onHearAgain,
+  hearAgainLabel = 'Hear again',
 }: LetterTypeQuestionViewProps) {
   return (
     <>
@@ -26,9 +31,9 @@ export function LetterTypeQuestionView({
         {question.letter.character}
       </motion.div>
 
-      <p className="text-xl font-semibold text-slate-700">
+      <QuestionPromptRow onHearAgain={onHearAgain} hearAgainLabel={hearAgainLabel}>
         Is this letter a Swar (vowel) or Vyanjan (consonant)?
-      </p>
+      </QuestionPromptRow>
 
       <div className="grid w-full max-w-2xl grid-cols-1 gap-4 md:grid-cols-2">
         {question.options.map((option) => (

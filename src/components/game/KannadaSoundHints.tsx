@@ -1,4 +1,5 @@
 import type { Letter } from '../../types'
+import { useTranslation } from '../../hooks/useTranslation'
 import { getKannadaSoundHints } from '../../utils/kannadaLetterHints'
 
 interface KannadaSoundHintsProps {
@@ -7,12 +8,13 @@ interface KannadaSoundHintsProps {
 }
 
 export function KannadaSoundHints({ letter, layout = 'stacked' }: KannadaSoundHintsProps) {
+  const { t } = useTranslation()
   const { hindi, english } = getKannadaSoundHints(letter.name)
 
   if (layout === 'inline') {
     return (
       <div className="flex flex-wrap items-center justify-center gap-2 rounded-2xl bg-white/90 px-5 py-3 shadow">
-        <span className="text-sm font-semibold text-slate-500">Sounds like</span>
+        <span className="text-sm font-semibold text-slate-500">{t('common.soundsLike')}</span>
         {hindi ? (
           <span className="rounded-xl bg-orange-50 px-3 py-1 text-2xl font-bold text-slate-700">
             {hindi}

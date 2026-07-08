@@ -10,7 +10,22 @@ export class LocalChallengeRepository implements ChallengeRepository {
   getChallenges(subject: Subject, grade: AgeGroup): ChallengeDefinition[] {
     return CHALLENGE_CATALOG.filter(
       (challenge) =>
-        challenge.subject === subject && challenge.gradeLevels.includes(grade),
+        challenge.subject === subject &&
+        challenge.gradeLevels.includes(grade) &&
+        !challenge.menuGroup,
+    )
+  }
+
+  getGroupedChallenges(
+    subject: Subject,
+    menuGroup: string,
+    grade: AgeGroup,
+  ): ChallengeDefinition[] {
+    return CHALLENGE_CATALOG.filter(
+      (challenge) =>
+        challenge.subject === subject &&
+        challenge.menuGroup === menuGroup &&
+        challenge.gradeLevels.includes(grade),
     )
   }
 

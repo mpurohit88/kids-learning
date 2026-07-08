@@ -6,6 +6,7 @@ import { LocalGameCatalogRepository } from './repositories/local/gameCatalogRepo
 import { LocalGameSettingsRepository } from './repositories/local/gameSettingsRepository'
 import { LocalProfileRepository } from './repositories/local/profileRepository'
 import { LocalProgressRepository } from './repositories/local/progressRepository'
+import { LocalLocaleRepository } from './repositories/local/localeRepository'
 import { LocalSubjectRepository } from './repositories/local/subjectRepository'
 import type {
   DataRepositories,
@@ -21,6 +22,8 @@ import type {
   SessionQuestion,
   Subject,
   SubjectDefinition,
+  TranslationDictionary,
+  UiLocale,
 } from '../types'
 
 function createLocalRepositories(): DataRepositories {
@@ -33,6 +36,7 @@ function createLocalRepositories(): DataRepositories {
     challenges: new LocalChallengeRepository(),
     subjects: new LocalSubjectRepository(),
     maths: new LocalMathsRepository(),
+    locale: new LocalLocaleRepository(),
   }
 }
 
@@ -65,6 +69,10 @@ class DataService {
 
   getChallenges(subject: Subject, grade: AgeGroup): ChallengeDefinition[] {
     return this.repositories.challenges.getChallenges(subject, grade)
+  }
+
+  getGroupedChallenges(subject: Subject, menuGroup: string, grade: AgeGroup): ChallengeDefinition[] {
+    return this.repositories.challenges.getGroupedChallenges(subject, menuGroup, grade)
   }
 
   getChallenge(subject: Subject, challengeId: string): ChallengeDefinition | undefined {
@@ -106,6 +114,30 @@ class DataService {
 
   getLetterReference(language: Language, ageGroup: AgeGroup) {
     return this.repositories.content.getLetterReference(language, ageGroup)
+  }
+
+  getMotherTongueLanguages() {
+    return this.repositories.locale.getMotherTongueLanguages()
+  }
+
+  getDefaultUiLocale(): UiLocale {
+    return this.repositories.locale.getDefaultLocale()
+  }
+
+  getSavedUiLocale(): UiLocale | null {
+    return this.repositories.locale.getSavedLocale()
+  }
+
+  saveUiLocale(locale: UiLocale) {
+    this.repositories.locale.saveLocale(locale)
+  }
+
+  clearUiLocale() {
+    this.repositories.locale.clearSavedLocale()
+  }
+
+  getTranslations(locale: UiLocale): TranslationDictionary {
+    return this.repositories.locale.getTranslations(locale)
   }
 
   getGames() {

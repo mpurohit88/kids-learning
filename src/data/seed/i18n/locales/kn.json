@@ -1,0 +1,163 @@
+{
+  "app": {
+    "name": "ಮಕ್ಕಳ ಭಾಷಾ ಕಲಿಕೆ",
+    "tagline": "ಮೋಜಿನ ಅಕ್ಷರಗಳು",
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ..."
+  },
+  "motherTongue": {
+    "title": "ನಿಮ್ಮ ಮಾತೃಭಾಷೆ ಯಾವುದು?",
+    "subtitle": "ಮೆನು ಮತ್ತು ಸೂಚನೆಗಳು ನೀವು ಆಯ್ಕೆ ಮಾಡಿದ ಭಾಷೆಯಲ್ಲಿ ಕಾಣಿಸುತ್ತವೆ",
+    "continue": "ಮುಂದುವರಿಸಿ"
+  },
+  "launch": {
+    "heading": "ಇಂದು ಯಾರು ಕಲಿಯುತ್ತಿದ್ದಾರೆ?",
+    "subtitle": "ಪ್ರಾರಂಭಿಸಲು ಪ್ರೊಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ"
+  },
+  "home": {
+    "title": "ವಿಷಯ ಆಯ್ಕೆಮಾಡಿ",
+    "greeting": "ನಮಸ್ಕಾರ {{name}}! ಇಂದು ನೀವು ಏನು ಕಲಿಯಲು ಬಯಸುತ್ತೀರಿ?",
+    "chooseSubject": "{{subject}} ಆಯ್ಕೆಮಾಡಿ"
+  },
+  "activities": {
+    "challengesTitle": "{{subject}} ಸವಾಲುಗಳು",
+    "pickChallenge": "ಆಟವಾಡಲು ಒಂದು ಸವಾಲು ಆಯ್ಕೆಮಾಡಿ!",
+    "lettersIntro": "ಅಭ್ಯಾಸಕ್ಕೂ ಮೊದಲು ಎಲ್ಲ ಅಕ್ಷರಗಳನ್ನು ಉದಾಹರಣೆಗಳೊಂದಿಗೆ ನೋಡಿ!",
+    "tabPractice": "ಅಭ್ಯಾಸ",
+    "tabLetters": "ಎಲ್ಲ ಅಕ್ಷರಗಳು",
+    "comingSoon": "ಶೀಘ್ರದಲ್ಲೇ ಬರುತ್ತದೆ!",
+    "comingSoonDetail": "{{subject}} ಗಾಗಿ ಸವಾಲುಗಳನ್ನು ಸೇರಿಸಲಾಗುತ್ತಿದೆ.",
+    "viewAllLetters": "ಎಲ್ಲ ಅಕ್ಷರಗಳನ್ನು ನೋಡಿ →",
+    "seeMyStars": "ನನ್ನ ನಕ್ಷತ್ರಗಳನ್ನು ನೋಡಿ"
+  },
+  "progress": {
+    "title": "ಗಳಿಸಿದ ನಕ್ಷತ್ರಗಳು",
+    "subtitle": "ಪ್ರತಿ ಮಗುವೂ ಎಷ್ಟು ನಕ್ಷತ್ರಗಳನ್ನು ಗಳಿಸಿದೆ ನೋಡಿ!",
+    "totalStars": "ಒಟ್ಟು ನಕ್ಷತ್ರಗಳು",
+    "playedTimes_one": "{{count}} ಬಾರಿ ಆಟವಾಡಿದ್ದಾರೆ",
+    "playedTimes_other": "{{count}} ಬಾರಿ ಆಟವಾಡಿದ್ದಾರೆ",
+    "starsCount": "{{count}} ನಕ್ಷತ್ರಗಳು",
+    "switchProfile": "ಮಗು ಬದಲಾಯಿಸಿ"
+  },
+  "common": {
+    "goBack": "ಹಿಂದಕ್ಕೆ",
+    "viewProgress": "ಪ್ರಗತಿ ನೋಡಿ",
+    "hearAgain": "ಮತ್ತೆ ಕೇಳಿ",
+    "hearWord": "ಪದ ಕೇಳಿ",
+    "hearLetter": "ಅಕ್ಷರ {{name}} ಕೇಳಿ",
+    "round": "ಸುತ್ತು",
+    "question": "ಪ್ರಶ್ನೆ",
+    "letter": "ಅಕ್ಷರ",
+    "done": "ಆಯಿತು! ⭐",
+    "correct": "ಸರಿ!",
+    "tryAgain": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!",
+    "playAgain": "ಮತ್ತೆ ಆಟ",
+    "backToGames": "ಆಟಗಳಿಗೆ ಹಿಂತಿರುಗಿ",
+    "soundsLike": "ಇಂತೆ ಧ್ವನಿಸುತ್ತದೆ",
+    "changeLanguage": "ಭಾಷೆ ಬದಲಾಯಿಸಿ"
+  },
+  "feedback": {
+    "score": "{{correct}} ರಲ್ಲಿ {{total}} ಸರಿ",
+    "stars3": "ಅದ್ಭುತ! ನೀವು ನಕ್ಷತ್ರ!",
+    "stars2": "ಚೆನ್ನಾಗಿದೆ! ಮುಂದುವರಿಯಿರಿ!",
+    "stars1": "ಒಳ್ಳೆಯ ಪ್ರಯತ್ನ! ಅಭ್ಯಾಸದಿಂದ ಸಿಗುತ್ತದೆ!",
+    "letterCorrect": "ಹೌದು! ಚೆನ್ನಾಗಿದೆ!",
+    "letterWrong": "ಒಳ್ಳೆಯ ಪ್ರಯತ್ನ! ಸರಿಯಾದ ಉತ್ತರ {{letter}}",
+    "greatJob": "ಚೆನ್ನಾಗಿದೆ!",
+    "letsBegin": "ಪ್ರಾರಂಭಿಸೋಣ!"
+  },
+  "games": {
+    "findLetter": {
+      "title": "ಅಕ್ಷರ ಹುಡುಕಿ",
+      "prompt": "ಕೇಳಿ ಮತ್ತು ಸರಿಯಾದ ಅಕ್ಷರ ಹುಡುಕಿ!",
+      "instruction": "ಸರಿಯಾದ ಅಕ್ಷರವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.",
+      "instructionWithHints": "ಸರಿಯಾದ ಅಕ್ಷರವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ. ಪ್ರತಿ ಆಯ್ಕೆಯ ಕೆಳಗೆ ಹಿಂದಿ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಸಹಾಯ ಇದೆ."
+    },
+    "traceLetter": {
+      "title": "ಅಕ್ಷರ ಬರೆಯಿರಿ",
+      "prompt": "ಬೆರಳು ಅಥವಾ ಮೌಸ್‌ನಿಂದ ಅಕ್ಷರ ಬರೆಯಿರಿ!",
+      "traceSuccess": "ಚೆನ್ನಾಗಿ ಬರೆದಿರಿ!",
+      "traceEmpty": "ಒಳ್ಳೆಯ ಪ್ರಯತ್ನ! ಮ nächst ಬಾರಿ ಇನ್ನಷ್ಟು ಬರೆಯಿರಿ!"
+    },
+    "pictureMatch": {
+      "title": "ಚಿತ್ರ ಹೊಂದಿಸಿ",
+      "prompt": "ಯಾವ ಪದ ಚಿತ್ರಕ್ಕೆ ಹೊಂದಿಕೆಯಾಗುತ್ತದೆ?"
+    },
+    "examPractice": {
+      "title": "ಪರೀಕ್ಷಾ ಅಭ್ಯಾಸ"
+    }
+  },
+  "exam": {
+    "firstLetter": "ಈ ಪದ ಯಾವ ಅಕ್ಷರದಿಂದ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ?",
+    "letterType": "ಇದು ಸ್ವರವಾ ಅಥವಾ ವ್ಯಂಜನವಾ?",
+    "swar": "ಸ್ವರ",
+    "vyanjan": "ವ್ಯಂಜನ"
+  },
+  "lettersTable": {
+    "capital": "ದೊಡ್ಡ",
+    "small": "ಚಿಕ್ಕ",
+    "letter": "ಅಕ್ಷರ",
+    "sound": "ಧ್ವನಿ",
+    "example": "ಉದಾಹರಣೆ",
+    "type": "ಪ್ರಕಾರ",
+    "listen": "ಕೇಳಿ",
+    "swar": "ಸ್ವರ",
+    "vyanjan": "ವ್ಯಂಜನ",
+    "swara": "ಸ್ವರ",
+    "vyanjana": "ವ್ಯಂಜನ",
+    "vowel": "ಸ್ವರ",
+    "consonant": "ವ್ಯಂಜನ"
+  },
+  "maths": {
+    "whichIsHeavier": "ಯಾವುದು ಭಾರಿಯಾಗಿದೆ?",
+    "whichIsLighter": "ಯಾವುದು ಹಗುರವಾಗಿದೆ?",
+    "or": "ಅಥವಾ",
+    "hearQuestion": "ಪ್ರಶ್ನೆ ಕೇಳಿ",
+    "additionPickPractice": "ಕೂಡಿಕೆ ಅಭ್ಯಾಸ ಆಯ್ಕೆಮಾಡಿ!",
+    "notes": "ಟಿಪ್ಪಣಿಗಳು",
+    "clearNotes": "ಟಿಪ್ಪಣಿಗಳನ್ನು ಅಳಿಸಿ"
+  },
+  "challenges": {
+    "letter-recognition": { "title": "ಅಕ್ಷರ ಹುಡುಕಿ", "description": "ಕೇಳಿ ಮತ್ತು ಸರಿಯಾದ ಅಕ್ಷರ ಟ್ಯಾಪ್ ಮಾಡಿ" },
+    "picture-word-match": { "title": "ಚಿತ್ರ ಹೊಂದಿಸಿ", "description": "ಚಿತ್ರಕ್ಕೆ ಸರಿಯಾದ ಪದ ಹೊಂದಿಸಿ" },
+    "letter-tracing": { "title": "ಅಕ್ಷರ ಬರೆಯಿರಿ", "description": "ಸ್ಕ್ರೀನ್‌ನಲ್ಲಿ ಅಕ್ಷರ ಬರೆಯಿರಿ" },
+    "exam-practice": { "title": "ಪರೀಕ್ಷಾ ಅಭ್ಯಾಸ", "description": "2ನೇ ತರಗತಿ ಶೈಲಿಯ ಅಕ್ಷರ ಪ್ರಶ್ನೆಗಳು", "badge": "2ನೇ ತರಗತಿ" },
+    "heavy-and-light": { "title": "ಭಾರಿ ಮತ್ತು ಹಗುರ", "description": "ಭಾರಿ ಮತ್ತು ಹಗುರ ವಸ್ತುಗಳನ್ನು ಕಲಿಯಿರಿ", "badge": "LKG" },
+    "on-and-under": { "title": "ಮೇಲೆ ಮತ್ತು ಕೆಳಗೆ", "description": "ಮೇಲೆ ಮತ್ತು ಕೆಳಗೆ ಸ್ಥಿತಿ ಕಲಿಯಿರಿ", "badge": "LKG" },
+    "shapes": { "title": "ಆಕಾರಗಳು", "description": "ವೃತ್ತ, ತ್ರಿಕೋನ, ಚೌಕ ಮತ್ತು ದೀರ್ಘಚೌಕ", "badge": "LKG" },
+    "numeracy-skills": { "title": "ಸಂಖ್ಯಾ ಕೌಶಲ್ಯ", "description": " ಎಣಿಕೆ ಮತ್ತು ಸಂಖ್ಯಾ ಅಭ್ಯಾಸ", "badge": "LKG", "bookReference": "Numeracy Skills Book · ಪುಟ 4–10" },
+    "refresh-homework": { "title": "Refresh Homework", "description": "ಸಂಖ್ಯೆ ಮತ್ತು ಎಣಿಕೆ ಪುನರಾವರ್ತನೆ", "badge": "LKG", "bookReference": "Refresh Homework Book · ಪುಟ 3–13" },
+    "addition-within-10": { "title": "10 ವರೆಗೆ ಕೂಡಿಸಿ", "description": "10 ವರೆಗಿನ ಚಿಕ್ಕ ಸಂಖ್ಯೆಗಳನ್ನು ಕೂಡಿಸಿ" },
+    "addition-within-100": { "title": "ಎರಡು ಅಂಕಿ ಕೂಡಿಕೆ", "description": "44 + 55 ನಂತಹ ಎರಡು ಅಂಕಿಯ ಸಂಖ್ಯೆಗಳನ್ನು ಕೂಡಿಸಿ" },
+    "addition-three-digit": { "title": "ಮೂರು ಅಂಕಿ ಕೂಡಿಕೆ", "description": "736 + 213 ನಂತಹ 3-ಅಂಕಿಯ ಸಂಖ್ಯೆಗಳನ್ನು ಕೂಡಿಸಿ" },
+    "addition-three-digit-two-digit": { "title": "ಮೂರು + ಎರಡು ಅಂಕಿ", "description": "315 + 53 ನಂತಹ 3 ಮತ್ತು 2 ಅಂಕಿಯ ಸಂಖ್ಯೆಗಳನ್ನು ಕೂಡಿಸಿ" },
+    "addition-three-two-digit-numbers": { "title": "ಮೂರು ಸಂಖ್ಯೆಗಳನ್ನು ಕೂಡಿಸಿ", "description": "38 + 79 + 12 ನಂತಹ ಮೂರು 2-ಅಂಕಿಯ ಸಂಖ್ಯೆಗಳನ್ನು ಕೂಡಿಸಿ" },
+    "addition": { "title": "ಕೂಡಿಕೆ", "description": "ಅಡ್ಡ ಕೂಡಿಕೆ ಅಭ್ಯಾಸ", "badge": "2ನೇ ತರಗತಿ" },
+    "counting-objects": { "title": "ವಸ್ತುಗಳನ್ನು ಎಣಿಸಿ", "description": "ವಸ್ತುಗಳನ್ನು ಎಣಿಸಿ ಸಂಖ್ಯೆ ಆಯ್ಕೆಮಾಡಿ", "badge": "LKG" },
+    "number-recognition": { "title": "ಸಂಖ್ಯೆ ಹೊಂದಿಸಿ", "description": "ಸಂಖ್ಯೆಗೆ ಹೆಸರು ಹೊಂದಿಸಿ", "badge": "LKG" }
+  },
+  "subjects": {
+    "hindi": { "title": "ಹಿಂದಿ", "description": "ಅಕ್ಷರ, ಪದಗಳು ಮತ್ತು ಓದುವಿಕೆ" },
+    "kannada": { "title": "ಕನ್ನಡ", "description": "ಅಕ್ಷರ, ಪದಗಳು ಮತ್ತು ಓದುವಿಕೆ" },
+    "english": { "title": "ಇಂಗ್ಲಿಷ್", "description": "ಪದ ಮತ್ತು ಓದುವ ಅಭ್ಯಾಸ" },
+    "maths": { "title": "ಗಣಿತ", "description": "ಸಂಖ್ಯೆ, ಎಣಿಕೆ ಮತ್ತು ಕೂಡಿಕೆ" }
+  },
+  "profiles": {
+    "aarav": { "description": "ವಯಸ್ಸು 4 · LKG" },
+    "diya": { "description": "ವಯಸ್ಸು 7 · 2ನೇ ತರಗತಿ" }
+  },
+  "sideGames": {
+    "mango": {
+      "title": "ಮಾವಿನ ಹಣ್ಣುಗಳನ್ನು ಸಂಗ್ರಹಿಸಿ",
+      "goal": "3+ ಮಾವಿನ ಹಣ್ಣುಗಳನ್ನು ಸಂಗ್ರಹಿಸಿ!",
+      "allCollected": "ಎಲ್ಲ ಮಾವಿನ ಹಣ್ಣುಗಳು ಸಂಗ್ರಹ!",
+      "soClose": "ಸ್ವಲ್ಪ ದೂರ! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!",
+      "keepGoing": "ಮುಂದುವರಿಯಿರಿ!"
+    },
+    "goat": {
+      "title": "ಆಡನ್ನು ರಕ್ಷಿಸಿ",
+      "safe": "ಗನು ಸುರಕ್ಷಿತ!",
+      "chomp": "ಚomp!",
+      "saveGanu": "ಗನು ಅನ್ನು ರಕ್ಷಿಸಿ! {{count}}+ ಸರಿ"
+    }
+  }
+}

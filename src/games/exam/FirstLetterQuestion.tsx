@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { AnswerOptionButton } from '../../components/game/AnswerOptionButton'
+import { QuestionPromptRow } from '../../components/game/QuestionPromptRow'
 import type { FirstLetterQuestion } from './types'
 
 interface FirstLetterQuestionViewProps {
@@ -7,6 +8,8 @@ interface FirstLetterQuestionViewProps {
   selectedId: string | null
   isLocked: boolean
   onAnswer: (choiceId: string) => void
+  onHearAgain?: () => void
+  hearAgainLabel?: string
 }
 
 export function FirstLetterQuestionView({
@@ -14,6 +17,8 @@ export function FirstLetterQuestionView({
   selectedId,
   isLocked,
   onAnswer,
+  onHearAgain,
+  hearAgainLabel = 'Hear again',
 }: FirstLetterQuestionViewProps) {
   return (
     <>
@@ -29,9 +34,9 @@ export function FirstLetterQuestionView({
         </span>
       </motion.div>
 
-      <p className="text-xl font-semibold text-slate-700">
+      <QuestionPromptRow onHearAgain={onHearAgain} hearAgainLabel={hearAgainLabel}>
         Which letter does this word <span className="text-blue-600">start</span> with?
-      </p>
+      </QuestionPromptRow>
 
       <div className="grid w-full max-w-3xl grid-cols-2 gap-4 md:grid-cols-4">
         {question.options.map((letter) => (

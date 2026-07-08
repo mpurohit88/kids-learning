@@ -3,64 +3,260 @@
   "questionBanks": {
     "heavy-and-light": [
       {
-        "id": "hl-1",
+        "id": "hl-beach-ball-heavy",
         "gradeLevels": ["lkg"],
         "prompt": "Which is heavier?",
-        "emoji": "🪨   🪶",
-        "options": [
-          { "id": "rock", "text": "Rock 🪨" },
-          { "id": "feather", "text": "Feather 🪶" }
+        "promptHint": "Which is heavier? The beach ball or the balloon?",
+        "visualItems": [
+          { "label": "Beach ball", "emoji": "🏐" },
+          { "label": "Balloon", "emoji": "🎈" }
         ],
-        "correctOptionId": "rock",
-        "explanation": "A rock is heavier than a feather."
+        "options": [
+          { "id": "beach-ball", "text": "Beach ball", "emoji": "🏐" },
+          { "id": "balloon", "text": "Balloon", "emoji": "🎈" }
+        ],
+        "correctOptionId": "beach-ball",
+        "explanation": "A beach ball is heavier than a balloon."
       },
       {
-        "id": "hl-2",
+        "id": "hl-beach-ball-light",
         "gradeLevels": ["lkg"],
         "prompt": "Which is lighter?",
-        "emoji": "🎈   📚",
+        "promptHint": "Which is lighter? The beach ball or the balloon?",
+        "visualItems": [
+          { "label": "Beach ball", "emoji": "🏐" },
+          { "label": "Balloon", "emoji": "🎈" }
+        ],
         "options": [
-          { "id": "balloon", "text": "Balloon 🎈" },
-          { "id": "book", "text": "Book 📚" }
+          { "id": "beach-ball", "text": "Beach ball", "emoji": "🏐" },
+          { "id": "balloon", "text": "Balloon", "emoji": "🎈" }
         ],
         "correctOptionId": "balloon",
-        "explanation": "A balloon is lighter than a book."
+        "explanation": "A balloon is lighter than a beach ball."
       },
       {
-        "id": "hl-3",
-        "gradeLevels": ["lkg"],
-        "prompt": "Pick the heavy object.",
-        "emoji": "🐘   🐁",
-        "options": [
-          { "id": "elephant", "text": "Elephant 🐘" },
-          { "id": "mouse", "text": "Mouse 🐁" }
-        ],
-        "correctOptionId": "elephant",
-        "explanation": "An elephant is heavy."
-      },
-      {
-        "id": "hl-4",
-        "gradeLevels": ["lkg"],
-        "prompt": "Pick the light object.",
-        "emoji": "🍃   🧱",
-        "options": [
-          { "id": "leaf", "text": "Leaf 🍃" },
-          { "id": "brick", "text": "Brick 🧱" }
-        ],
-        "correctOptionId": "leaf",
-        "explanation": "A leaf is light."
-      },
-      {
-        "id": "hl-5",
+        "id": "hl-watermelon-heavy",
         "gradeLevels": ["lkg"],
         "prompt": "Which is heavier?",
-        "emoji": "🏋️   🧸",
-        "options": [
-          { "id": "weights", "text": "Weights 🏋️" },
-          { "id": "teddy", "text": "Teddy 🧸" }
+        "promptHint": "Which is heavier? The watermelon or the apple?",
+        "visualItems": [
+          { "label": "Watermelon", "emoji": "🍉" },
+          { "label": "Apple", "emoji": "🍎", "imagePath": "/assets/images/apple.svg" }
         ],
-        "correctOptionId": "weights",
-        "explanation": "Weights are heavier than a teddy bear."
+        "options": [
+          { "id": "watermelon", "text": "Watermelon", "emoji": "🍉" },
+          { "id": "apple", "text": "Apple", "emoji": "🍎", "imagePath": "/assets/images/apple.svg" }
+        ],
+        "correctOptionId": "watermelon",
+        "explanation": "A watermelon is heavier than an apple."
+      },
+      {
+        "id": "hl-watermelon-light",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is lighter?",
+        "promptHint": "Which is lighter? The watermelon or the apple?",
+        "visualItems": [
+          { "label": "Watermelon", "emoji": "🍉" },
+          { "label": "Apple", "emoji": "🍎", "imagePath": "/assets/images/apple.svg" }
+        ],
+        "options": [
+          { "id": "watermelon", "text": "Watermelon", "emoji": "🍉" },
+          { "id": "apple", "text": "Apple", "emoji": "🍎", "imagePath": "/assets/images/apple.svg" }
+        ],
+        "correctOptionId": "apple",
+        "explanation": "An apple is lighter than a watermelon."
+      },
+      {
+        "id": "hl-shoes-heavy",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is heavier?",
+        "promptHint": "Which is heavier? The shoes or the socks?",
+        "visualItems": [
+          { "label": "Shoes", "emoji": "👞" },
+          { "label": "Socks", "emoji": "🧦" }
+        ],
+        "options": [
+          { "id": "shoes", "text": "Shoes", "emoji": "👞" },
+          { "id": "socks", "text": "Socks", "emoji": "🧦" }
+        ],
+        "correctOptionId": "shoes",
+        "explanation": "Shoes are heavier than socks."
+      },
+      {
+        "id": "hl-shoes-light",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is lighter?",
+        "promptHint": "Which is lighter? The shoes or the socks?",
+        "visualItems": [
+          { "label": "Shoes", "emoji": "👞" },
+          { "label": "Socks", "emoji": "🧦" }
+        ],
+        "options": [
+          { "id": "shoes", "text": "Shoes", "emoji": "👞" },
+          { "id": "socks", "text": "Socks", "emoji": "🧦" }
+        ],
+        "correctOptionId": "socks",
+        "explanation": "Socks are lighter than shoes."
+      },
+      {
+        "id": "hl-book-heavy",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is heavier?",
+        "promptHint": "Which is heavier? The book or the pencil?",
+        "visualItems": [
+          { "label": "Book", "emoji": "📚" },
+          { "label": "Pencil", "emoji": "✏️" }
+        ],
+        "options": [
+          { "id": "book", "text": "Book", "emoji": "📚" },
+          { "id": "pencil", "text": "Pencil", "emoji": "✏️" }
+        ],
+        "correctOptionId": "book",
+        "explanation": "A book is heavier than a pencil."
+      },
+      {
+        "id": "hl-book-light",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is lighter?",
+        "promptHint": "Which is lighter? The book or the pencil?",
+        "visualItems": [
+          { "label": "Book", "emoji": "📚" },
+          { "label": "Pencil", "emoji": "✏️" }
+        ],
+        "options": [
+          { "id": "book", "text": "Book", "emoji": "📚" },
+          { "id": "pencil", "text": "Pencil", "emoji": "✏️" }
+        ],
+        "correctOptionId": "pencil",
+        "explanation": "A pencil is lighter than a book."
+      },
+      {
+        "id": "hl-banana-heavy",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is heavier?",
+        "promptHint": "Which is heavier? The banana or the feather?",
+        "visualItems": [
+          { "label": "Banana", "emoji": "🍌", "imagePath": "/assets/images/banana.svg" },
+          { "label": "Feather", "emoji": "🪶" }
+        ],
+        "options": [
+          { "id": "banana", "text": "Banana", "emoji": "🍌", "imagePath": "/assets/images/banana.svg" },
+          { "id": "feather", "text": "Feather", "emoji": "🪶" }
+        ],
+        "correctOptionId": "banana",
+        "explanation": "A banana is heavier than a feather."
+      },
+      {
+        "id": "hl-banana-light",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is lighter?",
+        "promptHint": "Which is lighter? The banana or the feather?",
+        "visualItems": [
+          { "label": "Banana", "emoji": "🍌", "imagePath": "/assets/images/banana.svg" },
+          { "label": "Feather", "emoji": "🪶" }
+        ],
+        "options": [
+          { "id": "banana", "text": "Banana", "emoji": "🍌", "imagePath": "/assets/images/banana.svg" },
+          { "id": "feather", "text": "Feather", "emoji": "🪶" }
+        ],
+        "correctOptionId": "feather",
+        "explanation": "A feather is lighter than a banana."
+      },
+      {
+        "id": "hl-lock-heavy",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is heavier?",
+        "promptHint": "Which is heavier? The lock or the key?",
+        "visualItems": [
+          { "label": "Lock", "emoji": "🔒" },
+          { "label": "Key", "emoji": "🔑" }
+        ],
+        "options": [
+          { "id": "lock", "text": "Lock", "emoji": "🔒" },
+          { "id": "key", "text": "Key", "emoji": "🔑" }
+        ],
+        "correctOptionId": "lock",
+        "explanation": "A lock is heavier than a key."
+      },
+      {
+        "id": "hl-lock-light",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is lighter?",
+        "promptHint": "Which is lighter? The lock or the key?",
+        "visualItems": [
+          { "label": "Lock", "emoji": "🔒" },
+          { "label": "Key", "emoji": "🔑" }
+        ],
+        "options": [
+          { "id": "lock", "text": "Lock", "emoji": "🔒" },
+          { "id": "key", "text": "Key", "emoji": "🔑" }
+        ],
+        "correctOptionId": "key",
+        "explanation": "A key is lighter than a lock."
+      },
+      {
+        "id": "hl-chair-heavy",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is heavier?",
+        "promptHint": "Which is heavier? The chair or the hat?",
+        "visualItems": [
+          { "label": "Chair", "emoji": "🪑" },
+          { "label": "Hat", "emoji": "🎩" }
+        ],
+        "options": [
+          { "id": "chair", "text": "Chair", "emoji": "🪑" },
+          { "id": "hat", "text": "Hat", "emoji": "🎩" }
+        ],
+        "correctOptionId": "chair",
+        "explanation": "A chair is heavier than a hat."
+      },
+      {
+        "id": "hl-chair-light",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is lighter?",
+        "promptHint": "Which is lighter? The chair or the hat?",
+        "visualItems": [
+          { "label": "Chair", "emoji": "🪑" },
+          { "label": "Hat", "emoji": "🎩" }
+        ],
+        "options": [
+          { "id": "chair", "text": "Chair", "emoji": "🪑" },
+          { "id": "hat", "text": "Hat", "emoji": "🎩" }
+        ],
+        "correctOptionId": "hat",
+        "explanation": "A hat is lighter than a chair."
+      },
+      {
+        "id": "hl-elephant-heavy",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is heavier?",
+        "promptHint": "Which is heavier? The elephant or the ant?",
+        "visualItems": [
+          { "label": "Elephant", "emoji": "🐘", "imagePath": "/assets/images/elephant.svg" },
+          { "label": "Ant", "emoji": "🐜" }
+        ],
+        "options": [
+          { "id": "elephant", "text": "Elephant", "emoji": "🐘", "imagePath": "/assets/images/elephant.svg" },
+          { "id": "ant", "text": "Ant", "emoji": "🐜" }
+        ],
+        "correctOptionId": "elephant",
+        "explanation": "An elephant is heavier than an ant."
+      },
+      {
+        "id": "hl-elephant-light",
+        "gradeLevels": ["lkg"],
+        "prompt": "Which is lighter?",
+        "promptHint": "Which is lighter? The elephant or the ant?",
+        "visualItems": [
+          { "label": "Elephant", "emoji": "🐘", "imagePath": "/assets/images/elephant.svg" },
+          { "label": "Ant", "emoji": "🐜" }
+        ],
+        "options": [
+          { "id": "elephant", "text": "Elephant", "emoji": "🐘", "imagePath": "/assets/images/elephant.svg" },
+          { "id": "ant", "text": "Ant", "emoji": "🐜" }
+        ],
+        "correctOptionId": "ant",
+        "explanation": "An ant is lighter than an elephant."
       }
     ],
     "on-and-under": [

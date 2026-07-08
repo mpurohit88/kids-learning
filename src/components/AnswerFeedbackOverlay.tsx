@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { useTranslation } from '../hooks/useTranslation'
 
 export type AnswerFeedbackType = 'success' | 'wrong' | null
 
@@ -14,6 +15,8 @@ const jumpingStars = Array.from({ length: 9 }, (_, index) => ({
 }))
 
 export function AnswerFeedbackOverlay({ type }: AnswerFeedbackOverlayProps) {
+  const { t } = useTranslation()
+
   return (
     <AnimatePresence>
       {type === 'success' ? (
@@ -65,7 +68,7 @@ export function AnswerFeedbackOverlay({ type }: AnswerFeedbackOverlayProps) {
               transition={{ delay: 0.2 }}
               className="mt-2 rounded-full bg-amber-300 px-8 py-3 text-3xl font-extrabold text-amber-900 shadow-xl md:text-4xl"
             >
-              Correct!
+              {t('common.correct')}
             </motion.p>
           </motion.div>
 
@@ -105,7 +108,7 @@ export function AnswerFeedbackOverlay({ type }: AnswerFeedbackOverlayProps) {
           >
             <span className="text-6xl md:text-7xl">🙂</span>
             <p className="mt-3 rounded-full bg-white/95 px-8 py-3 text-2xl font-bold text-slate-700 shadow-xl md:text-3xl">
-              Try again!
+              {t('common.tryAgain')}
             </p>
           </motion.div>
         </motion.div>
