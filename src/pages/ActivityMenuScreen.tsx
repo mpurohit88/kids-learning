@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { BigButton } from '../components/BigButton'
 import { LetterReferenceTable } from '../components/letters/LetterReferenceTable'
 import { AppShell } from '../components/layout/AppShell'
+import { AccessibleExamCursor } from '../components/accessibility/AccessibleExamCursor'
 import { dataService } from '../data'
 import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
@@ -44,7 +45,9 @@ export function ActivityMenuScreen() {
       ? dataService.getLetterReference(subject, profile.ageGroup)
       : []
 
-  return (
+  const useAccessibleCursor = subject === 'maths'
+
+  const page = (
     <AppShell
       title={t('activities.challengesTitle', {
         subject: localizedSubject?.title ?? subjectInfo?.nativeName ?? subject,
@@ -155,5 +158,11 @@ export function ActivityMenuScreen() {
         </div>
       </div>
     </AppShell>
+  )
+
+  return useAccessibleCursor ? (
+    <AccessibleExamCursor className="min-h-screen">{page}</AccessibleExamCursor>
+  ) : (
+    page
   )
 }

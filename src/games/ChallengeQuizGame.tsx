@@ -196,6 +196,7 @@ export function ChallengeQuizGame() {
       result={session.result}
       onPlayAgain={() => handlePlayAgain(startGame)}
       roundLabel={t('common.question', undefined, 'Question')}
+      accessibleCursor
     >
       <motion.div
         key={currentQuestion.id}

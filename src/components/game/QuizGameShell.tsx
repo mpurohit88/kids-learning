@@ -5,6 +5,7 @@ import { ConfettiBurst } from '../ConfettiBurst'
 import { GameChallengeSidebar } from '../challenges/GameChallengeSidebar'
 import { GameCompleteModal } from '../GameCompleteModal'
 import { Mascot, type MascotMood } from '../Mascot'
+import { AccessibleExamCursor } from '../accessibility/AccessibleExamCursor'
 import { AppShell } from '../layout/AppShell'
 import { GameSideLayout } from '../layout/GameSideLayout'
 import type { GameRoundResult } from '../../types'
@@ -26,6 +27,7 @@ interface QuizGameShellProps {
   onHearAgain?: () => void
   hearAgainLabel?: string
   roundLabel?: string
+  accessibleCursor?: boolean
   children: ReactNode
 }
 
@@ -46,12 +48,13 @@ export function QuizGameShell({
   onHearAgain,
   hearAgainLabel = 'Hear Again',
   roundLabel = 'Round',
+  accessibleCursor = false,
   children,
 }: QuizGameShellProps) {
   const navigate = useNavigate()
 
-  return (
-    <AppShell title={title} showBack backTo="/activities">
+  const content = (
+    <>
       <AnswerFeedbackOverlay type={feedbackType} />
       <div className="relative flex flex-1 flex-col gap-4">
         <ConfettiBurst active={showConfetti} />
@@ -90,6 +93,18 @@ export function QuizGameShell({
           onBackToMenu={() => navigate('/activities')}
         />
       ) : null}
+    </>
+  )
+
+  return accessibleCursor ? (
+    <AccessibleExamCursor className="min-h-screen">
+      <AppShell title={title} showBack backTo="/activities">
+        {content}
+      </AppShell>
+    </AccessibleExamCursor>
+  ) : (
+    <AppShell title={title} showBack backTo="/activities">
+      {content}
     </AppShell>
   )
 }
