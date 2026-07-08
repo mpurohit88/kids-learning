@@ -95,7 +95,7 @@ export function MathNotesPad({
 
   return (
     <div
-      className={`flex min-h-56 w-full flex-col rounded-[2rem] border-4 border-white bg-amber-50 shadow-xl md:min-h-full md:w-56 lg:w-64 ${className}`}
+      className={`hidden min-h-56 w-full flex-col rounded-[2rem] border-4 border-white bg-amber-50 shadow-xl md:flex md:min-h-full md:w-56 lg:w-64 ${className}`}
     >
       <div className="flex items-center justify-between px-4 py-3">
         <p className="text-sm font-bold uppercase tracking-wide text-amber-800">{label}</p>
