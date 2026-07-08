@@ -7,6 +7,7 @@ import { ActivityMenuScreen } from './pages/ActivityMenuScreen'
 import { HomeScreen } from './pages/HomeScreen'
 import { LaunchScreen } from './pages/LaunchScreen'
 import { MotherTongueScreen } from './pages/MotherTongueScreen'
+import { NumberLearnerPage } from './pages/NumberLearnerPage'
 import { ProgressScreen } from './pages/ProgressScreen'
 import { useAppStore } from './store/useAppStore'
 
@@ -42,6 +43,7 @@ function App() {
         <Route path="/language" element={<MotherTongueScreen />} />
         <Route path="/home" element={<HomeScreen />} />
         <Route path="/activities" element={<ActivityMenuScreen />} />
+        <Route path="/learn/numbers" element={<NumberLearnerPage />} />
         <Route path="/progress" element={<ProgressScreen />} />
         <Route path="/games/challenge/addition" element={<AdditionMenuScreen />} />
         <Route path="/games/challenge/:challengeId" element={<ChallengeQuizGame />} />

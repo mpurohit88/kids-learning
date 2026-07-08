@@ -142,9 +142,18 @@ export function LetterRecognitionGame() {
         key={targetLetter.id}
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="flex h-36 w-36 items-center justify-center rounded-[2rem] bg-white text-7xl font-bold text-slate-800 shadow-xl md:h-44 md:w-44 md:text-8xl"
+        className="flex flex-col items-center justify-center gap-2 rounded-[2rem] bg-white px-8 py-6 shadow-xl"
       >
-        ?
+        {targetLetter.example ? (
+          <>
+            <span className="text-6xl md:text-7xl">{targetLetter.example.emoji}</span>
+            <span className="text-xl font-bold text-slate-700 md:text-2xl">
+              {targetLetter.character} for {targetLetter.example.word}
+            </span>
+          </>
+        ) : (
+          <span className="text-8xl font-bold text-slate-800 md:text-9xl">?</span>
+        )}
       </motion.div>
 
       <p className="text-lg text-slate-600">

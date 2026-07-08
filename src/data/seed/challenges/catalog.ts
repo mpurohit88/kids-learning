@@ -52,17 +52,17 @@ const LANGUAGE_CHALLENGE_TEMPLATES: Omit<ChallengeDefinition, 'subject'>[] = [
   },
 ]
 
+const ENGLISH_CHALLENGE_IDS = new Set(['letter-recognition', 'letter-tracing'])
+
 function buildLanguageChallenges(
   subject: 'hindi' | 'kannada' | 'english',
 ): ChallengeDefinition[] {
-  if (subject === 'english') {
-    return []
-  }
+  const templates =
+    subject === 'english'
+      ? LANGUAGE_CHALLENGE_TEMPLATES.filter((t) => ENGLISH_CHALLENGE_IDS.has(t.id))
+      : LANGUAGE_CHALLENGE_TEMPLATES
 
-  return LANGUAGE_CHALLENGE_TEMPLATES.map((template) => ({
-    ...template,
-    subject,
-  }))
+  return templates.map((template) => ({ ...template, subject }))
 }
 
 const MATHS_CHALLENGES: ChallengeDefinition[] = [
@@ -254,6 +254,7 @@ const MATHS_CHALLENGES: ChallengeDefinition[] = [
 export const CHALLENGE_CATALOG: ChallengeDefinition[] = [
   ...buildLanguageChallenges('hindi'),
   ...buildLanguageChallenges('kannada'),
+  ...buildLanguageChallenges('english'),
   ...MATHS_CHALLENGES,
 ]
 

@@ -69,7 +69,7 @@ function generateLanguageBankQuestions(
   count: number,
   deps: QuestionEngineDependencies,
 ): SessionQuestion[] {
-  if (subject === 'maths' || subject === 'english') {
+  if (subject === 'maths') {
     return []
   }
 

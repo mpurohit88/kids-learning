@@ -44,6 +44,7 @@ export function LetterTracingGame() {
   const [roundLetters, setRoundLetters] = useState<Letter[]>([])
   const [currentLetter, setCurrentLetter] = useState<Letter | null>(null)
   const [hasDrawn, setHasDrawn] = useState(false)
+  const [showHint, setShowHint] = useState(false)
   const [mood, setMood] = useState<'idle' | 'happy' | 'encourage'>('idle')
   const [message, setMessage] = useState(t('games.traceLetter.prompt'))
   const [showConfetti, setShowConfetti] = useState(false)
@@ -67,12 +68,27 @@ export function LetterTracingGame() {
     context.fillRect(0, 0, canvas.width, canvas.height)
 
     if (currentLetter) {
-      const fontSize = currentLetter.character.length > 1 ? 150 : 220
-      context.font = `bold ${fontSize}px Segoe UI, Nirmala UI, Tunga, sans-serif`
-      context.fillStyle = '#e2e8f0'
-      context.textAlign = 'center'
-      context.textBaseline = 'middle'
-      context.fillText(currentLetter.character, canvas.width / 2, canvas.height / 2 + 10)
+      const hasBothCases =
+        currentLetter.lowerCase && currentLetter.lowerCase !== currentLetter.character
+
+      if (hasBothCases) {
+        const halfW = canvas.width / 2
+        const midY = canvas.height / 2 + 10
+        const fontSize = Math.min(canvas.height * 0.55, 200)
+        context.font = `bold ${fontSize}px Segoe UI, Arial, sans-serif`
+        context.fillStyle = '#e2e8f0'
+        context.textAlign = 'center'
+        context.textBaseline = 'middle'
+        context.fillText(currentLetter.character, halfW * 0.55, midY)
+        context.fillText(currentLetter.lowerCase!, halfW * 1.45, midY)
+      } else {
+        const fontSize = currentLetter.character.length > 1 ? 150 : 220
+        context.font = `bold ${fontSize}px Segoe UI, Nirmala UI, Tunga, sans-serif`
+        context.fillStyle = '#e2e8f0'
+        context.textAlign = 'center'
+        context.textBaseline = 'middle'
+        context.fillText(currentLetter.character, canvas.width / 2, canvas.height / 2 + 10)
+      }
     }
   }, [currentLetter])
 
@@ -100,6 +116,7 @@ export function LetterTracingGame() {
       const letter = lettersPool[index % lettersPool.length]
       setCurrentLetter(letter)
       setHasDrawn(false)
+      setShowHint(false)
       setMood('idle')
       setMessage(t('games.traceLetter.prompt'))
       setShowConfetti(false)
@@ -259,6 +276,31 @@ export function LetterTracingGame() {
           <KannadaSoundHints letter={currentLetter} layout="inline" />
         ) : null}
 
+        {showHint ? (
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="flex items-center gap-4 rounded-[1.5rem] border-4 border-white bg-white px-6 py-4 shadow-lg"
+          >
+            {currentLetter.example ? (
+              <span className="text-4xl">{currentLetter.example.emoji}</span>
+            ) : null}
+            <div className="flex flex-col">
+              <span className="text-5xl font-bold leading-none text-slate-800 md:text-6xl">
+                {currentLetter.character}
+                {currentLetter.lowerCase && currentLetter.lowerCase !== currentLetter.character
+                  ? ` / ${currentLetter.lowerCase}`
+                  : ''}
+              </span>
+              {currentLetter.example ? (
+                <span className="text-base font-semibold text-slate-500">
+                  {currentLetter.character} for {currentLetter.example.word}
+                </span>
+              ) : null}
+            </div>
+          </motion.div>
+        ) : null}
+
         <motion.div
           key={currentLetter.id}
           initial={{ opacity: 0, y: 12 }}
@@ -283,6 +325,19 @@ export function LetterTracingGame() {
             className="flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white bg-slate-500 text-white shadow-lg transition hover:bg-slate-400 md:h-24 md:w-24"
           >
             <Eraser size={36} strokeWidth={2.5} />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowHint((v) => !v)}
+            className={`flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white text-3xl shadow-lg transition md:h-24 md:w-24 ${
+              showHint
+                ? 'bg-amber-300 hover:bg-amber-200'
+                : 'bg-amber-100 hover:bg-amber-200'
+            }`}
+            title={showHint ? 'Hide hint' : 'Show letter hint'}
+          >
+            {showHint ? '🙈' : '👁️'}
           </button>
 
           <button

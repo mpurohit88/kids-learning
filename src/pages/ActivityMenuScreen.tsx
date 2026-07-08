@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BigButton } from '../components/BigButton'
-import { LetterReferenceTable } from '../components/letters/LetterReferenceTable'
+import { LetterCardGrid } from '../components/letters/LetterCardGrid'
 import { AppShell } from '../components/layout/AppShell'
 import { AccessibleExamCursor } from '../components/accessibility/AccessibleExamCursor'
 import { dataService } from '../data'
@@ -21,7 +21,7 @@ export function ActivityMenuScreen() {
   const profileId = useAppStore((state) => state.profileId)
   const subject = useAppStore((state) => state.subject)
   const profile = dataService.getProfileById(profileId)
-  const [activeTab, setActiveTab] = useState<ActivityTab>('practice')
+  const [activeTab, setActiveTab] = useState<ActivityTab>('letters')
 
   useEffect(() => {
     if (!profileId) {
@@ -64,6 +64,17 @@ export function ActivityMenuScreen() {
           <div className="flex justify-center gap-3">
             <button
               type="button"
+              onClick={() => setActiveTab('letters')}
+              className={`rounded-full px-6 py-3 text-lg font-bold transition ${
+                activeTab === 'letters'
+                  ? 'bg-white text-slate-800 shadow-lg'
+                  : 'bg-white/50 text-slate-600 hover:bg-white/70'
+              }`}
+            >
+              📚 {t('activities.tabLearn', undefined, 'Learn')}
+            </button>
+            <button
+              type="button"
               onClick={() => setActiveTab('practice')}
               className={`rounded-full px-6 py-3 text-lg font-bold transition ${
                 activeTab === 'practice'
@@ -73,22 +84,11 @@ export function ActivityMenuScreen() {
             >
               🎮 {t('activities.tabPractice')}
             </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('letters')}
-              className={`rounded-full px-6 py-3 text-lg font-bold transition ${
-                activeTab === 'letters'
-                  ? 'bg-white text-slate-800 shadow-lg'
-                  : 'bg-white/50 text-slate-600 hover:bg-white/70'
-              }`}
-            >
-              📋 {t('activities.tabLetters')}
-            </button>
           </div>
         ) : null}
 
         {activeTab === 'letters' && showLetterTab && languageContent ? (
-          <LetterReferenceTable
+          <LetterCardGrid
             subject={subject}
             letters={letterReference}
             speechLang={languageContent.speechLang}
@@ -150,6 +150,26 @@ export function ActivityMenuScreen() {
             })}
           </div>
         )}
+
+        {subject === 'maths' ? (
+          <button
+            type="button"
+            onClick={() => navigate('/learn/numbers')}
+            className="group flex min-h-28 w-full items-center gap-5 rounded-[2rem] border-4 border-white bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-5 text-white shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
+          >
+            <span className="text-5xl transition group-hover:animate-bounce-soft">🔢</span>
+            <div className="text-left">
+              <p className="text-2xl font-bold">
+                {t('learn.numbersTitle', undefined, 'Learn Numbers')}
+              </p>
+              <p className="text-base font-normal opacity-90">
+                {profile.ageGroup === 'lkg'
+                  ? t('learn.numbersBadgeLkg', undefined, 'Numbers 1 – 20')
+                  : t('learn.numbersBadgeClass2', undefined, 'Numbers 1 – 100')}
+              </p>
+            </div>
+          </button>
+        ) : null}
 
         <div className="mt-auto flex justify-center">
           <BigButton color="#ffb74d" onClick={() => navigate('/progress')} className="max-w-md">
