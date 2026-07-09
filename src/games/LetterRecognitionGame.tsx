@@ -26,10 +26,11 @@ export function LetterRecognitionGame() {
     subject && isLanguageSubject(subject)
       ? dataService.getLanguageContent(subject)
       : null
+  const ageGroup = profile?.ageGroup
   const letters = useMemo(() => {
-    if (!subject || !profile || !isLanguageSubject(subject)) return []
-    return dataService.getLettersForLetterGames(subject, profile.ageGroup)
-  }, [subject, profile])
+    if (!subject || !ageGroup || !isLanguageSubject(subject)) return []
+    return dataService.getLettersForLetterGames(subject, ageGroup)
+  }, [subject, ageGroup])
 
   const roundCount =
     profile && subject ? dataService.getRoundCount(profile.ageGroup, subject) : 5
@@ -84,7 +85,7 @@ export function LetterRecognitionGame() {
 
       playTargetLetterAudio(target)
     },
-    [optionCount, playTargetLetterAudio, resetRoundUi],
+    [optionCount, playTargetLetterAudio, resetRoundUi, t],
   )
 
   const startGame = useCallback(() => {

@@ -23,10 +23,11 @@ export function PictureWordMatchGame() {
     subject && isLanguageSubject(subject)
       ? dataService.getLanguageContent(subject)
       : null
+  const ageGroup = profile?.ageGroup
   const vocabulary = useMemo(() => {
-    if (!subject || !profile || !isLanguageSubject(subject)) return []
-    return dataService.getVocabularyForProfile(subject, profile.ageGroup)
-  }, [subject, profile])
+    if (!subject || !ageGroup || !isLanguageSubject(subject)) return []
+    return dataService.getVocabularyForProfile(subject, ageGroup)
+  }, [subject, ageGroup])
 
   const roundCount = profile && subject ? dataService.getRoundCount(profile.ageGroup, subject) : 5
   const optionCount = profile && subject ? dataService.getOptionCount(profile.ageGroup, subject) : 3

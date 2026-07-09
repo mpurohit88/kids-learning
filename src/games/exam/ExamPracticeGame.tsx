@@ -23,14 +23,15 @@ export function ExamPracticeGame() {
     subject && isLanguageSubject(subject)
       ? dataService.getLanguageContent(subject)
       : null
+  const ageGroup = profile?.ageGroup
   const letters = useMemo(() => {
-    if (!subject || !profile || !isLanguageSubject(subject)) return []
-    return dataService.getLettersForProfile(subject, profile.ageGroup)
-  }, [subject, profile])
+    if (!subject || !ageGroup || !isLanguageSubject(subject)) return []
+    return dataService.getLettersForProfile(subject, ageGroup)
+  }, [subject, ageGroup])
   const vocabulary = useMemo(() => {
-    if (!subject || !profile || !isLanguageSubject(subject)) return []
-    return dataService.getVocabularyForProfile(subject, profile.ageGroup)
-  }, [subject, profile])
+    if (!subject || !ageGroup || !isLanguageSubject(subject)) return []
+    return dataService.getVocabularyForProfile(subject, ageGroup)
+  }, [subject, ageGroup])
 
   const roundCount = dataService.getExamRoundCount()
   const [questions, setQuestions] = useState<ExamQuestion[]>([])

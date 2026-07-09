@@ -5,14 +5,34 @@ import {
   hasAnyProfileName,
   readProfileNames,
   writeProfileName,
+  type ProfileNameMap,
 } from './profileNameStorage'
+
+let cachedNamesKey = ''
+let cachedProfiles: Profile[] | null = null
+
+function namesKey(names: ProfileNameMap): string {
+  return JSON.stringify(names)
+}
 
 function withCustomNames(list: Profile[]): Profile[] {
   const customNames = readProfileNames()
-  return list.map((profile) => {
+  const key = namesKey(customNames)
+  if (cachedProfiles && cachedNamesKey === key) {
+    return cachedProfiles
+  }
+
+  cachedNamesKey = key
+  cachedProfiles = list.map((profile) => {
     const customName = customNames[profile.id]
     return customName ? { ...profile, name: customName } : profile
   })
+  return cachedProfiles
+}
+
+function invalidateCache() {
+  cachedNamesKey = ''
+  cachedProfiles = null
 }
 
 export class LocalProfileRepository implements ProfileRepository {
@@ -27,6 +47,7 @@ export class LocalProfileRepository implements ProfileRepository {
 
   saveProfileName(profileId: string, name: string) {
     writeProfileName(profileId, name)
+    invalidateCache()
   }
 
   hasAnyCustomProfileName() {
