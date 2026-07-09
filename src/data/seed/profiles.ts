@@ -7,7 +7,7 @@ export const profiles: Profile[] = [
     ageGroup: 'lkg',
     avatar: '🦁',
     color: '#ff8a65',
-    description: 'Age 4 · LKG',
+    description: 'LKG/UKG',
   },
   {
     id: 'diya',
@@ -15,6 +15,6 @@ export const profiles: Profile[] = [
     ageGroup: 'class2',
     avatar: '🦋',
     color: '#64b5f6',
-    description: 'Age 7 · Class 2',
+    description: 'Class 2',
   },
 ]
