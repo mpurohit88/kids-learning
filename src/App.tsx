@@ -12,7 +12,6 @@ import { ProgressScreen } from './pages/ProgressScreen'
 import { useAppStore } from './store/useAppStore'
 
 function AppEntry() {
-  const uiLocale = useAppStore((state) => state.uiLocale)
   const localeReady = useAppStore((state) => state.localeReady)
   const initLocale = useAppStore((state) => state.initLocale)
 
@@ -26,10 +25,6 @@ function AppEntry() {
         <p className="text-xl font-semibold text-slate-600">Loading...</p>
       </div>
     )
-  }
-
-  if (!uiLocale) {
-    return <MotherTongueScreen />
   }
 
   return <LaunchScreen />

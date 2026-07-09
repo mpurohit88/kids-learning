@@ -67,6 +67,14 @@ class DataService {
     return this.repositories.profiles.getProfileById(id)
   }
 
+  saveProfileName(profileId: string, name: string) {
+    this.repositories.profiles.saveProfileName(profileId, name)
+  }
+
+  hasAnyCustomProfileName() {
+    return this.repositories.profiles.hasAnyCustomProfileName()
+  }
+
   getChallenges(subject: Subject, grade: AgeGroup): ChallengeDefinition[] {
     return this.repositories.challenges.getChallenges(subject, grade)
   }

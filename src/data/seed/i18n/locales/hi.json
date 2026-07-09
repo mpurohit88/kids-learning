@@ -11,7 +11,14 @@
   },
   "launch": {
     "heading": "आज कौन सीख रहा है?",
-    "subtitle": "शुरू करने के लिए प्रोफ़ाइल चुनें"
+    "subtitle": "शुरू करने के लिए प्रोफ़ाइल चुनें",
+    "nameSetupTitle": "आपका नाम क्या है?",
+    "nameSetupSubtitle": "हर सीखने वाले का नाम लिखें। बाद में बदल सकते हैं।",
+    "nameSetupContinue": "आगे बढ़ें",
+    "nameLabel": "नाम",
+    "namePlaceholder": "नाम लिखें",
+    "editName": "नाम बदलें",
+    "editNameTitle": "नाम बदलें"
   },
   "home": {
     "title": "विषय चुनें",
@@ -48,6 +55,8 @@
     "question": "प्रश्न",
     "letter": "अक्षर",
     "done": "हो गया! ⭐",
+    "cancel": "रद्द करें",
+    "save": "सेव करें",
     "correct": "सही!",
     "tryAgain": "फिर कोशिश करें!",
     "playAgain": "फिर खेलें",

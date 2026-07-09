@@ -38,7 +38,7 @@ export function MotherTongueScreen() {
     >
       <div className="flex flex-1 flex-col items-center justify-center gap-8">
         <div className="text-center">
-          <p className="text-6xl">🗣️</p>
+          <p className="text-6xl">🌐</p>
           <h1 className="mt-4 text-4xl font-extrabold text-slate-800 md:text-5xl">
             {t('motherTongue.title')}
           </h1>

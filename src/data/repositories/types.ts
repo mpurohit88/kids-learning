@@ -43,6 +43,8 @@ export interface MathsRepository {
 export interface ProfileRepository {
   getAllProfiles(): Profile[]
   getProfileById(id: string | null): Profile | undefined
+  saveProfileName(profileId: string, name: string): void
+  hasAnyCustomProfileName(): boolean
 }
 
 export interface ProgressRepository {
