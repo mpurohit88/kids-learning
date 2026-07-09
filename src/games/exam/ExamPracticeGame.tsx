@@ -160,7 +160,6 @@ export function ExamPracticeGame() {
       result={result}
       onPlayAgain={() => handlePlayAgain(startGame)}
       roundLabel={t('common.question', undefined, 'Question')}
-      accessibleCursor
     >
       {currentQuestion.type === 'first-letter' ? (
         <FirstLetterQuestionView

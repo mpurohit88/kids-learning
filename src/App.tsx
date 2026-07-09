@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { AccessibleExamCursor } from './components/accessibility/AccessibleExamCursor'
 import { GAME_REGISTRY } from './config/gameRegistry'
 import { ChallengeQuizGame } from './games/ChallengeQuizGame'
 import { AdditionMenuScreen } from './pages/AdditionMenuScreen'
@@ -33,23 +34,25 @@ function AppEntry() {
 function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <Routes>
-        <Route path="/" element={<AppEntry />} />
-        <Route path="/language" element={<MotherTongueScreen />} />
-        <Route path="/home" element={<HomeScreen />} />
-        <Route path="/activities" element={<ActivityMenuScreen />} />
-        <Route path="/learn/numbers" element={<NumberLearnerPage />} />
-        <Route path="/progress" element={<ProgressScreen />} />
-        <Route path="/games/challenge/addition" element={<AdditionMenuScreen />} />
-        <Route path="/games/challenge/:challengeId" element={<ChallengeQuizGame />} />
-        {GAME_REGISTRY.map((game) => {
-          const GameComponent = game.component
-          return (
-            <Route key={game.id} path={game.route} element={<GameComponent />} />
-          )
-        })}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <AccessibleExamCursor className="min-h-screen">
+        <Routes>
+          <Route path="/" element={<AppEntry />} />
+          <Route path="/language" element={<MotherTongueScreen />} />
+          <Route path="/home" element={<HomeScreen />} />
+          <Route path="/activities" element={<ActivityMenuScreen />} />
+          <Route path="/learn/numbers" element={<NumberLearnerPage />} />
+          <Route path="/progress" element={<ProgressScreen />} />
+          <Route path="/games/challenge/addition" element={<AdditionMenuScreen />} />
+          <Route path="/games/challenge/:challengeId" element={<ChallengeQuizGame />} />
+          {GAME_REGISTRY.map((game) => {
+            const GameComponent = game.component
+            return (
+              <Route key={game.id} path={game.route} element={<GameComponent />} />
+            )
+          })}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AccessibleExamCursor>
     </BrowserRouter>
   )
 }
