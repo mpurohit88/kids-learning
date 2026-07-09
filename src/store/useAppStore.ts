@@ -40,7 +40,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   initLocale: () => {
     // Default to English; multi-language UI is preserved but not forced on first launch.
     const DEFAULT_LOCALE: UiLocale = 'en'
-    const saved = dataService.getSavedUiLocale()
+    // const saved = dataService.getSavedUiLocale()
     set({
       uiLocale: DEFAULT_LOCALE,
       localeReady: true,
