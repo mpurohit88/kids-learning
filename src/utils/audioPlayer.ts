@@ -1,15 +1,15 @@
 import { Howl, Howler } from 'howler'
 import { isAudioUnlocked, primeSpeechSynthesis, unlockAudio } from './audioUnlock'
-import { findKidFriendlyVoice } from './kidFriendlyVoice'
+import { findKidFriendlyVoice, voiceMatchesLang } from './kidFriendlyVoice'
 import { playSuccessSound, playWrongSound } from './soundEffects'
 
 /** Desktop pacing — clear for young students */
 export const SPEECH_RATE = 0.7
-/** iOS / generic mobile — mild slowdown (strong slowdowns garble many engines) */
-export const SPEECH_RATE_MOBILE = 0.85
+/** iOS Safari — slightly slower; strong slowdowns still garble TTS */
+export const SPEECH_RATE_MOBILE = 0.78
 /**
  * Android Chrome often distorts or rushes speech when rate is far from 1.
- * Stay near default and slow short letter sounds via text instead.
+ * Stay near default for clearer letter sounds.
  */
 export const SPEECH_RATE_ANDROID = 0.95
 /** Higher pitch on desktop/iOS — clearer kid-friendly voice */
@@ -17,7 +17,7 @@ export const SPEECH_PITCH = 0.9
 /** Android pitch ≠ 1 frequently sounds robotic / clipped */
 export const SPEECH_PITCH_ANDROID = 1
 
-/** Brief settle after cancel() — mobile TTS truncates if speak() follows instantly. */
+/** Brief settle after cancel() — used when we are already outside a sync gesture. */
 const MOBILE_SPEECH_GAP_MS = 50
 
 let currentHowl: Howl | null = null
@@ -35,7 +35,7 @@ export function isAndroidBrowser(): boolean {
   return /Android/i.test(navigator.userAgent)
 }
 
-function isIos(): boolean {
+export function isIosBrowser(): boolean {
   if (typeof navigator === 'undefined') return false
   return /iPad|iPhone|iPod/i.test(navigator.userAgent)
 }
@@ -122,6 +122,38 @@ export function stopAudio() {
   stopSpeech()
 }
 
+/**
+ * Pick a voice for the utterance.
+ * - Android: never force a voice (OS default for lang is clearer).
+ * - iOS: only force a voice that actually matches the spoken language;
+ *   never fall back to an English female voice for Hindi/Kannada text.
+ * - Desktop: prefer kid-friendly matching voice as before.
+ */
+function resolveUtteranceVoice(
+  voices: SpeechSynthesisVoice[],
+  spokenLang: string,
+  useRomanized: boolean,
+): SpeechSynthesisVoice | null {
+  if (isAndroidBrowser()) return null
+
+  const lang = useRomanized ? 'en-IN' : spokenLang
+  const voice = useRomanized
+    ? (findKidFriendlyVoice(voices, 'en-IN') ??
+        findKidFriendlyVoice(voices, 'en-US') ??
+        voices[0] ??
+        null)
+    : findKidFriendlyVoice(voices, lang)
+
+  if (!voice) return null
+
+  // iOS: refuse mismatched voices (common cause of rushed/wrong-language audio).
+  if (isIosBrowser() && !voiceMatchesLang(voice, lang)) {
+    return null
+  }
+
+  return voice
+}
+
 async function speakNow(text: string, lang: string, romanizedHint?: string): Promise<void> {
   if (!('speechSynthesis' in window) || !text.trim()) return
 
@@ -140,8 +172,11 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
     if (token !== speakSequence) return
   }
 
-  // Settle before cancel+speak on mobile so cancel is not lost in the gap race.
-  if (isMobileBrowser()) {
+  // Android: keep a short settle gap.
+  // iOS: skip the gap when voices are already loaded so speak() stays inside
+  // the user-gesture window (Safari otherwise often stays silent).
+  const needsMobileGap = isMobileBrowser() && !(isIosBrowser() && voices.length > 0)
+  if (needsMobileGap) {
     await wait(MOBILE_SPEECH_GAP_MS)
     if (token !== speakSequence) return
   }
@@ -149,8 +184,8 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
   // Cancel immediately before speak so only this (latest) utterance plays.
   stopSpeech()
 
-  const hasVoice = findKidFriendlyVoice(voices, lang) !== null
-  const useRomanized = !!(romanizedHint && prefix === 'kn' && !hasVoice)
+  const hasMatchingLangVoice = voices.some((voice) => voiceMatchesLang(voice, lang))
+  const useRomanized = !!(romanizedHint && prefix === 'kn' && !hasMatchingLangVoice)
 
   const spokenText = prepareSpokenText(useRomanized ? romanizedHint! : text)
   const spokenLang = useRomanized ? 'en-IN' : lang
@@ -161,19 +196,10 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
   utterance.pitch = getSpeechPitch()
   utterance.volume = 1
 
-  // Android: forcing a mismatched voice often sounds worse than lang-only.
-  // Let the OS pick the default voice for the language.
-  if (!isAndroidBrowser()) {
-    const voice = useRomanized
-      ? (findKidFriendlyVoice(voices, 'en-IN') ??
-          findKidFriendlyVoice(voices, 'en-US') ??
-          voices[0] ??
-          null)
-      : findKidFriendlyVoice(voices, lang)
-    if (voice) utterance.voice = voice
-  }
+  const voice = resolveUtteranceVoice(voices, spokenLang, useRomanized)
+  if (voice) utterance.voice = voice
 
-  if (isIos()) {
+  if (isIosBrowser()) {
     try {
       window.speechSynthesis.resume()
     } catch {

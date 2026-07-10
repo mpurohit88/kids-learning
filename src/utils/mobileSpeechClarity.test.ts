@@ -15,7 +15,7 @@ describe('mobile speech clarity helpers', () => {
     expect(getSpeechPitch()).toBe(SPEECH_PITCH)
   })
 
-  it('does not repeat short letter sounds on iOS', async () => {
+  it('uses a slightly slower iOS rate without repeating letters', async () => {
     vi.stubGlobal('navigator', {
       userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)',
     })
@@ -25,6 +25,7 @@ describe('mobile speech clarity helpers', () => {
     expect(prepareSpokenText('क')).toBe('क')
     expect(prepareSpokenText('क से कमल')).toBe('क से कमल')
     expect(getSpeechRate()).toBe(SPEECH_RATE_MOBILE)
+    expect(SPEECH_RATE_MOBILE).toBe(0.78)
   })
 
   it('uses near-default rate/pitch on Android without repeating letters', async () => {

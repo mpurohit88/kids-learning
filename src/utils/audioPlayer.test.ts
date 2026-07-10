@@ -290,3 +290,64 @@ describe('audioPlayer mobile speech clarity', () => {
     expect(cancel).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('audioPlayer iOS speech hardening', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.clearAllMocks()
+    lastHowl = null
+    howlPlaySucceeds = false
+    isAudioUnlocked.mockReturnValue(true)
+    vi.stubGlobal('navigator', {
+      userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15',
+    })
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+  })
+
+  it('speaks immediately when voices are already loaded (no settle gap)', async () => {
+    const { speak } = installWindowSpeech([
+      { name: 'Samantha', lang: 'en-US' },
+    ])
+    const { speakText, SPEECH_RATE_MOBILE } = await import('./audioPlayer')
+
+    // No fake-timer advance — iOS should speak in the same turn when voices exist.
+    await speakText('hello', 'en-US')
+
+    expect(speak).toHaveBeenCalledTimes(1)
+    const utterance = speak.mock.calls[0][0] as FakeUtterance
+    expect(utterance.rate).toBe(SPEECH_RATE_MOBILE)
+    expect(utterance.text).toBe('hello')
+  })
+
+  it('does not force an English voice onto Hindi text', async () => {
+    const { speak } = installWindowSpeech([
+      { name: 'Samantha', lang: 'en-US' },
+      { name: 'Google US English', lang: 'en-US' },
+    ])
+    const { speakText } = await import('./audioPlayer')
+
+    await speakText('क', 'hi-IN')
+
+    expect(speak).toHaveBeenCalledTimes(1)
+    const utterance = speak.mock.calls[0][0] as FakeUtterance
+    expect(utterance.lang).toBe('hi-IN')
+    expect(utterance.voice).toBeNull()
+  })
+
+  it('uses a matching Hindi voice when iOS has one', async () => {
+    const { speak } = installWindowSpeech([
+      { name: 'Samantha', lang: 'en-US' },
+      { name: 'Lekha', lang: 'hi-IN' },
+    ])
+    const { speakText } = await import('./audioPlayer')
+
+    await speakText('क', 'hi-IN')
+
+    const utterance = speak.mock.calls[0][0] as FakeUtterance
+    expect(utterance.voice?.name).toBe('Lekha')
+  })
+})

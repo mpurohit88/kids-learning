@@ -17,6 +17,7 @@ export {
   prepareSpokenText,
   isMobileBrowser,
   isAndroidBrowser,
+  isIosBrowser,
 } from './audioPlayer'
 export {
   unlockAudio,
