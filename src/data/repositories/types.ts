@@ -44,7 +44,10 @@ export interface MathsRepository {
 export interface PronunciationRepository {
   getAllWords(): PronunciationWord[]
   getWordById(id: string): PronunciationWord | undefined
-  getRound(count: number): PronunciationWord[]
+  getRound(
+    count: number,
+    options?: { minSyllables?: number },
+  ): PronunciationWord[]
 }
 
 export interface ProfileRepository {

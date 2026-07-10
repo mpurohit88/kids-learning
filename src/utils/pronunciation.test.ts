@@ -37,6 +37,14 @@ describe('pronunciation word bank', () => {
     ).length
     expect(priorityHits).toBeGreaterThanOrEqual(5)
   })
+
+  it('can require at least two syllable chunks for feed-the-bear rounds', () => {
+    const round = pickPronunciationRound(7, undefined, { minSyllables: 2 })
+    expect(round.length).toBe(7)
+    for (const word of round) {
+      expect(word.syllables.length).toBeGreaterThanOrEqual(2)
+    }
+  })
 })
 
 describe('say-it catalog', () => {

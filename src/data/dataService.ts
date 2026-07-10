@@ -149,8 +149,8 @@ class DataService {
     return this.repositories.pronunciation.getAllWords()
   }
 
-  getPronunciationRound(count: number) {
-    return this.repositories.pronunciation.getRound(count)
+  getPronunciationRound(count: number, options?: { minSyllables?: number }) {
+    return this.repositories.pronunciation.getRound(count, options)
   }
 
   getMotherTongueLanguages() {

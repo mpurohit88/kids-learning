@@ -4,6 +4,11 @@ import { pickRandomItems, shuffleArray } from '../../../utils/arrayUtils'
 
 const content = pronunciationWords as PronunciationContent
 
+export interface PronunciationRoundOptions {
+  /** Minimum syllable chunks (Feed the Bear needs 2+). */
+  minSyllables?: number
+}
+
 /**
  * Prefer priority (worksheet) words, then fill from the rest of the bank.
  * Safe to call repeatedly — returns a fresh shuffled round each time.
@@ -11,11 +16,14 @@ const content = pronunciationWords as PronunciationContent
 export function pickPronunciationRound(
   count: number,
   words: PronunciationWord[] = content.words,
+  options: PronunciationRoundOptions = {},
 ): PronunciationWord[] {
-  if (words.length === 0 || count <= 0) return []
+  const minSyllables = options.minSyllables ?? 1
+  const pool = words.filter((word) => word.syllables.length >= minSyllables)
+  if (pool.length === 0 || count <= 0) return []
 
-  const priority = words.filter((word) => word.priority)
-  const regular = words.filter((word) => !word.priority)
+  const priority = pool.filter((word) => word.priority)
+  const regular = pool.filter((word) => !word.priority)
 
   const priorityPick = pickRandomItems(
     priority,
@@ -31,7 +39,7 @@ export function pickPronunciationRound(
 
   if (round.length < count) {
     const used = new Set(round.map((word) => word.id))
-    const filler = shuffleArray(words.filter((word) => !used.has(word.id))).slice(
+    const filler = shuffleArray(pool.filter((word) => !used.has(word.id))).slice(
       0,
       count - round.length,
     )
@@ -39,8 +47,8 @@ export function pickPronunciationRound(
   }
 
   // If the bank is smaller than count, allow reuse by cycling.
-  while (round.length < count && words.length > 0) {
-    round.push(words[round.length % words.length])
+  while (round.length < count && pool.length > 0) {
+    round.push(pool[round.length % pool.length])
   }
 
   return shuffleArray(round).slice(0, count)
@@ -55,7 +63,7 @@ export class LocalPronunciationRepository {
     return content.words.find((word) => word.id === id)
   }
 
-  getRound(count: number): PronunciationWord[] {
-    return pickPronunciationRound(count, content.words)
+  getRound(count: number, options?: PronunciationRoundOptions): PronunciationWord[] {
+    return pickPronunciationRound(count, content.words, options)
   }
 }

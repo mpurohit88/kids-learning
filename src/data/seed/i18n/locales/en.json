@@ -150,15 +150,20 @@
       "pickPractice": "Pick a Say It! practice!",
       "progress": "Word {{current}} of {{total}}",
       "priorityBadge": "Practice word",
-      "nextWord": "Next word",
       "keepGoing": "Nice try — let's keep going!",
-      "clap": {
-        "prompt": "Listen to the chunks, then clap each one!",
+      "feed": {
+        "prompt": "Listen to the chunks, then feed the bear in order!",
         "listen": "Listen to each chunk…",
-        "yourTurn": "Your turn — tap Clap for each chunk!",
+        "yourTurn": "Now tap the chunks in order to feed the bear!",
         "hearChunks": "Hear the chunks",
-        "clapButton": "👏 Clap {{current}}/{{total}}",
-        "niceClapping": "Great clapping!"
+        "keepFeeding": "Yum! Feed the next chunk!",
+        "yum": "All full — great feeding!",
+        "wrongOrder": "Oops — try the next chunk!",
+        "skipWord": "Skip this word",
+        "tapHere": "Tap here!",
+        "tapChunk": "Tap this chunk!",
+        "bowlLabel": "Bear's bowl",
+        "trayLabel": "Word chunks"
       },
       "echo": {
         "prompt": "Listen to \"{{word}}\", then say it!",
@@ -319,12 +324,12 @@
     },
     "say-it": {
       "title": "Say It!",
-      "description": "Listen, clap syllables, and practice saying words",
+      "description": "Listen, feed syllable chunks, and practice saying words",
       "badge": "Class 2"
     },
     "clap-it-out": {
-      "title": "Clap It Out",
-      "description": "Break words into syllables and clap along"
+      "title": "Feed the Bear",
+      "description": "Listen to word chunks and feed them to the bear in order"
     },
     "echo-mascot": {
       "title": "Echo the Mascot",
