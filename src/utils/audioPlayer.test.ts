@@ -235,7 +235,7 @@ describe('audioPlayer mobile speech clarity', () => {
     vi.unstubAllGlobals()
   })
 
-  it('uses a milder mobile rate and repeats short phrases', async () => {
+  it('uses a milder mobile rate without repeating short phrases', async () => {
     vi.useFakeTimers()
     const { speak } = installWindowSpeech([
       { name: 'Google हिन्दी', lang: 'hi-IN' },
@@ -251,9 +251,26 @@ describe('audioPlayer mobile speech clarity', () => {
     const utterance = speak.mock.calls[0][0] as FakeUtterance
     expect(utterance.rate).toBe(SPEECH_RATE_ANDROID)
     expect(utterance.pitch).toBe(SPEECH_PITCH_ANDROID)
-    expect(utterance.text).toBe('क, क')
+    expect(utterance.text).toBe('क')
     // Android should not force a voice — OS default is clearer.
     expect(utterance.voice).toBeNull()
+  })
+
+  it('only speaks the latest utterance when two speakText calls race', async () => {
+    vi.useFakeTimers()
+    const { speak } = installWindowSpeech([
+      { name: 'Google हिन्दी', lang: 'hi-IN' },
+    ])
+    const { speakText } = await import('./audioPlayer')
+
+    const first = speakText('क', 'hi-IN')
+    const second = speakText('ख', 'hi-IN')
+    await vi.advanceTimersByTimeAsync(100)
+    await Promise.all([first, second])
+
+    expect(speak).toHaveBeenCalledTimes(1)
+    const utterance = speak.mock.calls[0][0] as FakeUtterance
+    expect(utterance.text).toBe('ख')
   })
 
   it('does not race Howler against TTS on mobile (avoids cut-off speech)', async () => {

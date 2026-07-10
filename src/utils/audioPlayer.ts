@@ -22,6 +22,8 @@ const MOBILE_SPEECH_GAP_MS = 50
 
 let currentHowl: Howl | null = null
 let voicesPromise: Promise<SpeechSynthesisVoice[]> | null = null
+/** Only the latest speakNow call may reach speechSynthesis.speak(). */
+let speakSequence = 0
 
 export function isMobileBrowser(): boolean {
   if (typeof navigator === 'undefined') return false
@@ -49,24 +51,11 @@ export function getSpeechPitch(): number {
 }
 
 /**
- * Keep spoken text natural. Do not append "…" — Android often reads it aloud
- * and makes letter sounds worse. For very short letter sounds on mobile,
- * gently repeat once with a comma pause so kids hear it clearly.
+ * Normalize spoken text. Keep it natural on all platforms — do not repeat
+ * letters or append ellipsis (both sound like double/garbled audio on mobile).
  */
 export function prepareSpokenText(text: string): string {
-  const trimmed = text.trim()
-  if (!trimmed) return trimmed
-  if (!isMobileBrowser()) return trimmed
-
-  // Already a phrase / multi-word — leave alone.
-  if (/\s/.test(trimmed) || trimmed.includes(',')) return trimmed
-
-  const units = Array.from(trimmed)
-  // Single letter / matra-sized tokens benefit from a soft repeat on phones.
-  if (units.length <= 2) {
-    return `${trimmed}, ${trimmed}`
-  }
-  return trimmed
+  return text.trim()
 }
 
 function resolveAssetUrl(path: string): string {
@@ -136,6 +125,8 @@ export function stopAudio() {
 async function speakNow(text: string, lang: string, romanizedHint?: string): Promise<void> {
   if (!('speechSynthesis' in window) || !text.trim()) return
 
+  const token = ++speakSequence
+
   // Prime only until unlocked. Re-priming every letter floods the mobile queue.
   if (!isAudioUnlocked()) {
     primeSpeechSynthesis()
@@ -146,12 +137,17 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
   let voices = window.speechSynthesis.getVoices()
   if (voices.length === 0) {
     voices = await loadVoices()
+    if (token !== speakSequence) return
   }
 
-  stopSpeech()
+  // Settle before cancel+speak on mobile so cancel is not lost in the gap race.
   if (isMobileBrowser()) {
     await wait(MOBILE_SPEECH_GAP_MS)
+    if (token !== speakSequence) return
   }
+
+  // Cancel immediately before speak so only this (latest) utterance plays.
+  stopSpeech()
 
   const hasVoice = findKidFriendlyVoice(voices, lang) !== null
   const useRomanized = !!(romanizedHint && prefix === 'kn' && !hasVoice)
@@ -185,6 +181,7 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
     }
   }
 
+  if (token !== speakSequence) return
   window.speechSynthesis.speak(utterance)
 }
 

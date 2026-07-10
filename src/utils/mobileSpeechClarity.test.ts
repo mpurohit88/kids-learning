@@ -15,19 +15,19 @@ describe('mobile speech clarity helpers', () => {
     expect(getSpeechPitch()).toBe(SPEECH_PITCH)
   })
 
-  it('repeats short letter sounds on iOS with a mild slowdown', async () => {
+  it('does not repeat short letter sounds on iOS', async () => {
     vi.stubGlobal('navigator', {
       userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)',
     })
     const { prepareSpokenText, getSpeechRate, SPEECH_RATE_MOBILE } = await import(
       './audioPlayer'
     )
-    expect(prepareSpokenText('क')).toBe('क, क')
+    expect(prepareSpokenText('क')).toBe('क')
     expect(prepareSpokenText('क से कमल')).toBe('क से कमल')
     expect(getSpeechRate()).toBe(SPEECH_RATE_MOBILE)
   })
 
-  it('uses near-default rate/pitch on Android (avoids garbled TTS)', async () => {
+  it('uses near-default rate/pitch on Android without repeating letters', async () => {
     vi.stubGlobal('navigator', {
       userAgent:
         'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/120.0.0.0 Mobile Safari/537.36',
@@ -39,7 +39,7 @@ describe('mobile speech clarity helpers', () => {
       SPEECH_RATE_ANDROID,
       SPEECH_PITCH_ANDROID,
     } = await import('./audioPlayer')
-    expect(prepareSpokenText('क')).toBe('क, क')
+    expect(prepareSpokenText('क')).toBe('क')
     expect(getSpeechRate()).toBe(SPEECH_RATE_ANDROID)
     expect(getSpeechPitch()).toBe(SPEECH_PITCH_ANDROID)
   })
