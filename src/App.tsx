@@ -5,12 +5,15 @@ import { GAME_REGISTRY } from './config/gameRegistry'
 import { ChallengeQuizGame } from './games/ChallengeQuizGame'
 import { AdditionMenuScreen } from './pages/AdditionMenuScreen'
 import { GreaterLessThanMenuScreen } from './pages/GreaterLessThanMenuScreen'
+import { SayItMenuScreen } from './pages/SayItMenuScreen'
 import { ActivityMenuScreen } from './pages/ActivityMenuScreen'
 import { HomeScreen } from './pages/HomeScreen'
 import { LaunchScreen } from './pages/LaunchScreen'
 import { MotherTongueScreen } from './pages/MotherTongueScreen'
 import { NumberLearnerPage } from './pages/NumberLearnerPage'
 import { ProgressScreen } from './pages/ProgressScreen'
+import { ClapItOutGame } from './games/pronunciation/ClapItOutGame'
+import { EchoMascotGame } from './games/pronunciation/EchoMascotGame'
 import { useAppStore } from './store/useAppStore'
 
 function AppEntry() {
@@ -48,6 +51,9 @@ function App() {
             path="/games/challenge/greater-less-than"
             element={<GreaterLessThanMenuScreen />}
           />
+          <Route path="/games/say-it" element={<SayItMenuScreen />} />
+          <Route path="/games/say-it/clap-it-out" element={<ClapItOutGame />} />
+          <Route path="/games/say-it/echo-mascot" element={<EchoMascotGame />} />
           <Route path="/games/challenge/:challengeId" element={<ChallengeQuizGame />} />
           {GAME_REGISTRY.map((game) => {
             const GameComponent = game.component

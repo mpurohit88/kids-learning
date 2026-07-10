@@ -52,7 +52,7 @@ export function ComparisonQuestion({
       </div>
 
       {onHearAgain ? (
-        <QuestionHearButton onClick={onHearAgain} label={hearAgainLabel} />
+        <QuestionHearButton onClick={onHearAgain} ariaLabel={hearAgainLabel} />
       ) : null}
     </div>
   )

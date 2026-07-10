@@ -1,6 +1,7 @@
 import { generateSession as runQuestionEngine } from '../engine/questionEngine'
 import { LocalChallengeRepository } from './repositories/local/challengeRepository'
 import { LocalMathsRepository } from './repositories/local/mathsRepository'
+import { LocalPronunciationRepository } from './repositories/local/pronunciationRepository'
 import { LocalContentRepository } from './repositories/local/contentRepository'
 import { LocalGameCatalogRepository } from './repositories/local/gameCatalogRepository'
 import { LocalGameSettingsRepository } from './repositories/local/gameSettingsRepository'
@@ -36,6 +37,7 @@ function createLocalRepositories(): DataRepositories {
     challenges: new LocalChallengeRepository(),
     subjects: new LocalSubjectRepository(),
     maths: new LocalMathsRepository(),
+    pronunciation: new LocalPronunciationRepository(),
     locale: new LocalLocaleRepository(),
   }
 }
@@ -141,6 +143,14 @@ class DataService {
 
   getLetterReference(language: Language, ageGroup: AgeGroup) {
     return this.repositories.content.getLetterReference(language, ageGroup)
+  }
+
+  getPronunciationWords() {
+    return this.repositories.pronunciation.getAllWords()
+  }
+
+  getPronunciationRound(count: number) {
+    return this.repositories.pronunciation.getRound(count)
   }
 
   getMotherTongueLanguages() {

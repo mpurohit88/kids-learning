@@ -27,6 +27,8 @@ interface QuizGameShellProps {
   onHearAgain?: () => void
   hearAgainLabel?: string
   roundLabel?: string
+  /** Where Back returns — usually the activities menu or a practice hub. */
+  backTo?: string
   children: ReactNode
 }
 
@@ -48,6 +50,7 @@ export function QuizGameShell({
   onHearAgain,
   hearAgainLabel,
   roundLabel,
+  backTo = '/activities',
   children,
 }: QuizGameShellProps) {
   const { t } = useTranslation()
@@ -57,7 +60,8 @@ export function QuizGameShell({
   return (
     <AppShell
       title={title}
-      showBack={false}
+      showBack
+      backTo={backTo}
       profileGoesHome
       showProgressLink={false}
       showLanguageButton={false}

@@ -65,6 +65,49 @@ function buildLanguageChallenges(
   return templates.map((template) => ({ ...template, subject }))
 }
 
+/** English Class 1/2 pronunciation hub + mini-games (not shown for LKG). */
+const ENGLISH_SAY_IT_CHALLENGES: ChallengeDefinition[] = [
+  {
+    id: 'say-it',
+    subject: 'english',
+    topic: 'pronunciation',
+    title: 'Say It!',
+    emoji: '🗣️',
+    color: '#29b6f6',
+    route: '/games/say-it',
+    description: 'Listen, clap syllables, and practice saying words',
+    gradeLevels: ['class2'],
+    source: 'group',
+    badge: 'Class 2',
+  },
+  {
+    id: 'clap-it-out',
+    subject: 'english',
+    topic: 'pronunciation',
+    title: 'Clap It Out',
+    emoji: '👏',
+    color: '#26c6da',
+    route: '/games/say-it/clap-it-out',
+    description: 'Break words into syllables and clap along',
+    gradeLevels: ['class2'],
+    source: 'bank',
+    menuGroup: 'say-it',
+  },
+  {
+    id: 'echo-mascot',
+    subject: 'english',
+    topic: 'pronunciation',
+    title: 'Echo the Mascot',
+    emoji: '🎤',
+    color: '#0288d1',
+    route: '/games/say-it/echo-mascot',
+    description: 'Listen, say the word, and compare by ear',
+    gradeLevels: ['class2'],
+    source: 'bank',
+    menuGroup: 'say-it',
+  },
+]
+
 const MATHS_CHALLENGES: ChallengeDefinition[] = [
   {
     id: 'heavy-and-light',
@@ -296,6 +339,7 @@ export const CHALLENGE_CATALOG: ChallengeDefinition[] = [
   ...buildLanguageChallenges('hindi'),
   ...buildLanguageChallenges('kannada'),
   ...buildLanguageChallenges('english'),
+  ...ENGLISH_SAY_IT_CHALLENGES,
   ...MATHS_CHALLENGES,
 ]
 

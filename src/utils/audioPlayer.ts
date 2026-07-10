@@ -154,7 +154,13 @@ function resolveUtteranceVoice(
   return voice
 }
 
-async function speakNow(text: string, lang: string, romanizedHint?: string): Promise<void> {
+async function speakNow(
+  text: string,
+  lang: string,
+  romanizedHint?: string,
+  rateOverride?: number,
+  waitUntilEnd = false,
+): Promise<void> {
   if (!('speechSynthesis' in window) || !text.trim()) return
 
   const token = ++speakSequence
@@ -192,7 +198,7 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
 
   const utterance = new SpeechSynthesisUtterance(spokenText)
   utterance.lang = spokenLang
-  utterance.rate = getSpeechRate()
+  utterance.rate = rateOverride ?? getSpeechRate()
   utterance.pitch = getSpeechPitch()
   utterance.volume = 1
 
@@ -208,7 +214,18 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
   }
 
   if (token !== speakSequence) return
-  window.speechSynthesis.speak(utterance)
+
+  if (!waitUntilEnd) {
+    window.speechSynthesis.speak(utterance)
+    return
+  }
+
+  await new Promise<void>((resolve) => {
+    const finish = () => resolve()
+    utterance.onend = finish
+    utterance.onerror = finish
+    window.speechSynthesis.speak(utterance)
+  })
 }
 
 export async function speakText(
@@ -218,6 +235,16 @@ export async function speakText(
 ): Promise<void> {
   if (!text.trim()) return
   await speakNow(text, lang, romanizedHint)
+}
+
+/** Speak and resolve when the utterance finishes (for syllable sequences). */
+export async function speakTextAndWait(
+  text: string,
+  lang: string,
+  options?: { rate?: number; romanizedHint?: string },
+): Promise<void> {
+  if (!text.trim()) return
+  await speakNow(text, lang, options?.romanizedHint, options?.rate, true)
 }
 
 function playHowl(src: string): Promise<boolean> {

@@ -4,6 +4,7 @@
  */
 export {
   speakText,
+  speakTextAndWait,
   playAudio,
   stopAudio,
   playCelebrationSound,

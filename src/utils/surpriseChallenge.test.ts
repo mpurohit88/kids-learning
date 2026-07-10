@@ -17,6 +17,19 @@ describe('getPlayableChallenges', () => {
       ['letter-recognition', 'letter-tracing', 'picture-word-match'].sort(),
     )
   })
+
+  it('includes say-it mini-games for class2 english', () => {
+    const playable = getPlayableChallenges('english', 'class2').map((c) => c.id)
+    expect(playable).toEqual(
+      expect.arrayContaining([
+        'letter-recognition',
+        'letter-tracing',
+        'clap-it-out',
+        'echo-mascot',
+      ]),
+    )
+    expect(playable).not.toContain('say-it')
+  })
 })
 
 describe('pickSurpriseChallenge', () => {

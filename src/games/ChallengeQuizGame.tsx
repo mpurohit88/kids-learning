@@ -83,6 +83,14 @@ export function ChallengeQuizGame() {
       : undefined
   const localizedChallenge = challenge ? getLocalizedChallenge(t, challenge) : undefined
 
+  const backTo = useMemo(() => {
+    if (challenge?.menuGroup && subject) {
+      const hub = dataService.getChallenge(subject, challenge.menuGroup)
+      if (hub) return hub.route
+    }
+    return '/activities'
+  }, [challenge, subject])
+
   const roundCount = useMemo(
     () => getChallengeRoundCount(challengeId, ageGroup, subject),
     [challengeId, ageGroup, subject],
@@ -222,6 +230,7 @@ export function ChallengeQuizGame() {
       result={session.result}
       onPlayAgain={handlePlayAgainClick}
       roundLabel={t('common.question', undefined, 'Question')}
+      backTo={backTo}
     >
       <motion.div
         key={currentQuestion.id}

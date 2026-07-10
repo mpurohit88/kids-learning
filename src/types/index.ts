@@ -97,6 +97,26 @@ export interface LanguageContent {
   practiceQuestions?: PracticeQuestion[]
 }
 
+export type PronunciationDifficulty = 'simple' | 'medium' | 'harder'
+
+export interface PronunciationWord {
+  id: string
+  word: string
+  syllables: string[]
+  difficulty: PronunciationDifficulty
+  priority: boolean
+  emoji?: string
+  imagePath?: string
+  /** Optional pre-recorded clips for a later iteration. */
+  audioPath?: string
+  audioPathSlow?: string
+}
+
+export interface PronunciationContent {
+  subject: 'english'
+  words: PronunciationWord[]
+}
+
 export interface ChallengeDefinition {
   id: string
   subject: Subject

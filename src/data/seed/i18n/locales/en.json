@@ -71,6 +71,7 @@
     "numbersBadgeClass2": "Numbers 1 – 100"
   },
   "common": {
+    "back": "Back",
     "goBack": "Go back",
     "viewProgress": "View progress",
     "hearAgain": "Hear again",
@@ -144,6 +145,41 @@
     },
     "examPractice": {
       "title": "Exam Practice"
+    },
+    "sayIt": {
+      "pickPractice": "Pick a Say It! practice!",
+      "progress": "Word {{current}} of {{total}}",
+      "priorityBadge": "Practice word",
+      "nextWord": "Next word",
+      "keepGoing": "Nice try — let's keep going!",
+      "clap": {
+        "prompt": "Listen to the chunks, then clap each one!",
+        "listen": "Listen to each chunk…",
+        "yourTurn": "Your turn — tap Clap for each chunk!",
+        "hearChunks": "Hear the chunks",
+        "clapButton": "👏 Clap {{current}}/{{total}}",
+        "niceClapping": "Great clapping!"
+      },
+      "echo": {
+        "prompt": "Listen to \"{{word}}\", then say it!",
+        "promptFallback": "Listen, then say the word!",
+        "listening": "Listen carefully…",
+        "yourTurn": "Now you say it!",
+        "hearWord": "Hear the word",
+        "tapToSpeak": "Tap to speak",
+        "stopRecording": "Stop",
+        "recording": "Listening to you…",
+        "compare": "Hear the model, then you!",
+        "hearCompare": "Hear again",
+        "selfMark": "Did it sound close?",
+        "tryAgain": "Try again",
+        "gotItButton": "Got it!",
+        "gotIt": "Awesome saying!",
+        "tryAgainReady": "Let's hear it once more!",
+        "micUnsupported": "This device can't record yet. You can still listen and practice!",
+        "micDenied": "Microphone permission is needed to hear yourself back.",
+        "recordFailed": "Couldn't save that try. Tap to speak again!"
+      }
     }
   },
   "exam": {
@@ -280,6 +316,19 @@
       "title": "Number Match",
       "description": "Match the number to its name",
       "badge": "LKG"
+    },
+    "say-it": {
+      "title": "Say It!",
+      "description": "Listen, clap syllables, and practice saying words",
+      "badge": "Class 2"
+    },
+    "clap-it-out": {
+      "title": "Clap It Out",
+      "description": "Break words into syllables and clap along"
+    },
+    "echo-mascot": {
+      "title": "Echo the Mascot",
+      "description": "Listen, say the word, and compare by ear"
     }
   },
   "subjects": {

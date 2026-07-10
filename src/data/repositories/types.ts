@@ -9,6 +9,7 @@ import type {
   PracticeQuestion,
   Profile,
   ProgressMap,
+  PronunciationWord,
   SessionQuestion,
   Subject,
   SubjectDefinition,
@@ -38,6 +39,12 @@ export interface ContentRepository {
 
 export interface MathsRepository {
   getSessionQuestions(bankId: string, grade: AgeGroup, count?: number): SessionQuestion[]
+}
+
+export interface PronunciationRepository {
+  getAllWords(): PronunciationWord[]
+  getWordById(id: string): PronunciationWord | undefined
+  getRound(count: number): PronunciationWord[]
 }
 
 export interface ProfileRepository {
@@ -101,6 +108,7 @@ export interface DataRepositories {
   challenges: ChallengeRepository
   subjects: SubjectRepository
   maths: MathsRepository
+  pronunciation: PronunciationRepository
   locale: LocaleRepository
 }
 

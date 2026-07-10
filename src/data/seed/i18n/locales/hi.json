@@ -71,6 +71,7 @@
     "numbersBadgeClass2": "संख्या 1 – 100"
   },
   "common": {
+    "back": "वापस",
     "goBack": "वापस जाएँ",
     "viewProgress": "प्रगति देखें",
     "hearAgain": "फिर सुनें",
@@ -144,6 +145,41 @@
     },
     "examPractice": {
       "title": "परीक्षा अभ्यास"
+    },
+    "sayIt": {
+      "pickPractice": "बोलो! अभ्यास चुनें!",
+      "progress": "शब्द {{current}} / {{total}}",
+      "priorityBadge": "अभ्यास शब्द",
+      "nextWord": "अगला शब्द",
+      "keepGoing": "अच्छी कोशिश — चलते रहो!",
+      "clap": {
+        "prompt": "टुकड़े सुनो, फिर हर एक पर ताली बजाओ!",
+        "listen": "हर टुकड़ा सुनो…",
+        "yourTurn": "अब तुम्हारी बारी — हर टुकड़े पर ताली!",
+        "hearChunks": "टुकड़े सुनो",
+        "clapButton": "👏 ताली {{current}}/{{total}}",
+        "niceClapping": "बहुत अच्छी ताली!"
+      },
+      "echo": {
+        "prompt": "\"{{word}}\" सुनो, फिर बोलो!",
+        "promptFallback": "सुनो, फिर शब्द बोलो!",
+        "listening": "ध्यान से सुनो…",
+        "yourTurn": "अब तुम बोलो!",
+        "hearWord": "शब्द सुनो",
+        "tapToSpeak": "बोलने के लिए टैप करो",
+        "stopRecording": "रोको",
+        "recording": "तुम्हें सुन रहा हूँ…",
+        "compare": "पहले सही उच्चारण, फिर तुम्हारा!",
+        "hearCompare": "फिर से सुनो",
+        "selfMark": "क्या मिलता-जुलता लगा?",
+        "tryAgain": "फिर कोशिश",
+        "gotItButton": "हो गया!",
+        "gotIt": "बहुत अच्छा बोला!",
+        "tryAgainReady": "एक बार और सुनते हैं!",
+        "micUnsupported": "इस डिवाइस पर रिकॉर्ड नहीं हो सकता। सुनकर अभ्यास कर सकते हो!",
+        "micDenied": "अपनी आवाज़ सुनने के लिए माइक की अनुमति चाहिए।",
+        "recordFailed": "रिकॉर्ड नहीं हुआ। फिर से बोलने के लिए टैप करो!"
+      }
     }
   },
   "exam": {
@@ -218,7 +254,20 @@
       "description": "तुलना को सही बनाने वाली संख्या चुनो"
     },
     "counting-objects": { "title": "वस्तुएँ गिनो", "description": "वस्तुएँ गिनकर संख्या चुनो", "badge": "LKG" },
-    "number-recognition": { "title": "संख्या मिलाओ", "description": "संख्या का नाम मिलाओ", "badge": "LKG" }
+    "number-recognition": { "title": "संख्या मिलाओ", "description": "संख्या का नाम मिलाओ", "badge": "LKG" },
+    "say-it": {
+      "title": "बोलो!",
+      "description": "सुनो, अक्षर-खंड ताली बजाओ, और शब्द बोलो",
+      "badge": "कक्षा 2"
+    },
+    "clap-it-out": {
+      "title": "ताली बजाओ",
+      "description": "शब्दों को टुकड़ों में तोड़ो और ताली बजाओ"
+    },
+    "echo-mascot": {
+      "title": "मस्कॉट की नकल",
+      "description": "सुनो, बोलो, और कान से मिलाओ"
+    }
   },
   "subjects": {
     "hindi": { "title": "हिन्दी", "description": "अक्षर, शब्द और पढ़ना" },

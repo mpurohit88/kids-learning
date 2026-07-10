@@ -243,7 +243,8 @@ export function LetterTracingGame() {
   return (
     <AppShell
       title={t('games.traceLetter.title')}
-      showBack={false}
+      showBack
+      backTo="/activities"
       profileGoesHome
       showProgressLink={false}
       showLanguageButton={false}

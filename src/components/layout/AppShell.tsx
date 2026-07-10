@@ -61,12 +61,13 @@ export function AppShell({
               type="button"
               aria-label={t('common.goBack')}
               onClick={() => navigate(backTo)}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/90 text-slate-700 shadow-md transition hover:bg-white"
+              className="flex h-12 items-center gap-2 rounded-2xl bg-white/90 px-4 text-base font-bold text-slate-700 shadow-md transition hover:bg-white active:scale-95 md:text-lg"
             >
-              <ArrowLeft size={24} />
+              <ArrowLeft size={22} strokeWidth={2.5} aria-hidden />
+              <span>{t('common.back')}</span>
             </button>
           ) : (
-            <div className="h-12 w-12" />
+            <div className="h-12 w-12 shrink-0" />
           )}
           <div>
             <p className="text-sm font-medium text-slate-500">{t('app.tagline')}</p>
