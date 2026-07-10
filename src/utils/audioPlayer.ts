@@ -1,31 +1,29 @@
+import { Howl, Howler } from 'howler'
+import { isAudioUnlocked, onAudioUnlocked, unlockAudio } from './audioUnlock'
 import { playSuccessSound, playWrongSound } from './soundEffects'
 
 /** Slower pacing so young students can follow each word */
-const SPEECH_RATE = 0.72
+const SPEECH_RATE = .7
 /** Higher pitch — clearer, more kid-friendly lady voice */
-const SPEECH_PITCH = 1.35
+const SPEECH_PITCH = .9
 
-let currentAudio: HTMLAudioElement | null = null
+let currentHowl: Howl | null = null
 let voicesPromise: Promise<SpeechSynthesisVoice[]> | null = null
+let pendingSpeech: { text: string; lang: string; romanizedHint?: string } | null = null
 
-// ---------------------------------------------------------------------------
-// Voices — prefer female / child-friendly system voices when available
-// ---------------------------------------------------------------------------
-
-/** Names commonly used by Windows / macOS / Chrome for female or soft voices */
 const FEMALE_VOICE_HINTS = [
   'female',
   'woman',
   'girl',
-  'zira', // Windows English
+  'zira',
   'hazel',
   'susan',
-  'samantha', // macOS
+  'samantha',
   'karen',
   'moira',
   'tessa',
   'fiona',
-  'veena', // Indian English (often female)
+  'veena',
   'raveena',
   'aditi',
   'neerja',
@@ -34,7 +32,6 @@ const FEMALE_VOICE_HINTS = [
   'ananya',
   'priya',
   'heera',
-  'google हिन्दी', // Chrome Hindi female
   'google हिन्दी',
   'google uk english female',
   'google us english',
@@ -63,6 +60,21 @@ const MALE_VOICE_HINTS = [
   'google uk english male',
 ]
 
+function isIos(): boolean {
+  if (typeof navigator === 'undefined') return false
+  return /iPad|iPhone|iPod/i.test(navigator.userAgent)
+}
+
+function resolveAssetUrl(path: string): string {
+  if (!path) return path
+  if (/^(https?:|data:|blob:)/i.test(path)) return path
+  const base = import.meta.env.BASE_URL || '/'
+  if (path.startsWith('/')) {
+    return `${base.replace(/\/$/, '')}${path}`
+  }
+  return `${base}${path}`
+}
+
 function loadVoices(): Promise<SpeechSynthesisVoice[]> {
   if (!('speechSynthesis' in window)) return Promise.resolve([])
 
@@ -85,9 +97,7 @@ function loadVoices(): Promise<SpeechSynthesisVoice[]> {
         }
       }
       window.speechSynthesis.addEventListener('voiceschanged', onChanged)
-
-      // Fallback: give up waiting after 1 s and use whatever is available
-      window.setTimeout(() => resolve(window.speechSynthesis.getVoices()), 1000)
+      window.setTimeout(() => resolve(window.speechSynthesis.getVoices()), 1500)
     })
   }
 
@@ -130,7 +140,6 @@ function scoreKidFriendlyVoice(voice: SpeechSynthesisVoice, lang: string): numbe
   if (isLikelyFemaleVoice(voice)) score += 50
   if (isLikelyMaleVoice(voice)) score -= 40
 
-  // Prefer local / higher-quality voices when the browser marks them
   if (voice.localService) score += 5
   if (voice.default) score += 2
 
@@ -148,31 +157,34 @@ function findVoice(voices: SpeechSynthesisVoice[], lang: string): SpeechSynthesi
   return ranked[0] ?? null
 }
 
-// ---------------------------------------------------------------------------
-// Public API
-// ---------------------------------------------------------------------------
-
-export function stopAudio() {
-  if (currentAudio) {
-    currentAudio.pause()
-    currentAudio.currentTime = 0
-    currentAudio = null
+function stopHowl() {
+  if (currentHowl) {
+    currentHowl.stop()
+    currentHowl.unload()
+    currentHowl = null
   }
+}
+
+function stopSpeech() {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel()
   }
 }
 
-export async function speakText(
-  text: string,
-  lang: string,
-  romanizedHint?: string,
-): Promise<void> {
-  if (!('speechSynthesis' in window) || !text) return
+export function stopAudio() {
+  stopHowl()
+  stopSpeech()
+  pendingSpeech = null
+}
 
+async function speakNow(text: string, lang: string, romanizedHint?: string): Promise<void> {
+  if (!('speechSynthesis' in window) || !text.trim()) return
+
+  await unlockAudio()
   const voices = await loadVoices()
 
-  window.speechSynthesis.cancel()
+  // Cancel only the previous utterance, then speak immediately.
+  stopSpeech()
 
   const prefix = lang.toLowerCase().split('-')[0]
   const hasVoice = findVoice(voices, lang) !== null
@@ -185,13 +197,113 @@ export async function speakText(
   utterance.lang = spokenLang
   utterance.rate = SPEECH_RATE
   utterance.pitch = SPEECH_PITCH
+  utterance.volume = 1
 
   const voice = useRomanized
     ? (findVoice(voices, 'en-IN') ?? findVoice(voices, 'en-US') ?? voices[0] ?? null)
     : findVoice(voices, lang)
   if (voice) utterance.voice = voice
 
+  // iOS-only: unstick a silent speech queue. Do NOT run on desktop Chrome —
+  // pause() before speak() can leave speech permanently silent there.
+  if (isIos()) {
+    try {
+      window.speechSynthesis.resume()
+    } catch {
+      // ignore
+    }
+  }
+
   window.speechSynthesis.speak(utterance)
+
+  if (isIos()) {
+    window.setTimeout(() => {
+      try {
+        window.speechSynthesis.pause()
+        window.speechSynthesis.resume()
+      } catch {
+        // ignore
+      }
+    }, 0)
+  }
+}
+
+export async function speakText(
+  text: string,
+  lang: string,
+  romanizedHint?: string,
+): Promise<void> {
+  if (!text.trim()) return
+
+  // If audio is still locked (common on first mobile screen), queue and speak after unlock.
+  if (!isAudioUnlocked()) {
+    pendingSpeech = { text, lang, romanizedHint }
+    onAudioUnlocked(() => {
+      if (!pendingSpeech) return
+      const next = pendingSpeech
+      pendingSpeech = null
+      void speakNow(next.text, next.lang, next.romanizedHint)
+    })
+    void unlockAudio()
+    return
+  }
+
+  await speakNow(text, lang, romanizedHint)
+}
+
+function playHowl(src: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    let settled = false
+    const finish = (ok: boolean) => {
+      if (settled) return
+      settled = true
+      resolve(ok)
+    }
+
+    const sound = new Howl({
+      src: [src],
+      html5: true,
+      preload: true,
+      volume: 1,
+      onplayerror: () => {
+        sound.once('unlock', () => {
+          sound.play()
+        })
+        finish(false)
+      },
+      onloaderror: () => {
+        sound.unload()
+        finish(false)
+      },
+      onend: () => {
+        if (currentHowl === sound) currentHowl = null
+        sound.unload()
+      },
+    })
+
+    currentHowl = sound
+
+    // Missing letter MP3s should fall back to speech quickly (most assets are absent).
+    const timer = window.setTimeout(() => {
+      if (!sound.playing()) {
+        sound.unload()
+        if (currentHowl === sound) currentHowl = null
+        finish(false)
+      }
+    }, 600)
+
+    sound.once('play', () => {
+      window.clearTimeout(timer)
+      finish(true)
+    })
+
+    try {
+      sound.play()
+    } catch {
+      window.clearTimeout(timer)
+      finish(false)
+    }
+  })
 }
 
 export async function playAudio(
@@ -200,50 +312,32 @@ export async function playAudio(
   speechLang = 'hi-IN',
   romanizedHint?: string,
 ): Promise<void> {
-  stopAudio()
+  // Stop previous playback but keep unlock state.
+  stopHowl()
+  stopSpeech()
 
-  const played = await tryPlayFile(path)
+  await unlockAudio()
+  Howler.mute(false)
+  Howler.volume(1)
+
+  if (Howler.ctx?.state === 'suspended') {
+    try {
+      await Howler.ctx.resume()
+    } catch {
+      // Continue — speech fallback may still work.
+    }
+  }
+
+  // Prefer speech when we have fallback text and no reliable file set —
+  // try the file briefly, then speak.
+  const url = resolveAssetUrl(path)
+  const played = path ? await playHowl(url) : false
   if (played) return
 
   if (fallbackText || romanizedHint) {
-    await speakText(fallbackText ?? romanizedHint ?? '', speechLang, romanizedHint)
+    // Don't clear pending via stopAudio — speak directly.
+    await speakNow(fallbackText ?? romanizedHint ?? '', speechLang, romanizedHint)
   }
-}
-
-function tryPlayFile(path: string): Promise<boolean> {
-  return new Promise((resolve) => {
-    const audio = new Audio()
-    let settled = false
-
-    const finish = (success: boolean) => {
-      if (settled) return
-      settled = true
-      resolve(success)
-    }
-
-    audio.addEventListener(
-      'canplaythrough',
-      () => {
-        currentAudio = audio
-        audio
-          .play()
-          .then(() => finish(true))
-          .catch(() => {
-            currentAudio = null
-            finish(false)
-          })
-      },
-      { once: true },
-    )
-
-    audio.addEventListener('error', () => finish(false), { once: true })
-
-    audio.src = path
-    audio.load()
-
-    // Timeout: if audio hasn't loaded in 3 s, fall back to speech
-    window.setTimeout(() => finish(false), 3000)
-  })
 }
 
 export function playCelebrationSound() {
@@ -254,20 +348,6 @@ export function playEncouragementSound() {
   void playWrongSound()
 }
 
-// Warm up voices as soon as possible so they're ready when needed
 if (typeof window !== 'undefined') {
-  // On first user interaction, kick off voice loading and unblock any
-  // browser that requires a gesture before speech synthesis works.
-  const warmUp = () => {
-    void loadVoices()
-    window.removeEventListener('pointerdown', warmUp, true)
-    window.removeEventListener('touchstart', warmUp, true)
-    window.removeEventListener('keydown', warmUp, true)
-  }
-  window.addEventListener('pointerdown', warmUp, { capture: true, passive: true })
-  window.addEventListener('touchstart', warmUp, { capture: true, passive: true })
-  window.addEventListener('keydown', warmUp, { capture: true, passive: true })
-
-  // Also start loading immediately (works on desktop without any gesture)
   void loadVoices()
 }

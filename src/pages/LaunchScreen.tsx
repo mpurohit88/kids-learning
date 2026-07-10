@@ -5,6 +5,7 @@ import { AppShell } from '../components/layout/AppShell'
 import { dataService } from '../data'
 import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
+import { unlockAudio } from '../utils/audioUnlock'
 import { getLocalizedProfileDescription } from '../utils/localizedContent'
 import type { Profile } from '../types'
 
@@ -48,6 +49,7 @@ export function LaunchScreen() {
     for (const profile of profiles) {
       dataService.saveProfileName(profile.id, setupNames[profile.id].trim())
     }
+    void unlockAudio()
     setNeedsNameSetup(false)
     refreshProfiles()
   }
@@ -151,6 +153,7 @@ export function LaunchScreen() {
               <button
                 type="button"
                 onClick={() => {
+                  void unlockAudio()
                   setProfile(profile.id)
                   navigate('/home')
                 }}
