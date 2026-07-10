@@ -30,9 +30,9 @@ export function getLocalizedChallenge(
 }
 
 export function getLocalizedProfileDescription(
-  t: TranslateFn,
-  profileId: string,
+  _t: TranslateFn,
+  _profileId: string,
   fallback: string,
 ) {
-  return t(`profiles.${profileId}.description`, undefined, fallback)
+  return fallback
 }

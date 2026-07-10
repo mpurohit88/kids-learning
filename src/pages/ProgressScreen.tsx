@@ -4,11 +4,7 @@ import { StarDisplay } from '../components/StarDisplay'
 import { dataService } from '../data'
 import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
-import {
-  getLocalizedChallenge,
-  getLocalizedProfileDescription,
-  getLocalizedSubject,
-} from '../utils/localizedContent'
+import { getLocalizedChallenge, getLocalizedSubject } from '../utils/localizedContent'
 import type { Subject } from '../types'
 
 export function ProgressScreen() {
@@ -23,6 +19,21 @@ export function ProgressScreen() {
     <AppShell title={t('progress.title')} showBack backTo="/home" showProgressLink={false}>
       <div className="flex flex-1 flex-col gap-8">
         <p className="text-center text-xl text-slate-600">{t('progress.subtitle')}</p>
+
+        {profiles.length === 0 ? (
+          <div className="rounded-[2rem] bg-white/80 p-8 text-center shadow-lg">
+            <p className="text-xl text-slate-600">
+              {t('progress.noProfiles', undefined, 'No kid profiles yet. Create one to track stars.')}
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="mt-4 rounded-2xl bg-blue-500 px-8 py-3 text-lg font-bold text-white"
+            >
+              {t('launch.createProfile', undefined, 'Create profile')}
+            </button>
+          </div>
+        ) : null}
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {profiles.map((profile) => {
@@ -43,9 +54,7 @@ export function ProgressScreen() {
                   </span>
                   <div>
                     <h2 className="text-2xl font-bold text-slate-800">{profile.name}</h2>
-                    <p className="text-slate-500">
-                      {getLocalizedProfileDescription(t, profile.id, profile.description)}
-                    </p>
+                    <p className="text-slate-500">{profile.description}</p>
                   </div>
                 </div>
 

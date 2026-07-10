@@ -12,11 +12,23 @@
   "launch": {
     "heading": "ಇಂದು ಯಾರು ಕಲಿಯುತ್ತಿದ್ದಾರೆ?",
     "subtitle": "ಪ್ರಾರಂಭಿಸಲು ಪ್ರೊಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ",
+    "createTitle": "ಮಗುವಿನ ಪ್ರೊಫೈಲ್ ರಚಿಸಿ",
+    "createSubtitle": "ಹೆಸರು ಮತ್ತು ತರಗತಿ ನಮೂದಿಸಿ. ನೀವು ಗರಿಷ್ಠ 2 ಮಕ್ಕಳನ್ನು ಸೇರಿಸಬಹುದು.",
+    "createProfile": "ಪ್ರೊಫೈಲ್ ರಚಿಸಿ",
+    "editProfile": "ಪ್ರೊಫೈಲ್ ಬದಲಾಯಿಸಿ",
+    "deleteProfile": "ಪ್ರೊಫೈಲ್ ಅಳಿಸಿ",
+    "addKid": "ಇನ್ನೊಂದು ಮಗು ಸೇರಿಸಿ",
+    "maxTwo": "ಗರಿಷ್ಠ 2 ಪ್ರೊಫೈಲ್",
+    "formHint": "ಹೆಸರು ಮತ್ತು ತರಗತಿ ಮಾತ್ರ ಬೇಕು.",
+    "nameLabel": "ಹೆಸರು",
+    "namePlaceholder": "ಹೆಸರು ನಮೂದಿಸಿ",
+    "classLabel": "ತರಗತಿ",
+    "classLkg": "LKG / UKG",
+    "class12": "ತರಗತಿ 1 / 2",
+    "saveProfile": "ಪ್ರೊಫೈಲ್ ಉಳಿಸಿ",
     "nameSetupTitle": "ನಿಮ್ಮ ಹೆಸರೇನು?",
     "nameSetupSubtitle": "ಪ್ರತಿ ವಿದ್ಯಾರ್ಥಿಯ ಹೆಸರನ್ನು ನಮೂದಿಸಿ. ನಂತರ ಬದಲಾಯಿಸಬಹುದು.",
     "nameSetupContinue": "ಮುಂದುವರಿಸಿ",
-    "nameLabel": "ಹೆಸರು",
-    "namePlaceholder": "ಹೆಸರು ನಮೂದಿಸಿ",
     "editName": "ಹೆಸರು ಬದಲಾಯಿಸಿ",
     "editNameTitle": "ಹೆಸರು ಬದಲಾಯಿಸಿ"
   },
@@ -234,12 +246,8 @@
     }
   },
   "profiles": {
-    "aarav": {
-      "description": "ವಯಸ್ಸು 4 · LKG"
-    },
-    "diya": {
-      "description": "ವಯಸ್ಸು 7 · 2ನೇ ತರಗತಿ"
-    }
+    "classLkg": "LKG / UKG",
+    "class12": "ತರಗತಿ 1 / 2"
   },
   "sideGames": {
     "mango": {

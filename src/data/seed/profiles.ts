@@ -1,20 +1,7 @@
 import type { Profile } from '../../types'
 
-export const profiles: Profile[] = [
-  {
-    id: 'aarav',
-    name: 'Aarav',
-    ageGroup: 'lkg',
-    avatar: '🦁',
-    color: '#ff8a65',
-    description: 'LKG/UKG',
-  },
-  {
-    id: 'diya',
-    name: 'Diya',
-    ageGroup: 'class2',
-    avatar: '🦋',
-    color: '#64b5f6',
-    description: 'Class 2',
-  },
-]
+/**
+ * Profiles are no longer seeded. Kids are created by the parent/child on first launch
+ * and stored in localStorage (see profileStorage.ts).
+ */
+export const profiles: Profile[] = []

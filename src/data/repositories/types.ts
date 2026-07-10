@@ -43,6 +43,12 @@ export interface MathsRepository {
 export interface ProfileRepository {
   getAllProfiles(): Profile[]
   getProfileById(id: string | null): Profile | undefined
+  createProfile(input: { name: string; classChoice: 'lkg' | 'class12' }): Profile
+  updateProfile(
+    profileId: string,
+    input: { name: string; classChoice: 'lkg' | 'class12' },
+  ): Profile | undefined
+  deleteProfile(profileId: string): boolean
   saveProfileName(profileId: string, name: string): void
   hasAnyCustomProfileName(): boolean
 }

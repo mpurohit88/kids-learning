@@ -11,12 +11,24 @@
   },
   "launch": {
     "heading": "Who is learning today?",
-    "subtitle": "Pick your profile to start",
+    "subtitle": "Pick a profile to start",
+    "createTitle": "Create a kid profile",
+    "createSubtitle": "Add a name and class to start learning. You can add up to 2 kids.",
+    "createProfile": "Create profile",
+    "editProfile": "Edit profile",
+    "deleteProfile": "Delete profile",
+    "addKid": "Add another kid",
+    "maxTwo": "Up to 2 profiles",
+    "formHint": "Only a name and class are needed.",
+    "nameLabel": "Name",
+    "namePlaceholder": "Enter name",
+    "classLabel": "Class",
+    "classLkg": "LKG / UKG",
+    "class12": "Class 1 / 2",
+    "saveProfile": "Save profile",
     "nameSetupTitle": "What's your name?",
     "nameSetupSubtitle": "Enter a name for each learner. You can change it later.",
     "nameSetupContinue": "Continue",
-    "nameLabel": "Name",
-    "namePlaceholder": "Enter name",
     "editName": "Edit name",
     "editNameTitle": "Edit name"
   },
@@ -234,12 +246,8 @@
     }
   },
   "profiles": {
-    "aarav": {
-      "description": "LKG/UKG"
-    },
-    "diya": {
-      "description": "Class 1/2"
-    }
+    "classLkg": "LKG / UKG",
+    "class12": "Class 1 / 2"
   },
   "sideGames": {
     "mango": {

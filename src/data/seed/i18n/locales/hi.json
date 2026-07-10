@@ -12,11 +12,23 @@
   "launch": {
     "heading": "आज कौन सीख रहा है?",
     "subtitle": "शुरू करने के लिए प्रोफ़ाइल चुनें",
+    "createTitle": "बच्चे की प्रोफ़ाइल बनाएँ",
+    "createSubtitle": "नाम और कक्षा लिखें। आप अधिकतम 2 बच्चे जोड़ सकते हैं।",
+    "createProfile": "प्रोफ़ाइल बनाएँ",
+    "editProfile": "प्रोफ़ाइल बदलें",
+    "deleteProfile": "प्रोफ़ाइल हटाएँ",
+    "addKid": "एक और बच्चा जोड़ें",
+    "maxTwo": "अधिकतम 2 प्रोफ़ाइल",
+    "formHint": "केवल नाम और कक्षा चाहिए।",
+    "nameLabel": "नाम",
+    "namePlaceholder": "नाम लिखें",
+    "classLabel": "कक्षा",
+    "classLkg": "LKG / UKG",
+    "class12": "कक्षा 1 / 2",
+    "saveProfile": "प्रोफ़ाइल सेव करें",
     "nameSetupTitle": "आपका नाम क्या है?",
     "nameSetupSubtitle": "हर सीखने वाले का नाम लिखें। बाद में बदल सकते हैं।",
     "nameSetupContinue": "आगे बढ़ें",
-    "nameLabel": "नाम",
-    "namePlaceholder": "नाम लिखें",
     "editName": "नाम बदलें",
     "editNameTitle": "नाम बदलें"
   },
@@ -160,8 +172,8 @@
     "maths": { "title": "गणित", "description": "संख्या, गिनती और जोड़" }
   },
   "profiles": {
-    "aarav": { "description": "उम्र 4 · LKG" },
-    "diya": { "description": "उम्र 7 · कक्षा 2" }
+    "classLkg": "LKG / UKG",
+    "class12": "कक्षा 1 / 2"
   },
   "sideGames": {
     "mango": {

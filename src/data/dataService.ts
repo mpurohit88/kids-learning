@@ -67,6 +67,21 @@ class DataService {
     return this.repositories.profiles.getProfileById(id)
   }
 
+  createProfile(input: { name: string; classChoice: 'lkg' | 'class12' }) {
+    return this.repositories.profiles.createProfile(input)
+  }
+
+  updateProfile(
+    profileId: string,
+    input: { name: string; classChoice: 'lkg' | 'class12' },
+  ) {
+    return this.repositories.profiles.updateProfile(profileId, input)
+  }
+
+  deleteProfile(profileId: string) {
+    return this.repositories.profiles.deleteProfile(profileId)
+  }
+
   saveProfileName(profileId: string, name: string) {
     this.repositories.profiles.saveProfileName(profileId, name)
   }
