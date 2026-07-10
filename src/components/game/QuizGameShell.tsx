@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { AnswerFeedbackOverlay, type AnswerFeedbackType } from '../AnswerFeedbackOverlay'
 import { ConfettiBurst } from '../ConfettiBurst'
 import { GameChallengeSidebar } from '../challenges/GameChallengeSidebar'
@@ -11,6 +10,7 @@ import type { GameRoundResult } from '../../types'
 
 interface QuizGameShellProps {
   title: string
+  challengeId: string
   roundIndex: number
   roundCount: number
   correctCount: number
@@ -31,6 +31,7 @@ interface QuizGameShellProps {
 
 export function QuizGameShell({
   title,
+  challengeId,
   roundIndex,
   roundCount,
   correctCount,
@@ -48,10 +49,14 @@ export function QuizGameShell({
   roundLabel = 'Round',
   children,
 }: QuizGameShellProps) {
-  const navigate = useNavigate()
-
   return (
-    <AppShell title={title} showBack backTo="/activities">
+    <AppShell
+      title={title}
+      showBack={false}
+      profileGoesHome
+      showProgressLink={false}
+      showLanguageButton={false}
+    >
       <AnswerFeedbackOverlay type={feedbackType} />
       <div className="relative flex flex-1 flex-col gap-4">
         <ConfettiBurst active={showConfetti} />
@@ -86,8 +91,8 @@ export function QuizGameShell({
       {isComplete ? (
         <GameCompleteModal
           result={result}
+          challengeId={challengeId}
           onPlayAgain={onPlayAgain}
-          onBackToMenu={() => navigate('/activities')}
         />
       ) : null}
     </AppShell>

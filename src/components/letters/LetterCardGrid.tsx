@@ -51,12 +51,12 @@ function buildPhrase(letter: Letter, subject: Language): { text: string; lang: s
 
 function playLetterPhrase(letter: Letter, subject: Language, speechLang: string) {
   const { text, lang } = buildPhrase(letter, subject)
-  void speakText(text, lang)
-
-  // Also play the audio file if available (plays first, speech as fallback handled inside playAudio)
-  if (subject !== 'kannada') {
-    void playAudio(letter.audioPath, text, speechLang, letter.name)
+  // One voice only: prefer file when present, otherwise speech (never both at once)
+  if (subject === 'kannada') {
+    void speakText(text, lang)
+    return
   }
+  void playAudio(letter.audioPath, text, speechLang, letter.name)
 }
 
 interface LetterCardProps {

@@ -1,4 +1,4 @@
-import { ArrowLeft, Languages, Star } from 'lucide-react'
+import { ArrowLeft, Home, Languages, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { dataService } from '../../data'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -9,6 +9,8 @@ interface AppShellProps {
   children: React.ReactNode
   showBack?: boolean
   backTo?: string
+  /** When true, profile avatar navigates home (kid exit during gameplay). */
+  profileGoesHome?: boolean
   showProgressLink?: boolean
   showLanguageButton?: boolean
 }
@@ -18,6 +20,7 @@ export function AppShell({
   children,
   showBack = true,
   backTo = '/home',
+  profileGoesHome = false,
   showProgressLink = true,
   showLanguageButton = true,
 }: AppShellProps) {
@@ -26,6 +29,21 @@ export function AppShell({
   const profileId = useAppStore((state) => state.profileId)
   const uiLocale = useAppStore((state) => state.uiLocale)
   const profile = dataService.getProfileById(profileId)
+
+  const profileBadge = profile ? (
+    <div
+      className="flex items-center gap-2 rounded-2xl px-4 py-2 text-white shadow-md"
+      style={{ backgroundColor: profile.color }}
+    >
+      <span className="text-2xl" aria-hidden>
+        {profile.avatar}
+      </span>
+      <span className="font-semibold">{profile.name}</span>
+      {profileGoesHome ? (
+        <Home size={18} strokeWidth={2.5} className="opacity-90" aria-hidden />
+      ) : null}
+    </div>
+  ) : null
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-6 md:px-8">
@@ -50,15 +68,19 @@ export function AppShell({
         </div>
 
         <div className="flex items-center gap-3">
-          {profile ? (
-            <div
-              className="flex items-center gap-2 rounded-2xl px-4 py-2 text-white shadow-md"
-              style={{ backgroundColor: profile.color }}
+          {profile && profileGoesHome ? (
+            <button
+              type="button"
+              aria-label={t('common.goHome')}
+              title={t('common.goHome')}
+              onClick={() => navigate('/home')}
+              className="transition hover:brightness-110 active:scale-95"
             >
-              <span className="text-2xl">{profile.avatar}</span>
-              <span className="font-semibold">{profile.name}</span>
-            </div>
-          ) : null}
+              {profileBadge}
+            </button>
+          ) : (
+            profileBadge
+          )}
           {showLanguageButton && uiLocale ? (
             <button
               type="button"

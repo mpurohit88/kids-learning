@@ -148,6 +148,7 @@ export function ExamPracticeGame() {
   return (
     <QuizGameShell
       title="Exam Practice"
+      challengeId="exam-practice"
       roundIndex={roundIndex}
       roundCount={questions.length}
       correctCount={correctCount}

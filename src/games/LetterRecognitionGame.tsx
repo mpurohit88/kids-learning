@@ -124,6 +124,7 @@ export function LetterRecognitionGame() {
   return (
     <QuizGameShell
       title={t('games.findLetter.title')}
+      challengeId="letter-recognition"
       roundIndex={session.roundIndex}
       roundCount={roundCount}
       correctCount={session.correctCount}

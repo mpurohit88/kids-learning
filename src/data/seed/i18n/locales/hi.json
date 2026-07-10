@@ -61,8 +61,17 @@
     "tryAgain": "फिर कोशिश करें!",
     "playAgain": "फिर खेलें",
     "backToGames": "खेलों पर वापस",
+    "goHome": "घर जाएँ",
     "soundsLike": "ऐसा सुनाई देता है",
     "changeLanguage": "भाषा बदलें"
+  },
+  "whatsNext": {
+    "heading": "शाबाश, {{name}}!",
+    "subtitle": "तुम्हें {{total}} में से {{correct}} सही मिले। आगे क्या?",
+    "keepPlaying": "खेलते रहो",
+    "surpriseMe": "सरप्राइज़!",
+    "allDone": "अभी के लिए बस",
+    "spokenPrompt": "शाबाश, {{name}}! फिर खेलोगे, सरप्राइज़ चाहोगे, या अभी बस?"
   },
   "feedback": {
     "score": "{{correct}} में से {{total}} सही",

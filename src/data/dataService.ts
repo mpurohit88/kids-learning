@@ -75,6 +75,10 @@ class DataService {
     return this.repositories.profiles.hasAnyCustomProfileName()
   }
 
+  getAllChallenges(): ChallengeDefinition[] {
+    return this.repositories.challenges.getAllChallenges()
+  }
+
   getChallenges(subject: Subject, grade: AgeGroup): ChallengeDefinition[] {
     return this.repositories.challenges.getChallenges(subject, grade)
   }

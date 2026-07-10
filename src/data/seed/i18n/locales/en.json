@@ -61,8 +61,17 @@
     "tryAgain": "Try again!",
     "playAgain": "Play Again",
     "backToGames": "Back to Games",
+    "goHome": "Go home",
     "soundsLike": "Sounds like",
     "changeLanguage": "Change Language"
+  },
+  "whatsNext": {
+    "heading": "Great job, {{name}}!",
+    "subtitle": "You got {{correct}} of {{total}}. Pick what's next.",
+    "keepPlaying": "Keep playing",
+    "surpriseMe": "Surprise me!",
+    "allDone": "All done for now",
+    "spokenPrompt": "Great job, {{name}}! Want to keep playing, try a surprise, or all done?"
   },
   "feedback": {
     "score": "{{correct}} out of {{total}} correct",

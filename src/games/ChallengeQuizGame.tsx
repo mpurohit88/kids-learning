@@ -183,6 +183,7 @@ export function ChallengeQuizGame() {
   return (
     <QuizGameShell
       title={localizedChallenge.title}
+      challengeId={challengeId}
       roundIndex={session.roundIndex}
       roundCount={questions.length}
       correctCount={session.correctCount}

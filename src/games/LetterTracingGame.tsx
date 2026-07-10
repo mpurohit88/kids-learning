@@ -256,7 +256,13 @@ export function LetterTracingGame() {
   if (!profile || !content || !currentLetter) return null
 
   return (
-    <AppShell title={t('games.traceLetter.title')} showBack backTo="/activities">
+    <AppShell
+      title={t('games.traceLetter.title')}
+      showBack={false}
+      profileGoesHome
+      showProgressLink={false}
+      showLanguageButton={false}
+    >
       <div className="relative flex flex-1 flex-col items-center gap-5">
         <ConfettiBurst active={showConfetti} />
 
@@ -354,8 +360,8 @@ export function LetterTracingGame() {
       {isComplete ? (
         <GameCompleteModal
           result={result}
+          challengeId="letter-tracing"
           onPlayAgain={startGame}
-          onBackToMenu={() => navigate('/activities')}
         />
       ) : null}
     </AppShell>

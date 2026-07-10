@@ -110,6 +110,7 @@ export function PictureWordMatchGame() {
   return (
     <QuizGameShell
       title={t('games.pictureMatch.title', undefined, 'Picture Match')}
+      challengeId="picture-word-match"
       roundIndex={session.roundIndex}
       roundCount={roundCount}
       correctCount={session.correctCount}

@@ -61,8 +61,17 @@
     "tryAgain": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!",
     "playAgain": "ಮತ್ತೆ ಆಟ",
     "backToGames": "ಆಟಗಳಿಗೆ ಹಿಂತಿರುಗಿ",
+    "goHome": "ಮನೆಗೆ ಹೋಗಿ",
     "soundsLike": "ಇಂತೆ ಧ್ವನಿಸುತ್ತದೆ",
     "changeLanguage": "ಭಾಷೆ ಬದಲಾಯಿಸಿ"
+  },
+  "whatsNext": {
+    "heading": "ಚೆನ್ನಾಗಿದೆ, {{name}}!",
+    "subtitle": "{{total}} ರಲ್ಲಿ {{correct}} ಸರಿ. ಮುಂದೆ ಏನು?",
+    "keepPlaying": "ಆಡುತ್ತಿರಿ",
+    "surpriseMe": "ಸರ್ಪ್ರೈಸ್!",
+    "allDone": "ಈಗಷ್ಟೇ ಸಾಕು",
+    "spokenPrompt": "ಚೆನ್ನಾಗಿದೆ, {{name}}! ಮತ್ತೆ ಆಡಬೇಕೇ, ಸರ್ಪ್ರೈಸ್ ಬೇಕೇ, ಅಥವಾ ಈಗಷ್ಟೇ ಸಾಕೇ?"
   },
   "feedback": {
     "score": "{{correct}} ರಲ್ಲಿ {{total}} ಸರಿ",
