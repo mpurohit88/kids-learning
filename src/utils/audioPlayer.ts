@@ -1,63 +1,15 @@
 import { Howl, Howler } from 'howler'
 import { primeSpeechSynthesis, unlockAudio } from './audioUnlock'
+import { findKidFriendlyVoice } from './kidFriendlyVoice'
 import { playSuccessSound, playWrongSound } from './soundEffects'
 
 /** Slower pacing so young students can follow each word */
-const SPEECH_RATE = 0.7
+export const SPEECH_RATE = 0.7
 /** Higher pitch — clearer, more kid-friendly lady voice */
-const SPEECH_PITCH = 0.9
+export const SPEECH_PITCH = 0.9
 
 let currentHowl: Howl | null = null
 let voicesPromise: Promise<SpeechSynthesisVoice[]> | null = null
-
-const FEMALE_VOICE_HINTS = [
-  'female',
-  'woman',
-  'girl',
-  'zira',
-  'hazel',
-  'susan',
-  'samantha',
-  'karen',
-  'moira',
-  'tessa',
-  'fiona',
-  'veena',
-  'raveena',
-  'aditi',
-  'neerja',
-  'kalpana',
-  'swara',
-  'ananya',
-  'priya',
-  'heera',
-  'google हिन्दी',
-  'google uk english female',
-  'google us english',
-  'microsoft zira',
-  'microsoft hazel',
-  'microsoft heera',
-  'microsoft neerja',
-]
-
-const MALE_VOICE_HINTS = [
-  'male',
-  'man',
-  'boy',
-  'david',
-  'mark',
-  'george',
-  'daniel',
-  'alex',
-  'fred',
-  'ravi',
-  'hemant',
-  'microsoft david',
-  'microsoft mark',
-  'microsoft ravi',
-  'microsoft hemant',
-  'google uk english male',
-]
 
 function isIos(): boolean {
   if (typeof navigator === 'undefined') return false
@@ -103,59 +55,6 @@ function loadVoices(): Promise<SpeechSynthesisVoice[]> {
   return voicesPromise
 }
 
-function voiceMatchesLang(voice: SpeechSynthesisVoice, lang: string): boolean {
-  const norm = lang.toLowerCase()
-  const prefix = norm.split('-')[0]
-  const voiceLang = voice.lang.toLowerCase()
-  const voiceName = voice.name.toLowerCase()
-
-  if (voiceLang === norm || voiceLang.startsWith(prefix)) return true
-  if (prefix === 'kn' && voiceName.includes('kannada')) return true
-  if (prefix === 'hi' && (voiceName.includes('hindi') || voiceName.includes('हिन्दी'))) {
-    return true
-  }
-  return false
-}
-
-function isLikelyFemaleVoice(voice: SpeechSynthesisVoice): boolean {
-  const name = voice.name.toLowerCase()
-  if (MALE_VOICE_HINTS.some((hint) => name.includes(hint))) return false
-  return FEMALE_VOICE_HINTS.some((hint) => name.includes(hint))
-}
-
-function isLikelyMaleVoice(voice: SpeechSynthesisVoice): boolean {
-  const name = voice.name.toLowerCase()
-  return MALE_VOICE_HINTS.some((hint) => name.includes(hint))
-}
-
-function scoreKidFriendlyVoice(voice: SpeechSynthesisVoice, lang: string): number {
-  let score = 0
-  const norm = lang.toLowerCase()
-  const voiceLang = voice.lang.toLowerCase()
-
-  if (voiceLang === norm) score += 40
-  else if (voiceMatchesLang(voice, lang)) score += 25
-
-  if (isLikelyFemaleVoice(voice)) score += 50
-  if (isLikelyMaleVoice(voice)) score -= 40
-
-  if (voice.localService) score += 5
-  if (voice.default) score += 2
-
-  return score
-}
-
-function findVoice(voices: SpeechSynthesisVoice[], lang: string): SpeechSynthesisVoice | null {
-  const matching = voices.filter((voice) => voiceMatchesLang(voice, lang))
-  const pool = matching.length > 0 ? matching : voices
-  if (pool.length === 0) return null
-
-  const ranked = [...pool].sort(
-    (a, b) => scoreKidFriendlyVoice(b, lang) - scoreKidFriendlyVoice(a, lang),
-  )
-  return ranked[0] ?? null
-}
-
 function stopHowl() {
   if (currentHowl) {
     currentHowl.stop()
@@ -191,7 +90,7 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
 
   stopSpeech()
 
-  const hasVoice = findVoice(voices, lang) !== null
+  const hasVoice = findKidFriendlyVoice(voices, lang) !== null
   const useRomanized = !!(romanizedHint && prefix === 'kn' && !hasVoice)
 
   const spokenText = useRomanized ? romanizedHint! : text
@@ -204,8 +103,11 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
   utterance.volume = 1
 
   const voice = useRomanized
-    ? (findVoice(voices, 'en-IN') ?? findVoice(voices, 'en-US') ?? voices[0] ?? null)
-    : findVoice(voices, lang)
+    ? (findKidFriendlyVoice(voices, 'en-IN') ??
+        findKidFriendlyVoice(voices, 'en-US') ??
+        voices[0] ??
+        null)
+    : findKidFriendlyVoice(voices, lang)
   if (voice) utterance.voice = voice
 
   if (isIos()) {

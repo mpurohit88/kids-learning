@@ -54,11 +54,23 @@ describe('buildLetterPhrase', () => {
       lang: 'hi-IN',
     })
   })
+
+  it('builds Kannada phrase using Hindi sound hint', () => {
+    expect(buildLetterPhrase(kannadaKa, 'kannada')).toEqual({
+      text: 'क से ಕಮಲ',
+      lang: 'hi-IN',
+    })
+  })
 })
 
 describe('playLetterSound', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+  })
+
+  it('defaults to character mode', () => {
+    playLetterSound(hindiKa, 'hindi')
+    expect(playAudio).toHaveBeenCalledWith('/audio/hi/ka.mp3', 'क', 'hi-IN', 'ka')
   })
 
   it('uses the same character path for Hindi (speak-first via playAudio)', () => {
@@ -70,11 +82,22 @@ describe('playLetterSound', () => {
   it('uses Hindi hint for Kannada character mode', () => {
     playLetterSound(kannadaKa, 'kannada', { mode: 'character', speechLang: 'kn-IN' })
     expect(speakText).toHaveBeenCalledWith('क', 'hi-IN')
+    expect(playAudio).not.toHaveBeenCalled()
+  })
+
+  it('uses playAudio for English character mode', () => {
+    playLetterSound(englishA, 'english', { mode: 'character', speechLang: 'en-IN' })
+    expect(playAudio).toHaveBeenCalledWith('/audio/en/a.mp3', 'A', 'en-IN', 'a')
   })
 
   it('speaks phrase immediately for Hindi learn mode', () => {
     playLetterSound(hindiKa, 'hindi', { mode: 'phrase', speechLang: 'hi-IN' })
     expect(speakText).toHaveBeenCalledWith('क से कमल', 'hi-IN')
+  })
+
+  it('speaks phrase immediately for Kannada learn mode', () => {
+    playLetterSound(kannadaKa, 'kannada', { mode: 'phrase', speechLang: 'kn-IN' })
+    expect(speakText).toHaveBeenCalledWith('क से ಕಮಲ', 'hi-IN')
   })
 
   it('uses playAudio for English phrase mode', () => {

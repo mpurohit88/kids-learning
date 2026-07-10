@@ -84,7 +84,7 @@ export function ExamPracticeGame() {
     startGame()
   }, [ready, startGame])
 
-  const replayPrompt = useCallback(() => {
+  const playQuestionAudio = useCallback(() => {
     if (!currentQuestion || !content) return
 
     if (currentQuestion.type === 'first-letter') {
@@ -99,22 +99,21 @@ export function ExamPracticeGame() {
     })
   }, [content, currentQuestion, subject])
 
+  const replayPrompt = useCallback(() => {
+    playQuestionAudio()
+  }, [playQuestionAudio])
+
   useEffect(() => {
     if (!currentQuestion || !content) return
 
     if (currentQuestion.type === 'first-letter') {
       resetRoundUi('Which letter does this word START with?')
-      playWordSound(currentQuestion.word, content.speechLang)
-      return
+    } else {
+      resetRoundUi('Is this letter a Swar or Vyanjan?')
     }
 
-    resetRoundUi('Is this letter a Swar or Vyanjan?')
-    if (!subject || !isLanguageSubject(subject)) return
-    playLetterSound(currentQuestion.letter, subject, {
-      mode: 'character',
-      speechLang: content.speechLang,
-    })
-  }, [currentQuestion, content, resetRoundUi, subject])
+    playQuestionAudio()
+  }, [currentQuestion, content, resetRoundUi, playQuestionAudio])
 
   const handleAnswer = (choiceId: string) => {
     if (!currentQuestion) return

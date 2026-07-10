@@ -8,6 +8,8 @@ export {
   stopAudio,
   playCelebrationSound,
   playEncouragementSound,
+  SPEECH_RATE,
+  SPEECH_PITCH,
 } from './audioPlayer'
 export {
   unlockAudio,

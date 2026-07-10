@@ -1,0 +1,203 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+const unlockAudio = vi.fn(async () => undefined)
+const primeSpeechSynthesis = vi.fn()
+
+vi.mock('./audioUnlock', () => ({
+  unlockAudio: () => unlockAudio(),
+  primeSpeechSynthesis: () => primeSpeechSynthesis(),
+}))
+
+vi.mock('./soundEffects', () => ({
+  playSuccessSound: vi.fn(),
+  playWrongSound: vi.fn(),
+}))
+
+type HowlHandler = (() => void) | undefined
+
+function createHowlMock(options: { playSucceeds?: boolean } = {}) {
+  const playSucceeds = options.playSucceeds ?? false
+  const handlers: Record<string, HowlHandler> = {}
+
+  return {
+    play: vi.fn(() => {
+      if (playSucceeds) {
+        queueMicrotask(() => handlers.play?.())
+      }
+      return 1
+    }),
+    stop: vi.fn(),
+    unload: vi.fn(),
+    playing: vi.fn(() => playSucceeds),
+    once: vi.fn((event: string, cb: () => void) => {
+      handlers[event] = cb
+    }),
+  }
+}
+
+let lastHowl: ReturnType<typeof createHowlMock> | null = null
+let howlPlaySucceeds = false
+
+vi.mock('howler', () => {
+  class Howl {
+    constructor(_opts: unknown) {
+      lastHowl = createHowlMock({ playSucceeds: howlPlaySucceeds })
+      return lastHowl
+    }
+  }
+
+  return {
+    Howl,
+    Howler: {
+      mute: vi.fn(),
+      volume: vi.fn(),
+      ctx: null,
+    },
+  }
+})
+
+class FakeUtterance {
+  text: string
+  lang = ''
+  rate = 1
+  pitch = 1
+  volume = 1
+  voice: { name: string; lang: string } | null = null
+  constructor(text: string) {
+    this.text = text
+  }
+}
+
+function installWindowSpeech(voices: Array<{ name: string; lang: string }> = []) {
+  const speak = vi.fn()
+  const cancel = vi.fn()
+  const getVoices = vi.fn(() => voices)
+  const speechSynthesis = {
+    speak,
+    cancel,
+    getVoices,
+    resume: vi.fn(),
+    pause: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }
+
+  const win = {
+    speechSynthesis,
+    SpeechSynthesisUtterance: FakeUtterance,
+    setTimeout: globalThis.setTimeout.bind(globalThis),
+    clearTimeout: globalThis.clearTimeout.bind(globalThis),
+  }
+
+  vi.stubGlobal('window', win)
+  vi.stubGlobal('speechSynthesis', speechSynthesis)
+  vi.stubGlobal('SpeechSynthesisUtterance', FakeUtterance)
+
+  return { speak, cancel, getVoices }
+}
+
+describe('audioPlayer speak-first contract', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.clearAllMocks()
+    lastHowl = null
+    howlPlaySucceeds = false
+    unlockAudio.mockClear()
+    primeSpeechSynthesis.mockClear()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+  })
+
+  it('speakText primes unlock and speaks immediately with kid-friendly rate/pitch', async () => {
+    const { speak } = installWindowSpeech([
+      { name: 'Microsoft Neerja', lang: 'hi-IN' },
+    ])
+
+    const { speakText, SPEECH_RATE, SPEECH_PITCH } = await import('./audioPlayer')
+    await speakText('क', 'hi-IN')
+
+    expect(primeSpeechSynthesis).toHaveBeenCalled()
+    expect(unlockAudio).toHaveBeenCalled()
+    expect(speak).toHaveBeenCalledTimes(1)
+
+    const utterance = speak.mock.calls[0][0] as FakeUtterance
+    expect(utterance.text).toBe('क')
+    expect(utterance.lang).toBe('hi-IN')
+    expect(utterance.rate).toBe(SPEECH_RATE)
+    expect(utterance.pitch).toBe(SPEECH_PITCH)
+    expect(utterance.voice?.name).toBe('Microsoft Neerja')
+  })
+
+  it('speakText ignores blank text', async () => {
+    const { speak } = installWindowSpeech()
+    const { speakText } = await import('./audioPlayer')
+    await speakText('   ', 'hi-IN')
+    expect(speak).not.toHaveBeenCalled()
+  })
+
+  it('playAudio speaks fallback before waiting on Howler (missing MP3 safe)', async () => {
+    vi.useFakeTimers()
+    const { speak } = installWindowSpeech([
+      { name: 'Microsoft Heera', lang: 'hi-IN' },
+    ])
+
+    const { playAudio } = await import('./audioPlayer')
+    const pending = playAudio('/missing/hi-ka.mp3', 'क', 'hi-IN', 'ka')
+
+    // Speech must already have started before Howl timeout settles.
+    expect(speak).toHaveBeenCalled()
+    expect(primeSpeechSynthesis).toHaveBeenCalled()
+    expect(unlockAudio).toHaveBeenCalled()
+
+    const utterance = speak.mock.calls[0][0] as FakeUtterance
+    expect(utterance.text).toBe('क')
+
+    await vi.advanceTimersByTimeAsync(300)
+    await pending
+  })
+
+  it('playAudio keeps speech when Howl fails to play', async () => {
+    vi.useFakeTimers()
+    const { speak, cancel } = installWindowSpeech([
+      { name: 'Microsoft Heera', lang: 'hi-IN' },
+    ])
+    const { playAudio } = await import('./audioPlayer')
+
+    const pending = playAudio('/missing.mp3', 'कमल', 'hi-IN')
+    expect(speak).toHaveBeenCalled()
+    const cancelsBeforeHowl = cancel.mock.calls.length
+
+    await vi.advanceTimersByTimeAsync(300)
+    await pending
+
+    // Failed file must not cancel the speech fallback after Howl fails.
+    expect(cancel.mock.calls.length).toBe(cancelsBeforeHowl)
+  })
+
+  it('playAudio cancels speech when Howl actually plays', async () => {
+    howlPlaySucceeds = true
+    const { speak, cancel } = installWindowSpeech([
+      { name: 'Microsoft Heera', lang: 'hi-IN' },
+    ])
+    const { playAudio } = await import('./audioPlayer')
+
+    await playAudio('/real.mp3', 'कमल', 'hi-IN')
+
+    expect(speak).toHaveBeenCalled()
+    // stopSpeech before speak + stopSpeech after successful Howl
+    expect(cancel.mock.calls.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('playAudio with empty path still speaks fallback', async () => {
+    const { speak } = installWindowSpeech([
+      { name: 'Microsoft Zira', lang: 'en-IN' },
+    ])
+    const { playAudio } = await import('./audioPlayer')
+    await playAudio('', 'hello', 'en-IN')
+    expect(speak).toHaveBeenCalled()
+    expect(lastHowl).toBeNull()
+  })
+})
