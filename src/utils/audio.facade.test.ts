@@ -19,5 +19,7 @@ describe('audio facade exports', () => {
     expect(typeof audio.playEncouragementSound).toBe('function')
     expect(typeof audio.buildLetterPhrase).toBe('function')
     expect(typeof audio.speechLangForLocale).toBe('function')
+    expect(typeof audio.getSpeechRate).toBe('function')
+    expect(typeof audio.prepareSpokenText).toBe('function')
   })
 })

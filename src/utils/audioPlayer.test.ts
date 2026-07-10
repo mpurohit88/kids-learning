@@ -2,10 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const unlockAudio = vi.fn(async () => undefined)
 const primeSpeechSynthesis = vi.fn()
+const isAudioUnlocked = vi.fn(() => false)
 
 vi.mock('./audioUnlock', () => ({
   unlockAudio: () => unlockAudio(),
   primeSpeechSynthesis: () => primeSpeechSynthesis(),
+  isAudioUnlocked: () => isAudioUnlocked(),
 }))
 
 vi.mock('./soundEffects', () => ({
@@ -104,6 +106,8 @@ describe('audioPlayer speak-first contract', () => {
     howlPlaySucceeds = false
     unlockAudio.mockClear()
     primeSpeechSynthesis.mockClear()
+    isAudioUnlocked.mockReturnValue(false)
+    vi.stubGlobal('navigator', { userAgent: 'Mozilla/5.0 (Windows NT 10.0)' })
   })
 
   afterEach(() => {
@@ -129,6 +133,14 @@ describe('audioPlayer speak-first contract', () => {
     expect(utterance.rate).toBe(SPEECH_RATE)
     expect(utterance.pitch).toBe(SPEECH_PITCH)
     expect(utterance.voice?.name).toBe('Microsoft Neerja')
+  })
+
+  it('speakText skips priming once audio is already unlocked', async () => {
+    isAudioUnlocked.mockReturnValue(true)
+    installWindowSpeech([{ name: 'Microsoft Neerja', lang: 'hi-IN' }])
+    const { speakText } = await import('./audioPlayer')
+    await speakText('क', 'hi-IN')
+    expect(primeSpeechSynthesis).not.toHaveBeenCalled()
   })
 
   it('speakText ignores blank text', async () => {
@@ -177,7 +189,7 @@ describe('audioPlayer speak-first contract', () => {
     expect(cancel.mock.calls.length).toBe(cancelsBeforeHowl)
   })
 
-  it('playAudio cancels speech when Howl actually plays', async () => {
+  it('playAudio cancels speech when Howl actually plays on desktop', async () => {
     howlPlaySucceeds = true
     const { speak, cancel } = installWindowSpeech([
       { name: 'Microsoft Heera', lang: 'hi-IN' },
@@ -199,5 +211,60 @@ describe('audioPlayer speak-first contract', () => {
     await playAudio('', 'hello', 'en-IN')
     expect(speak).toHaveBeenCalled()
     expect(lastHowl).toBeNull()
+  })
+})
+
+describe('audioPlayer mobile speech clarity', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.clearAllMocks()
+    lastHowl = null
+    howlPlaySucceeds = true
+    isAudioUnlocked.mockReturnValue(true)
+    vi.stubGlobal(
+      'navigator',
+      {
+        userAgent:
+          'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/120.0.0.0 Mobile Safari/537.36',
+      },
+    )
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+  })
+
+  it('uses a slower rate and pads short phrases on mobile', async () => {
+    vi.useFakeTimers()
+    const { speak } = installWindowSpeech([
+      { name: 'Google हिन्दी', lang: 'hi-IN' },
+    ])
+    const { speakText, SPEECH_RATE_MOBILE } = await import('./audioPlayer')
+
+    const pending = speakText('क', 'hi-IN')
+    await vi.advanceTimersByTimeAsync(100)
+    await pending
+
+    const utterance = speak.mock.calls[0][0] as FakeUtterance
+    expect(utterance.rate).toBe(SPEECH_RATE_MOBILE)
+    expect(utterance.text).toBe('क…')
+  })
+
+  it('does not race Howler against TTS on mobile (avoids cut-off speech)', async () => {
+    vi.useFakeTimers()
+    const { speak, cancel } = installWindowSpeech([
+      { name: 'Google हिन्दी', lang: 'hi-IN' },
+    ])
+    const { playAudio } = await import('./audioPlayer')
+
+    const pending = playAudio('/maybe-real.mp3', 'कमल', 'hi-IN')
+    await vi.advanceTimersByTimeAsync(120)
+    await pending
+
+    expect(speak).toHaveBeenCalled()
+    expect(lastHowl).toBeNull()
+    // Only the pre-speak cancel — never a Howl-driven cancel mid-phrase.
+    expect(cancel).toHaveBeenCalledTimes(1)
   })
 })

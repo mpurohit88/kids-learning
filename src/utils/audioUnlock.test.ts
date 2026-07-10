@@ -69,9 +69,15 @@ describe('audioUnlock', () => {
     expect(utterance.text).toBe(' ')
   })
 
-  it('unlockAudio always primes speech first', async () => {
-    const { unlockAudio } = await import('./audioUnlock')
+  it('unlockAudio primes speech only on the first unlock', async () => {
+    const { unlockAudio, isAudioUnlocked } = await import('./audioUnlock')
+    expect(isAudioUnlocked()).toBe(false)
     await unlockAudio()
     expect(speak).toHaveBeenCalled()
+    const callsAfterFirst = speak.mock.calls.length
+
+    await unlockAudio()
+    // Already unlocked — do not queue more silent priming utterances.
+    expect(speak.mock.calls.length).toBe(callsAfterFirst)
   })
 })

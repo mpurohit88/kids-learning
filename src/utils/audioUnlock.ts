@@ -126,8 +126,11 @@ async function primeHowler(): Promise<void> {
  * When called from a tap, speech priming runs synchronously first.
  */
 export async function unlockAudio(): Promise<void> {
-  // Always try speech prime — cheap, and required on mobile first gesture.
-  primeSpeechSynthesis()
+  // Prime only until unlocked. Repeating silent speak() on every tap floods
+  // the mobile TTS queue and makes real phrases rush / cut out.
+  if (!unlocked) {
+    primeSpeechSynthesis()
+  }
 
   if (unlocked) {
     if (Howler.ctx?.state === 'suspended') {

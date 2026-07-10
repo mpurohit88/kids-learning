@@ -1,19 +1,48 @@
 import { Howl, Howler } from 'howler'
-import { primeSpeechSynthesis, unlockAudio } from './audioUnlock'
+import { isAudioUnlocked, primeSpeechSynthesis, unlockAudio } from './audioUnlock'
 import { findKidFriendlyVoice } from './kidFriendlyVoice'
 import { playSuccessSound, playWrongSound } from './soundEffects'
 
-/** Slower pacing so young students can follow each word */
+/** Desktop pacing — clear for young students */
 export const SPEECH_RATE = 0.7
+/**
+ * Mobile engines (esp. Android Chrome) often ignore mild slowdowns and clip
+ * short phrases. Use a stronger slowdown on phones/tablets.
+ */
+export const SPEECH_RATE_MOBILE = 0.55
 /** Higher pitch — clearer, more kid-friendly lady voice */
 export const SPEECH_PITCH = 0.9
+
+/** Brief settle after cancel() — mobile TTS truncates if speak() follows too fast. */
+const MOBILE_SPEECH_GAP_MS = 80
 
 let currentHowl: Howl | null = null
 let voicesPromise: Promise<SpeechSynthesisVoice[]> | null = null
 
+export function isMobileBrowser(): boolean {
+  if (typeof navigator === 'undefined') return false
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+}
+
 function isIos(): boolean {
   if (typeof navigator === 'undefined') return false
   return /iPad|iPhone|iPod/i.test(navigator.userAgent)
+}
+
+export function getSpeechRate(): number {
+  return isMobileBrowser() ? SPEECH_RATE_MOBILE : SPEECH_RATE
+}
+
+/**
+ * Android Chrome often chops the end of short utterances ("क" vanishes).
+ * A trailing ellipsis gives the engine a soft landing without changing meaning.
+ */
+export function prepareSpokenText(text: string): string {
+  const trimmed = text.trim()
+  if (!trimmed) return trimmed
+  if (!isMobileBrowser()) return trimmed
+  if (/[.!?…,，。।]$/u.test(trimmed)) return trimmed
+  return `${trimmed}…`
 }
 
 function resolveAssetUrl(path: string): string {
@@ -69,6 +98,12 @@ function stopSpeech() {
   }
 }
 
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms)
+  })
+}
+
 export function stopAudio() {
   stopHowl()
   stopSpeech()
@@ -77,8 +112,11 @@ export function stopAudio() {
 async function speakNow(text: string, lang: string, romanizedHint?: string): Promise<void> {
   if (!('speechSynthesis' in window) || !text.trim()) return
 
-  // Sync prime first so mobile gesture unlock is not lost to awaits.
-  primeSpeechSynthesis()
+  // Prime only until unlocked. Re-priming every letter queues silent utterances
+  // that make mobile speech rush and cut out ("come and go").
+  if (!isAudioUnlocked()) {
+    primeSpeechSynthesis()
+  }
   void unlockAudio()
 
   const prefix = lang.toLowerCase().split('-')[0]
@@ -89,16 +127,19 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
   }
 
   stopSpeech()
+  if (isMobileBrowser()) {
+    await wait(MOBILE_SPEECH_GAP_MS)
+  }
 
   const hasVoice = findKidFriendlyVoice(voices, lang) !== null
   const useRomanized = !!(romanizedHint && prefix === 'kn' && !hasVoice)
 
-  const spokenText = useRomanized ? romanizedHint! : text
+  const spokenText = prepareSpokenText(useRomanized ? romanizedHint! : text)
   const spokenLang = useRomanized ? 'en-IN' : lang
 
   const utterance = new SpeechSynthesisUtterance(spokenText)
   utterance.lang = spokenLang
-  utterance.rate = SPEECH_RATE
+  utterance.rate = getSpeechRate()
   utterance.pitch = SPEECH_PITCH
   utterance.volume = 1
 
@@ -110,6 +151,7 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
     : findKidFriendlyVoice(voices, lang)
   if (voice) utterance.voice = voice
 
+  // Resume only — the old pause()/resume() kick can chop phrases on iOS.
   if (isIos()) {
     try {
       window.speechSynthesis.resume()
@@ -119,17 +161,6 @@ async function speakNow(text: string, lang: string, romanizedHint?: string): Pro
   }
 
   window.speechSynthesis.speak(utterance)
-
-  if (isIos()) {
-    window.setTimeout(() => {
-      try {
-        window.speechSynthesis.pause()
-        window.speechSynthesis.resume()
-      } catch {
-        // ignore
-      }
-    }, 0)
-  }
 }
 
 export async function speakText(
@@ -221,6 +252,12 @@ export async function playAudio(
   // Speak immediately (Kannada-style) so mobile unlocks and kids hear something.
   if (hasSpeechFallback) {
     void speakNow(fallbackText ?? romanizedHint ?? '', speechLang, romanizedHint)
+  }
+
+  // On mobile, do not race Howler against TTS. A brief/false Howl "play"
+  // was canceling speech mid-phrase so audio "came and went".
+  if (isMobileBrowser() && hasSpeechFallback) {
+    return
   }
 
   if (!path) return

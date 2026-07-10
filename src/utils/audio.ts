@@ -9,7 +9,11 @@ export {
   playCelebrationSound,
   playEncouragementSound,
   SPEECH_RATE,
+  SPEECH_RATE_MOBILE,
   SPEECH_PITCH,
+  getSpeechRate,
+  prepareSpokenText,
+  isMobileBrowser,
 } from './audioPlayer'
 export {
   unlockAudio,
