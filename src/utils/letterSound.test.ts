@@ -14,6 +14,7 @@ const hindiKa: Letter = {
   character: 'क',
   name: 'ka',
   type: 'consonant',
+  difficulty: ['lkg', 'class2'],
   audioPath: '/audio/hi/ka.mp3',
   example: { word: 'कमल', emoji: '🌸', transliteration: 'kamal' },
 }
@@ -23,6 +24,7 @@ const kannadaKa: Letter = {
   character: 'ಕ',
   name: 'ka',
   type: 'consonant',
+  difficulty: ['lkg', 'class2'],
   audioPath: '/audio/kn/ka.mp3',
   example: { word: 'ಕಮಲ', emoji: '🌸', transliteration: 'kamala' },
 }
@@ -33,6 +35,7 @@ const englishA: Letter = {
   lowerCase: 'a',
   name: 'a',
   type: 'vowel',
+  difficulty: ['lkg', 'class2'],
   audioPath: '/audio/en/a.mp3',
   example: { word: 'Apple', emoji: '🍎', transliteration: 'apple' },
 }
