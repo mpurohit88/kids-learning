@@ -31,6 +31,16 @@
     "number-recognition": {
       "minNumber": 1,
       "maxNumber": 20
+    },
+    "compare-numbers": {
+      "minNumber": 10,
+      "maxNumber": 999
+    },
+    "complete-comparison": {
+      "minNumber": 10,
+      "maxNumber": 999,
+      "answerMin": 10,
+      "answerMax": 999
     }
   },
   "practiceQuestions": []

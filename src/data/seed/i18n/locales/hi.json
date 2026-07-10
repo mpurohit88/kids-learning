@@ -26,6 +26,11 @@
     "classLkg": "LKG / UKG",
     "class12": "कक्षा 1 / 2",
     "saveProfile": "प्रोफ़ाइल सेव करें",
+    "switchKid": "बच्चा बदलें",
+    "switchSubtitle": "सीखते रहने के लिए दोस्त पर टैप करें",
+    "switchTo": "{{name}} पर जाएँ",
+    "playingAs": "{{name}} खेल रहे हैं",
+    "you": "आप",
     "nameSetupTitle": "आपका नाम क्या है?",
     "nameSetupSubtitle": "हर सीखने वाले का नाम लिखें। बाद में बदल सकते हैं।",
     "nameSetupContinue": "आगे बढ़ें",
@@ -43,6 +48,7 @@
     "lettersIntro": "अभ्यास से पहले सभी अक्षर उदाहरण सहित देखें!",
     "tabPractice": "अभ्यास",
     "tabLetters": "सभी अक्षर",
+    "tabLearn": "सीखें",
     "comingSoon": "जल्द आ रहा है!",
     "comingSoonDetail": "{{subject}} के लिए चुनौतियाँ जोड़ी जा रही हैं।",
     "viewAllLetters": "सभी अक्षर देखें →",
@@ -55,7 +61,14 @@
     "playedTimes_one": "{{count}} बार खेला",
     "playedTimes_other": "{{count}} बार खेला",
     "starsCount": "{{count}} सितारे",
-    "switchProfile": "बच्चा बदलें"
+    "switchProfile": "बच्चा बदलें",
+    "noProfiles": "अभी कोई प्रोफ़ाइल नहीं है। सितारे देखने के लिए एक बनाएँ।"
+  },
+  "learn": {
+    "numbersTitle": "संख्याएँ सीखें",
+    "numbersIntro": "संख्या 1 – {{maxNumber}}। सीखने के लिए किसी संख्या पर टैप करें!",
+    "numbersBadgeLkg": "संख्या 1 – 20",
+    "numbersBadgeClass2": "संख्या 1 – 100"
   },
   "common": {
     "goBack": "वापस जाएँ",
@@ -75,7 +88,16 @@
     "backToGames": "खेलों पर वापस",
     "goHome": "घर जाएँ",
     "soundsLike": "ऐसा सुनाई देता है",
-    "changeLanguage": "भाषा बदलें"
+    "changeLanguage": "भाषा बदलें",
+    "close": "बंद करें",
+    "playSound": "आवाज़ चलाएँ",
+    "previous": "पिछला",
+    "next": "अगला",
+    "previousLetter": "पिछला अक्षर",
+    "nextLetter": "अगला अक्षर",
+    "playLetter": "{{name}} चलाएँ",
+    "mascotAria": "मस्कॉट भालू",
+    "plus": "जोड़"
   },
   "whatsNext": {
     "heading": "शाबाश, {{name}}!",
@@ -93,20 +115,28 @@
     "letterCorrect": "हाँ! बहुत अच्छा!",
     "letterWrong": "अच्छी कोशिश! सही जवाब था {{letter}}",
     "greatJob": "बहुत अच्छा!",
-    "letsBegin": "चलो शुरू करें!"
+    "letsBegin": "चलो शुरू करें!",
+    "pictureCorrect": "शानदार! सही जवाब!",
+    "pictureWrong": "अच्छी कोशिश! सही शब्द था {{word}}",
+    "examCorrect": "सुपर स्टार! सही जवाब!",
+    "examWrong": "अच्छी कोशिश! परीक्षा के लिए अभ्यास करते रहो।"
   },
   "games": {
     "findLetter": {
       "title": "अक्षर ढूँढो",
       "prompt": "सुनो और सही अक्षर ढूँढो!",
       "instruction": "सही अक्षर पर टैप करो।",
-      "instructionWithHints": "सही अक्षर पर टैप करो। हर विकल्प के नीचे हिन्दी और अंग्रेज़ी संकेत हैं।"
+      "instructionWithHints": "सही अक्षर पर टैप करो। हर विकल्प के नीचे हिन्दी और अंग्रेज़ी संकेत हैं।",
+      "noLetters": "अभी कोई अक्षर उपलब्ध नहीं है।"
     },
     "traceLetter": {
       "title": "अक्षर बनाओ",
       "prompt": "उँगली या माउस से अक्षर बनाओ!",
       "traceSuccess": "बहुत अच्छा! अक्षर बनाया!",
-      "traceEmpty": "अच्छी कोशिश! अगली बार और बनाओ!"
+      "traceEmpty": "अच्छी कोशिश! अगली बार और बनाओ!",
+      "erase": "मिटाकर फिर कोशिश करें",
+      "showHint": "अक्षर संकेत दिखाएँ",
+      "hideHint": "संकेत छिपाएँ"
     },
     "pictureMatch": {
       "title": "चित्र मिलाओ",
@@ -119,6 +149,8 @@
   "exam": {
     "firstLetter": "यह शब्द किस अक्षर से शुरू होता है?",
     "letterType": "क्या यह स्वर है या व्यंजन?",
+    "letterTypeShort": "क्या यह स्वर है या व्यंजन?",
+    "getReady": "परीक्षा अभ्यास के लिए तैयार हो जाओ!",
     "swar": "स्वर",
     "vyanjan": "व्यंजन"
   },
@@ -135,7 +167,10 @@
     "swara": "स्वर",
     "vyanjana": "व्यंजन",
     "vowel": "स्वर",
-    "consonant": "व्यंजन"
+    "consonant": "व्यंजन",
+    "vowelsGroup": "स्वर",
+    "consonantsGroup": "व्यंजन",
+    "englishForWord": "{{letter}} for {{word}}"
   },
   "maths": {
     "whichIsHeavier": "कौन सा ज़्यादा भारी है?",
@@ -143,8 +178,15 @@
     "or": "या",
     "hearQuestion": "प्रश्न सुनें",
     "additionPickPractice": "जोड़ का अभ्यास चुनें!",
+    "comparisonPickPractice": "बड़ा या छोटा का अभ्यास चुनें!",
+    "compareNumbersPrompt": "कौन सा चिह्न सही है?",
+    "completeComparisonPrompt": "कौन सी संख्या इसे सही बनाती है?",
+    "compareSpeech": "{{left}} और {{right}} की तुलना करो। बड़ा है या छोटा?",
+    "completeSpeechGreater": "कौन सी संख्या से {{left}} खाली से बड़ा होता है?",
+    "completeSpeechLess": "कौन सी संख्या से {{left}} खाली से छोटा होता है?",
     "notes": "नोट्स",
-    "clearNotes": "नोट्स मिटाएँ"
+    "clearNotes": "नोट्स मिटाएँ",
+    "addendsAria": "{{parts}}"
   },
   "challenges": {
     "letter-recognition": { "title": "अक्षर ढूँढो", "description": "सुनो और सही अक्षर चुनो" },
@@ -162,6 +204,19 @@
     "addition-three-digit-two-digit": { "title": "तीन + दो अंक", "description": "315 + 53 जैसी 3 और 2 अंक की संख्याएँ जोड़ो" },
     "addition-three-two-digit-numbers": { "title": "तीन संख्याएँ जोड़ो", "description": "38 + 79 + 12 जैसी तीन 2-अंकीय संख्याएँ जोड़ो" },
     "addition": { "title": "जोड़", "description": "स्तंभ जोड़ का अभ्यास करें", "badge": "कक्षा 2" },
+    "greater-less-than": {
+      "title": "बड़ा और छोटा",
+      "description": "बड़ा और छोटा चिह्न से संख्याओं की तुलना करो",
+      "badge": "कक्षा 2"
+    },
+    "compare-numbers": {
+      "title": "संख्या तुलना",
+      "description": "दो संख्याओं के बीच > या < चुनो"
+    },
+    "complete-comparison": {
+      "title": "सही बनाओ",
+      "description": "तुलना को सही बनाने वाली संख्या चुनो"
+    },
     "counting-objects": { "title": "वस्तुएँ गिनो", "description": "वस्तुएँ गिनकर संख्या चुनो", "badge": "LKG" },
     "number-recognition": { "title": "संख्या मिलाओ", "description": "संख्या का नाम मिलाओ", "badge": "LKG" }
   },
@@ -176,18 +231,27 @@
     "class12": "कक्षा 1 / 2"
   },
   "sideGames": {
+    "answered": "{{answered}}/{{total}} जवाब दिए",
     "mango": {
       "title": "आम इकट्ठा करो",
-      "goal": "3+ आम इकट्ठा करो!",
+      "ariaLabel": "आम इकट्ठा करने वाला मिनी गेम",
+      "goal": "{{count}}+ आम इकट्ठा करो!",
       "allCollected": "सारे आम इकट्ठा!",
+      "basketFull": "टोकरी भर गई!",
+      "needMore": "और आम चाहिए!",
       "soClose": "बस थोड़ा और! फिर कोशिश करो!",
       "keepGoing": "ऐसे ही करते रहो!"
     },
     "goat": {
       "title": "बकरी बचाओ",
+      "ariaLabel": "बकरी बचाने वाला मिनी गेम",
       "safe": "गनु सुरक्षित है!",
-      "chomp": "चomp!",
-      "saveGanu": "गनु को बचाओ! {{count}}+ सही"
+      "tigerWin": "बाघ ने गनु को पकड़ लिया!",
+      "chomp": "चंप!",
+      "chompTooMany": "चंप! बहुत गलत जवाब!",
+      "saveGanu": "गनु को बचाओ! {{count}}+ सही",
+      "goatAria": "बकरी",
+      "tigerAria": "बाघ"
     }
   }
 }

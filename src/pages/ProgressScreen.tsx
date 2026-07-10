@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
+import { ProfileSwitchModal } from '../components/ProfileSwitchModal'
 import { StarDisplay } from '../components/StarDisplay'
 import { dataService } from '../data'
 import { useTranslation } from '../hooks/useTranslation'
@@ -14,6 +16,7 @@ export function ProgressScreen() {
   const getTotalStars = useAppStore((state) => state.getTotalStars)
   const profiles = dataService.getProfiles()
   const subjects = dataService.getSubjects()
+  const [switchOpen, setSwitchOpen] = useState(false)
 
   return (
     <AppShell title={t('progress.title')} showBack backTo="/home" showProgressLink={false}>
@@ -118,13 +121,21 @@ export function ProgressScreen() {
         <div className="flex justify-center">
           <button
             type="button"
-            onClick={() => navigate('/')}
+            onClick={() => {
+              if (profiles.length >= 2) {
+                setSwitchOpen(true)
+                return
+              }
+              navigate('/')
+            }}
             className="rounded-2xl bg-slate-700 px-8 py-4 text-lg font-semibold text-white shadow-md transition hover:bg-slate-600"
           >
             {t('progress.switchProfile')}
           </button>
         </div>
       </div>
+
+      <ProfileSwitchModal open={switchOpen} onClose={() => setSwitchOpen(false)} />
     </AppShell>
   )
 }

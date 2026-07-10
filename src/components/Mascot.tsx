@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from '../hooks/useTranslation'
 import { QuestionHearButton } from './game/QuestionHearButton'
 
 export type MascotMood = 'idle' | 'happy' | 'sad' | 'encourage'
@@ -10,9 +11,11 @@ interface MascotProps {
   hearAgainLabel?: string
 }
 
-export function Mascot({ mood, message, onHearAgain, hearAgainLabel = 'Hear again' }: MascotProps) {
+export function Mascot({ mood, message, onHearAgain, hearAgainLabel }: MascotProps) {
+  const { t } = useTranslation()
   const isHappy = mood === 'happy'
   const isSad = mood === 'sad' || mood === 'encourage'
+  const label = hearAgainLabel ?? t('common.hearAgain')
 
   return (
     <div className="flex flex-col items-center gap-3">
@@ -37,7 +40,7 @@ export function Mascot({ mood, message, onHearAgain, hearAgainLabel = 'Hear agai
               : 'bg-gradient-to-br from-amber-200 to-orange-300'
         }`}
       >
-        <span className="text-6xl md:text-7xl" role="img" aria-label="Mascot bear">
+        <span className="text-6xl md:text-7xl" role="img" aria-label={t('common.mascotAria')}>
           🐻
         </span>
 
@@ -90,7 +93,7 @@ export function Mascot({ mood, message, onHearAgain, hearAgainLabel = 'Hear agai
               {message}
             </motion.p>
             {onHearAgain ? (
-              <QuestionHearButton onClick={onHearAgain} ariaLabel={hearAgainLabel} />
+              <QuestionHearButton onClick={onHearAgain} ariaLabel={label} />
             ) : null}
           </div>
         ) : null}

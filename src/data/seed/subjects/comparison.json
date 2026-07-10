@@ -1,0 +1,48 @@
+{
+  "subject": "maths",
+  "generators": {
+    "compare-numbers": {
+      "minNumber": 10,
+      "maxNumber": 999
+    },
+    "complete-comparison": {
+      "minNumber": 10,
+      "maxNumber": 999,
+      "answerMin": 10,
+      "answerMax": 999
+    }
+  },
+  "comparePairs": [
+    { "left": 127, "right": 534 },
+    { "left": 456, "right": 430 },
+    { "left": 721, "right": 217 },
+    { "left": 678, "right": 367 },
+    { "left": 298, "right": 609 },
+    { "left": 143, "right": 783 },
+    { "left": 523, "right": 98 },
+    { "left": 765, "right": 674 },
+    { "left": 632, "right": 802 },
+    { "left": 896, "right": 893 },
+    { "left": 245, "right": 254 },
+    { "left": 501, "right": 499 },
+    { "left": 88, "right": 180 },
+    { "left": 999, "right": 990 },
+    { "left": 310, "right": 301 }
+  ],
+  "completeStatements": [
+    { "left": 327, "symbol": ">" },
+    { "left": 98, "symbol": "<" },
+    { "left": 356, "symbol": ">" },
+    { "left": 457, "symbol": ">" },
+    { "left": 510, "symbol": "<" },
+    { "left": 647, "symbol": "<" },
+    { "left": 892, "symbol": ">" },
+    { "left": 990, "symbol": "<" },
+    { "left": 999, "symbol": ">" },
+    { "left": 791, "symbol": ">" },
+    { "left": 205, "symbol": "<" },
+    { "left": 640, "symbol": ">" },
+    { "left": 150, "symbol": "<" },
+    { "left": 875, "symbol": ">" }
+  ]
+}

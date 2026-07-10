@@ -6,6 +6,7 @@ import { GameCompleteModal } from '../GameCompleteModal'
 import { Mascot, type MascotMood } from '../Mascot'
 import { AppShell } from '../layout/AppShell'
 import { GameSideLayout } from '../layout/GameSideLayout'
+import { useTranslation } from '../../hooks/useTranslation'
 import type { GameRoundResult } from '../../types'
 
 interface QuizGameShellProps {
@@ -45,10 +46,14 @@ export function QuizGameShell({
   result,
   onPlayAgain,
   onHearAgain,
-  hearAgainLabel = 'Hear Again',
-  roundLabel = 'Round',
+  hearAgainLabel,
+  roundLabel,
   children,
 }: QuizGameShellProps) {
+  const { t } = useTranslation()
+  const resolvedHearAgain = hearAgainLabel ?? t('common.hearAgain')
+  const resolvedRoundLabel = roundLabel ?? t('common.round')
+
   return (
     <AppShell
       title={title}
@@ -74,7 +79,7 @@ export function QuizGameShell({
         >
           <div className="flex w-full items-center justify-start">
             <p className="rounded-full bg-white/80 px-4 py-2 font-semibold text-slate-600 shadow">
-              {roundLabel} {Math.min(roundIndex + 1, roundCount)} / {roundCount}
+              {resolvedRoundLabel} {Math.min(roundIndex + 1, roundCount)} / {roundCount}
             </p>
           </div>
 
@@ -82,7 +87,7 @@ export function QuizGameShell({
             mood={mood}
             message={message}
             onHearAgain={onHearAgain}
-            hearAgainLabel={hearAgainLabel}
+            hearAgainLabel={resolvedHearAgain}
           />
           {children}
         </GameSideLayout>

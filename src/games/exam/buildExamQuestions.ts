@@ -4,18 +4,17 @@ import { dataService } from '../../data'
 import { getFirstGrapheme } from '../../utils/textUtils'
 import type { ExamQuestion, FirstLetterQuestion, LetterTypeQuestion } from './types'
 
-function getLetterTypeLabels(language: Language) {
-  if (language === 'kannada') {
-    return { vowel: 'ಸ್ವರ (Vowel)', consonant: 'ವ್ಯಂಜನ (Consonant)' }
-  }
-  return { vowel: 'स्वर (Vowel)', consonant: 'व्यंजन (Consonant)' }
+export interface ExamTypeLabels {
+  vowel: string
+  consonant: string
 }
 
 export function buildExamQuestions(
-  language: Language,
+  _language: Language,
   letters: Letter[],
   vocabulary: VocabularyWord[],
   roundCount: number,
+  typeLabels: ExamTypeLabels,
 ): ExamQuestion[] {
   const letterByChar = new Map(letters.map((letter) => [letter.character, letter]))
   const examWords = vocabulary.filter((word) => {
@@ -36,7 +35,6 @@ export function buildExamQuestions(
     }
   })
 
-  const typeLabels = getLetterTypeLabels(language)
   const letterTypePool: LetterTypeQuestion[] = letters.map((letter) => ({
     type: 'letter-type',
     letter,

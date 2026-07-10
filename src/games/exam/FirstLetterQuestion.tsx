@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { AnswerOptionButton } from '../../components/game/AnswerOptionButton'
 import { QuestionPromptRow } from '../../components/game/QuestionPromptRow'
+import { useTranslation } from '../../hooks/useTranslation'
 import type { FirstLetterQuestion } from './types'
 
 interface FirstLetterQuestionViewProps {
@@ -18,8 +19,10 @@ export function FirstLetterQuestionView({
   isLocked,
   onAnswer,
   onHearAgain,
-  hearAgainLabel = 'Hear again',
+  hearAgainLabel,
 }: FirstLetterQuestionViewProps) {
+  const { t } = useTranslation()
+
   return (
     <>
       <motion.div
@@ -34,8 +37,11 @@ export function FirstLetterQuestionView({
         </span>
       </motion.div>
 
-      <QuestionPromptRow onHearAgain={onHearAgain} hearAgainLabel={hearAgainLabel}>
-        Which letter does this word <span className="text-blue-600">start</span> with?
+      <QuestionPromptRow
+        onHearAgain={onHearAgain}
+        hearAgainLabel={hearAgainLabel ?? t('common.hearAgain')}
+      >
+        {t('exam.firstLetter')}
       </QuestionPromptRow>
 
       <div className="grid w-full max-w-3xl grid-cols-2 gap-4 md:grid-cols-4">

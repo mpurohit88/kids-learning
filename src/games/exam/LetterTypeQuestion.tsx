@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { AnswerOptionButton } from '../../components/game/AnswerOptionButton'
 import { QuestionPromptRow } from '../../components/game/QuestionPromptRow'
+import { useTranslation } from '../../hooks/useTranslation'
 import type { LetterTypeQuestion } from './types'
 
 interface LetterTypeQuestionViewProps {
@@ -18,8 +19,10 @@ export function LetterTypeQuestionView({
   isLocked,
   onAnswer,
   onHearAgain,
-  hearAgainLabel = 'Hear again',
+  hearAgainLabel,
 }: LetterTypeQuestionViewProps) {
+  const { t } = useTranslation()
+
   return (
     <>
       <motion.div
@@ -31,8 +34,11 @@ export function LetterTypeQuestionView({
         {question.letter.character}
       </motion.div>
 
-      <QuestionPromptRow onHearAgain={onHearAgain} hearAgainLabel={hearAgainLabel}>
-        Is this letter a Swar (vowel) or Vyanjan (consonant)?
+      <QuestionPromptRow
+        onHearAgain={onHearAgain}
+        hearAgainLabel={hearAgainLabel ?? t('common.hearAgain')}
+      >
+        {t('exam.letterType')}
       </QuestionPromptRow>
 
       <div className="grid w-full max-w-2xl grid-cols-1 gap-4 md:grid-cols-2">

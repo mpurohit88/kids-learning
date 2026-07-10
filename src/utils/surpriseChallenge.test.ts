@@ -6,7 +6,9 @@ describe('getPlayableChallenges', () => {
     const playable = getPlayableChallenges('maths', 'class2')
     expect(playable.every((challenge) => challenge.source !== 'group')).toBe(true)
     expect(playable.some((challenge) => challenge.id === 'addition')).toBe(false)
+    expect(playable.some((challenge) => challenge.id === 'greater-less-than')).toBe(false)
     expect(playable.some((challenge) => challenge.id === 'addition-within-10')).toBe(true)
+    expect(playable.some((challenge) => challenge.id === 'compare-numbers')).toBe(true)
   })
 
   it('returns language games for lkg hindi', () => {

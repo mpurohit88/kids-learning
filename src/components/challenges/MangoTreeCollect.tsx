@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from '../../hooks/useTranslation'
 import { getRequiredCorrect } from './challengeUtils'
 
 export interface MangoTreeCollectProps {
@@ -30,6 +31,7 @@ export function MangoTreeCollect({
   className = '',
   variant = 'vertical',
 }: MangoTreeCollectProps) {
+  const { t } = useTranslation()
   const requiredCorrect = getRequiredCorrect(totalQuestions, passThreshold)
   const passed = correctCount >= requiredCorrect
   const allCollected = correctCount >= totalQuestions
@@ -40,17 +42,19 @@ export function MangoTreeCollect({
   const statusMessage = isComplete
     ? isSuccess
       ? allCollected
-        ? 'All mangoes collected!'
-        : 'Basket is full enough!'
-      : 'Need more mangoes!'
-    : `Collect ${requiredCorrect}+ mangoes!`
+        ? t('sideGames.mango.allCollected')
+        : t('sideGames.mango.basketFull')
+      : t('sideGames.mango.needMore')
+    : t('sideGames.mango.goal', { count: requiredCorrect })
 
   if (variant === 'horizontal') {
     return (
       <div
         className={`w-full max-w-3xl rounded-[1.75rem] border-4 border-white bg-white/85 px-4 py-4 shadow-lg ${className}`}
       >
-        <h2 className="mb-2 text-center text-lg font-extrabold text-amber-700">Collect the Mangoes</h2>
+        <h2 className="mb-2 text-center text-lg font-extrabold text-amber-700">
+          {t('sideGames.mango.title')}
+        </h2>
         <div className="mb-2 flex items-center justify-between gap-2 text-sm font-semibold text-slate-600">
           <span>{statusMessage}</span>
           <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-800">
@@ -63,7 +67,7 @@ export function MangoTreeCollect({
           {isSuccess ? <span className="absolute left-1/2 top-1 -translate-x-1/2">⭐</span> : null}
         </div>
         <p className="mt-2 text-center text-xs text-slate-500">
-          {answered}/{totalQuestions} answered · ❌ {wrongCount}
+          {t('sideGames.answered', { answered, total: totalQuestions })} · ❌ {wrongCount}
         </p>
       </div>
     )
@@ -74,10 +78,10 @@ export function MangoTreeCollect({
   return (
     <div
       className={`flex h-full min-h-[320px] flex-col rounded-[1.75rem] border-4 border-white bg-white/90 px-2 py-3 shadow-lg ${className}`}
-      aria-label="Collect the mangoes mini game"
+      aria-label={t('sideGames.mango.ariaLabel')}
     >
       <h2 className="mb-1 text-center text-sm font-extrabold uppercase tracking-wide text-amber-700 md:text-base">
-        Collect the Mangoes
+        {t('sideGames.mango.title')}
       </h2>
       <p className="mb-2 text-center text-[10px] font-semibold leading-tight text-slate-600 md:text-xs">
         {statusMessage}
@@ -175,14 +179,14 @@ export function MangoTreeCollect({
               exit={{ opacity: 0 }}
               className="absolute bottom-[18%] left-1/2 z-40 -translate-x-1/2 whitespace-nowrap text-[9px] font-extrabold text-orange-600 md:text-[10px]"
             >
-              So close!
+              {t('sideGames.mango.soClose')}
             </motion.span>
           ) : null}
         </AnimatePresence>
       </div>
 
       <p className="mt-2 text-center text-[10px] text-slate-500 md:text-xs">
-        {answered}/{totalQuestions}
+        {t('sideGames.answered', { answered, total: totalQuestions })}
       </p>
     </div>
   )

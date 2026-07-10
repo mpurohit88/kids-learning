@@ -55,6 +55,7 @@ interface NumberDetailProps {
 }
 
 function NumberDetail({ value, total, onClose, onPrev, onNext }: NumberDetailProps) {
+  const { t } = useTranslation()
   const color = CARD_COLORS[(value - 1) % CARD_COLORS.length]
   const word = NUMBER_WORDS[value] ?? String(value)
   const countEmoji = value <= 5 ? COUNT_EMOJIS[value] : null
@@ -115,7 +116,7 @@ function NumberDetail({ value, total, onClose, onPrev, onNext }: NumberDetailPro
             type="button"
             onClick={() => void speakText(word, 'en-IN')}
             className="flex h-14 w-14 items-center justify-center rounded-2xl border-4 border-white/40 bg-white/25 text-white transition hover:bg-white/40"
-            aria-label="Play sound"
+            aria-label={t('common.playSound')}
           >
             <span className="text-2xl">🔊</span>
           </button>
@@ -127,7 +128,7 @@ function NumberDetail({ value, total, onClose, onPrev, onNext }: NumberDetailPro
           type="button"
           onClick={(e) => { e.stopPropagation(); onPrev() }}
           className="absolute left-3 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white shadow-lg transition hover:bg-white/40 md:left-8"
-          aria-label="Previous"
+          aria-label={t('common.previous')}
         >
           <ChevronLeft size={32} />
         </button>
@@ -137,7 +138,7 @@ function NumberDetail({ value, total, onClose, onPrev, onNext }: NumberDetailPro
           type="button"
           onClick={(e) => { e.stopPropagation(); onNext() }}
           className="absolute right-3 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white shadow-lg transition hover:bg-white/40 md:right-8"
-          aria-label="Next"
+          aria-label={t('common.next')}
         >
           <ChevronRight size={32} />
         </button>
@@ -164,13 +165,13 @@ export function NumberLearnerPage() {
 
   return (
     <AppShell
-      title={t('learn.numbersTitle', undefined, 'Learn Numbers')}
+      title={t('learn.numbersTitle')}
       showBack
       backTo="/activities"
     >
       <div className="flex flex-col gap-4">
         <p className="text-center text-slate-600">
-          {t('learn.numbersIntro', undefined, `Numbers 1 – ${maxNumber}. Tap any number to learn it!`).replace('${maxNumber}', String(maxNumber))}
+          {t('learn.numbersIntro', { maxNumber })}
         </p>
 
         <div className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-10">

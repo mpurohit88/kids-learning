@@ -6,6 +6,7 @@ import { QuestionPromptRow } from '../components/game/QuestionPromptRow'
 import { MathNotesPad } from '../components/game/MathNotesPad'
 import { QuizGameShell } from '../components/game/QuizGameShell'
 import { VerticalAdditionQuestion } from '../components/game/VerticalAdditionQuestion'
+import { ComparisonQuestion } from '../components/game/ComparisonQuestion'
 import { dataService } from '../data'
 import { useGameSession } from '../hooks/useGameSession'
 import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
@@ -15,6 +16,7 @@ import {
   getChallengeQuizDisplayPrompt,
   getChallengeQuizSpeechText,
   getQuestionAddends,
+  getQuestionComparison,
 } from '../utils/challengeQuizPrompt'
 import { getLocalizedChallenge } from '../utils/localizedContent'
 import { getChallengeRoundCount, buildChallengeSessionKey, shouldStartChallengeSession } from '../utils/challengeRoundCount'
@@ -199,7 +201,9 @@ export function ChallengeQuizGame() {
   const localizedPrompt = getChallengeQuizDisplayPrompt(currentQuestion, t)
   const hasVisualItems = (currentQuestion.visualItems?.length ?? 0) >= 2
   const addends = getQuestionAddends(currentQuestion)
+  const comparison = getQuestionComparison(currentQuestion)
   const showVerticalAddition = addends !== null
+  const showComparison = comparison !== null
 
   return (
     <QuizGameShell
@@ -238,6 +242,18 @@ export function ChallengeQuizGame() {
             onHearAgain={session.isLocked ? undefined : replayAudio}
             hearAgainLabel={t('maths.hearQuestion', undefined, 'Listen to question')}
           />
+        ) : showComparison && comparison ? (
+          <>
+            <ComparisonQuestion
+              comparison={comparison}
+              onHearAgain={session.isLocked ? undefined : replayAudio}
+              hearAgainLabel={t('maths.hearQuestion', undefined, 'Listen to question')}
+              ariaLabel={localizedPrompt}
+            />
+            <p className="mt-4 text-center text-2xl font-bold text-slate-800 md:text-3xl">
+              {localizedPrompt}
+            </p>
+          </>
         ) : (
           <>
             {currentQuestion.emoji ? (

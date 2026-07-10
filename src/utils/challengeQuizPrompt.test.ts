@@ -17,14 +17,24 @@ import {
   isHeavyAndLightQuestion,
 } from './challengeQuizPrompt'
 
-const mockT: TranslateFn = (key, _params, fallback) => {
+const mockT: TranslateFn = (key, params, fallback) => {
   const translations: Record<string, string> = {
     'maths.whichIsHeavier': 'Which is heavier?',
     'maths.whichIsLighter': 'Which is lighter?',
     'maths.or': 'or',
+    'maths.compareNumbersPrompt': 'Which symbol is correct?',
+    'maths.completeComparisonPrompt': 'Which number makes this true?',
+    'maths.compareSpeech': 'Compare {{left}} and {{right}}. Greater than or less than?',
+    'maths.completeSpeechGreater': 'Which number makes {{left}} greater than blank?',
+    'maths.completeSpeechLess': 'Which number makes {{left}} less than blank?',
   }
 
-  return translations[key] ?? fallback ?? key
+  const template = translations[key] ?? fallback ?? key
+  if (!params) return template
+  return template.replace(/\{\{(\w+)\}\}/g, (_, token: string) => {
+    const value = params[token]
+    return value === undefined ? `{{${token}}}` : String(value)
+  })
 }
 
 const heavyAndLightQuestion: SessionQuestion = {
@@ -108,6 +118,44 @@ describe('challengeQuizPrompt', () => {
       'Which is heavier? Beach ball or Balloon?',
     )
   })
+
+  it('localizes greater/less-than compare prompts and speech', () => {
+    const question: SessionQuestion = {
+      id: 'compare-0-456-430',
+      prompt: '456 ○ 430',
+      comparison: { mode: 'symbol', left: 456, right: 430, symbol: null },
+      options: [
+        { id: '>', text: '>' },
+        { id: '<', text: '<' },
+      ],
+      correctOptionId: '>',
+    }
+
+    expect(getChallengeQuizDisplayPrompt(question, mockT)).toBe('Which symbol is correct?')
+    expect(getChallengeQuizSpeechText(question, mockT)).toBe(
+      'Compare 456 and 430. Greater than or less than?',
+    )
+  })
+
+  it('localizes complete-comparison prompts and speech', () => {
+    const question: SessionQuestion = {
+      id: 'complete-0-327->-129',
+      prompt: '327 > ○',
+      comparison: { mode: 'complete', left: 327, right: null, symbol: '>' },
+      options: [
+        { id: '129', text: '129' },
+        { id: '400', text: '400' },
+      ],
+      correctOptionId: '129',
+    }
+
+    expect(getChallengeQuizDisplayPrompt(question, mockT)).toBe(
+      'Which number makes this true?',
+    )
+    expect(getChallengeQuizSpeechText(question, mockT)).toBe(
+      'Which number makes 327 greater than blank?',
+    )
+  })
 })
 
 describe('generated maths questions stay aligned with quiz display', () => {
@@ -166,17 +214,29 @@ describe('questionEngine class 2 addition session', () => {
     maths: new LocalMathsRepository(),
   }
 
-  it('shows only the addition hub on the class 2 maths menu', () => {
+  it('shows addition and greater/less-than hubs on the class 2 maths menu', () => {
     const menu = deps.challenges.getChallenges('maths', 'class2')
     const additionPractices = deps.challenges.getGroupedChallenges('maths', 'addition', 'class2')
+    const comparisonPractices = deps.challenges.getGroupedChallenges(
+      'maths',
+      'greater-less-than',
+      'class2',
+    )
 
-    expect(menu.map((challenge) => challenge.id)).toEqual(['addition'])
+    expect(menu.map((challenge) => challenge.id)).toEqual([
+      'addition',
+      'greater-less-than',
+    ])
     expect(additionPractices.map((challenge) => challenge.id)).toEqual([
       'addition-within-10',
       'addition-within-100',
       'addition-three-digit',
       'addition-three-digit-two-digit',
       'addition-three-two-digit-numbers',
+    ])
+    expect(comparisonPractices.map((challenge) => challenge.id)).toEqual([
+      'compare-numbers',
+      'complete-comparison',
     ])
   })
 

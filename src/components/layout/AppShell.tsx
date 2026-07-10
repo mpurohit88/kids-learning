@@ -1,8 +1,10 @@
-import { ArrowLeft, Home, Languages, Star } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowLeft, ChevronsUpDown, Home, Languages, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { dataService } from '../../data'
 import { useTranslation } from '../../hooks/useTranslation'
 import { useAppStore } from '../../store/useAppStore'
+import { ProfileSwitchModal } from '../ProfileSwitchModal'
 
 interface AppShellProps {
   title: string
@@ -29,6 +31,8 @@ export function AppShell({
   const profileId = useAppStore((state) => state.profileId)
   const uiLocale = useAppStore((state) => state.uiLocale)
   const profile = dataService.getProfileById(profileId)
+  const canSwitchProfile = dataService.getProfiles().length >= 2
+  const [switchOpen, setSwitchOpen] = useState(false)
 
   const profileBadge = profile ? (
     <div
@@ -41,6 +45,9 @@ export function AppShell({
       <span className="font-semibold">{profile.name}</span>
       {profileGoesHome ? (
         <Home size={18} strokeWidth={2.5} className="opacity-90" aria-hidden />
+      ) : null}
+      {!profileGoesHome && canSwitchProfile ? (
+        <ChevronsUpDown size={18} strokeWidth={2.5} className="opacity-90" aria-hidden />
       ) : null}
     </div>
   ) : null
@@ -78,9 +85,19 @@ export function AppShell({
             >
               {profileBadge}
             </button>
-          ) : (
-            profileBadge
-          )}
+          ) : null}
+          {profile && !profileGoesHome && canSwitchProfile ? (
+            <button
+              type="button"
+              aria-label={t('launch.switchKid', undefined, 'Switch kid')}
+              title={t('launch.switchKid', undefined, 'Switch kid')}
+              onClick={() => setSwitchOpen(true)}
+              className="transition hover:brightness-110 active:scale-95"
+            >
+              {profileBadge}
+            </button>
+          ) : null}
+          {profile && !profileGoesHome && !canSwitchProfile ? profileBadge : null}
           {showLanguageButton && uiLocale ? (
             <button
               type="button"
@@ -106,6 +123,8 @@ export function AppShell({
       </header>
 
       <main className="flex flex-1 flex-col">{children}</main>
+
+      <ProfileSwitchModal open={switchOpen} onClose={() => setSwitchOpen(false)} />
     </div>
   )
 }

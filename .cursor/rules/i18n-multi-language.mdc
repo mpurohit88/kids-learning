@@ -1,0 +1,38 @@
+---
+description: Multi-language i18n — all user-facing text must use locale JSON
+alwaysApply: true
+---
+
+# Multi-language (i18n)
+
+This app supports **en / hi / kn** via `useTranslation()` and locale files under `src/data/seed/i18n/locales/`.
+
+## Required for every UI change
+
+1. **No hardcoded user-facing strings** in pages, components, or games (labels, titles, prompts, feedback, aria-labels, button text, empty states).
+2. Add keys to **all three** locale files in the same change:
+   - `src/data/seed/i18n/locales/en.json`
+   - `src/data/seed/i18n/locales/hi.json`
+   - `src/data/seed/i18n/locales/kn.json`
+3. Use existing namespaces when possible: `common`, `launch`, `home`, `games`, `exam`, `feedback`, `learn`, `sideGames`, `lettersTable`, `maths`, `challenges`, `progress`.
+4. Call `t('namespace.key', { vars })` — prefer real keys over English-only fallbacks for new copy.
+5. Interpolation uses `{{varName}}` in JSON (e.g. `"Nice try! It was {{word}}"`).
+
+## Allowed exceptions (not UI chrome)
+
+- Learning **content** data: letter/word examples in subject JSON, English number-word curriculum for speech
+- Technical identifiers: route paths, challenge IDs, CSS classes, log messages
+
+## Examples
+
+```tsx
+// ❌ BAD
+<title>Exam Practice</title>
+correctMessage: 'Super star! You got it!'
+
+// ✅ GOOD
+title={t('games.examPractice.title')}
+correctMessage={t('feedback.examCorrect')}
+```
+
+Before finishing a UI task, scan the diff for quoted English sentences and move them into locale JSON.

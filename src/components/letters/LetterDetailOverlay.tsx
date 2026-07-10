@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Language, Letter } from '../../types'
+import { useTranslation } from '../../hooks/useTranslation'
 import { playLetterSound } from '../../utils/audio'
 
 interface LetterDetailOverlayProps {
@@ -32,6 +33,7 @@ export function LetterDetailOverlay({
   onClose,
   onNavigate,
 }: LetterDetailOverlayProps) {
+  const { t } = useTranslation()
   const letter = letters[activeIndex]
   const hasPrev = activeIndex > 0
   const hasNext = activeIndex < letters.length - 1
@@ -78,7 +80,7 @@ export function LetterDetailOverlay({
             type="button"
             onClick={onClose}
             className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/25 text-white transition hover:bg-white/40"
-            aria-label="Close"
+            aria-label={t('common.close')}
           >
             <X size={20} />
           </button>
@@ -123,7 +125,10 @@ export function LetterDetailOverlay({
               )}
               <span className="text-xl font-bold text-white drop-shadow-sm">
                 {isEnglish
-                  ? `${letter.character} for ${letter.example.word}`
+                  ? t('lettersTable.englishForWord', {
+                      letter: letter.character,
+                      word: letter.example.word,
+                    })
                   : letter.example.word}
               </span>
             </div>
@@ -134,7 +139,7 @@ export function LetterDetailOverlay({
             type="button"
             onClick={() => playLetter(letter, subject, speechLang)}
             className="flex h-14 w-14 items-center justify-center rounded-2xl border-4 border-white/40 bg-white/25 text-white shadow-lg transition hover:bg-white/40"
-            aria-label="Play sound"
+            aria-label={t('common.playSound')}
           >
             <span className="text-2xl">🔊</span>
           </button>
@@ -147,7 +152,7 @@ export function LetterDetailOverlay({
           type="button"
           onClick={(e) => { e.stopPropagation(); onNavigate(activeIndex - 1) }}
           className="absolute left-3 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white shadow-lg transition hover:bg-white/40 md:left-8"
-          aria-label="Previous letter"
+          aria-label={t('common.previousLetter')}
         >
           <ChevronLeft size={32} />
         </button>
@@ -157,7 +162,7 @@ export function LetterDetailOverlay({
           type="button"
           onClick={(e) => { e.stopPropagation(); onNavigate(activeIndex + 1) }}
           className="absolute right-3 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white shadow-lg transition hover:bg-white/40 md:right-8"
-          aria-label="Next letter"
+          aria-label={t('common.nextLetter')}
         >
           <ChevronRight size={32} />
         </button>

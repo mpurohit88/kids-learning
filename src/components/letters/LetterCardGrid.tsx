@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Volume2 } from 'lucide-react'
 import type { Language, Letter } from '../../types'
+import { useTranslation } from '../../hooks/useTranslation'
 import { playLetterSound } from '../../utils/audio'
 import { getKannadaSoundHints } from '../../utils/kannadaLetterHints'
 import { LetterDetailOverlay } from './LetterDetailOverlay'
@@ -27,6 +28,7 @@ interface LetterCardProps {
 }
 
 function LetterCard({ letter, index, subject, speechLang, onTap }: LetterCardProps) {
+  const { t } = useTranslation()
   const color = CARD_COLORS[index % CARD_COLORS.length]
   const isEnglish = subject === 'english'
   const hasBothCases = isEnglish && letter.lowerCase && letter.lowerCase !== letter.character
@@ -87,7 +89,7 @@ function LetterCard({ letter, index, subject, speechLang, onTap }: LetterCardPro
       <div className="flex justify-center pb-3">
         <button
           type="button"
-          aria-label={`Play ${letter.name}`}
+          aria-label={t('common.playLetter', { name: letter.name })}
           onClick={(e) => {
             e.stopPropagation()
             playLetterSound(letter, subject, { mode: 'phrase', speechLang })
@@ -114,18 +116,14 @@ function SectionLabel({ children }: { children: string }) {
 }
 
 export function LetterCardGrid({ letters, subject, speechLang }: LetterCardGridProps) {
+  const { t } = useTranslation()
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
   const vowels = letters.filter((l) => l.type === 'vowel')
   const consonants = letters.filter((l) => l.type === 'consonant')
-  const isEnglish = subject === 'english'
 
-  const vowelLabel = isEnglish ? 'Vowels' : subject === 'hindi' ? 'स्वर (Vowels)' : 'ಸ್ವರ (Vowels)'
-  const consonantLabel = isEnglish
-    ? 'Consonants'
-    : subject === 'hindi'
-      ? 'व्यंजन (Consonants)'
-      : 'ವ್ಯಂಜನ (Consonants)'
+  const vowelLabel = t('lettersTable.vowelsGroup')
+  const consonantLabel = t('lettersTable.consonantsGroup')
 
   const renderGrid = (group: Letter[]) => (
     <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">

@@ -1,3 +1,4 @@
+import { useTranslation } from '../../hooks/useTranslation'
 import { QuestionHearButton } from './QuestionHearButton'
 
 interface VerticalAdditionQuestionProps {
@@ -23,6 +24,7 @@ export function VerticalAdditionQuestion({
   onHearAgain,
   hearAgainLabel,
 }: VerticalAdditionQuestionProps) {
+  const { t } = useTranslation()
   const columnCount = Math.max(...addends.map((value) => String(value).length))
   const columnLabels = getColumnLabels(columnCount)
   const digitClass =
@@ -30,12 +32,14 @@ export function VerticalAdditionQuestion({
   const labelClass =
     'inline-flex w-9 items-center justify-center text-sm font-bold uppercase tracking-wide text-slate-500 md:w-11 md:text-base'
   const operatorColumnClass = `${digitClass} text-slate-700`
+  const plusWord = t('common.plus')
+  const ariaParts = addends.join(` ${plusWord} `)
 
   return (
     <div className="flex items-center justify-center gap-4">
       <div
         className="rounded-2xl border-2 border-slate-100 bg-slate-50 px-5 py-4"
-        aria-label={addends.join(' plus ')}
+        aria-label={t('maths.addendsAria', { parts: ariaParts })}
       >
         <div className="flex justify-end">
           {columnLabels.map((label, index) => (

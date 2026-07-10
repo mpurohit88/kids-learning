@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from '../../hooks/useTranslation'
 import { getMaxWrongAllowed, getRequiredCorrect } from './challengeUtils'
 
 export interface TigerGoatRescueProps {
@@ -23,6 +24,7 @@ export function TigerGoatRescue({
   className = '',
   variant = 'vertical',
 }: TigerGoatRescueProps) {
+  const { t } = useTranslation()
   const requiredCorrect = getRequiredCorrect(totalQuestions, passThreshold)
   const maxWrongAllowed = getMaxWrongAllowed(totalQuestions, passThreshold)
   const passed = correctCount >= requiredCorrect
@@ -38,11 +40,11 @@ export function TigerGoatRescue({
 
   const statusMessage = isComplete
     ? isSaved
-      ? 'Ganu is safe!'
-      : 'Tiger got Ganu!'
+      ? t('sideGames.goat.safe')
+      : t('sideGames.goat.tigerWin')
     : isEaten
-      ? 'Chomp! Too many wrong!'
-      : `Save Ganu! ${requiredCorrect}+ correct`
+      ? t('sideGames.goat.chompTooMany')
+      : t('sideGames.goat.saveGanu', { count: requiredCorrect })
 
   if (variant === 'horizontal') {
     return (
@@ -63,10 +65,10 @@ export function TigerGoatRescue({
   return (
     <div
       className={`flex h-full min-h-[320px] flex-col rounded-[1.75rem] border-4 border-white bg-white/90 px-2 py-3 shadow-lg ${className}`}
-      aria-label="Save the goat mini game"
+      aria-label={t('sideGames.goat.ariaLabel')}
     >
       <h2 className="mb-1 text-center text-sm font-extrabold uppercase tracking-wide text-emerald-700 md:text-base">
-        Save the Goat
+        {t('sideGames.goat.title')}
       </h2>
       <p className="mb-2 text-center text-[10px] font-semibold leading-tight text-slate-600 md:text-xs">
         {statusMessage}
@@ -106,7 +108,7 @@ export function TigerGoatRescue({
             }}
             className="block"
             role="img"
-            aria-label="Goat"
+            aria-label={t('sideGames.goat.goatAria')}
           >
             🐐
           </motion.span>
@@ -143,7 +145,7 @@ export function TigerGoatRescue({
             transition={{ duration: isEaten ? 0.7 : 0.45 }}
             className="block text-3xl md:text-4xl"
             role="img"
-            aria-label="Tiger"
+            aria-label={t('sideGames.goat.tigerAria')}
           >
             🐯
           </motion.span>
@@ -160,7 +162,7 @@ export function TigerGoatRescue({
                 className="absolute left-1/2 z-40 -translate-x-1/2 text-sm font-extrabold text-orange-600"
                 style={{ top: `${GOAT_TOP_PERCENT + 14}%` }}
               >
-                Chomp!
+                {t('sideGames.goat.chomp')}
               </motion.span>
               <motion.span
                 key="yum"
@@ -188,7 +190,7 @@ export function TigerGoatRescue({
       </div>
 
       <p className="mt-2 text-center text-[10px] text-slate-500 md:text-xs">
-        {answered}/{totalQuestions}
+        {t('sideGames.answered', { answered, total: totalQuestions })}
       </p>
     </div>
   )
@@ -217,13 +219,16 @@ function HorizontalTrack({
   isEaten,
   isSaved,
 }: TrackProps) {
+  const { t } = useTranslation()
   const tigerLeftPercent = isEaten ? 72 : 4 + tigerProgress * 68
 
   return (
     <div
       className={`w-full max-w-3xl rounded-[1.75rem] border-4 border-white bg-white/85 px-4 py-4 shadow-lg ${className}`}
     >
-      <h2 className="mb-2 text-center text-lg font-extrabold text-emerald-700">Save the Goat</h2>
+      <h2 className="mb-2 text-center text-lg font-extrabold text-emerald-700">
+        {t('sideGames.goat.title')}
+      </h2>
       <div className="mb-2 flex items-center justify-between gap-2 text-sm font-semibold text-slate-600">
         <span>{statusMessage}</span>
         <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-800">
@@ -247,7 +252,7 @@ function HorizontalTrack({
         {isSaved ? <span className="absolute left-1/2 top-1 -translate-x-1/2">🛡️</span> : null}
       </div>
       <p className="mt-2 text-center text-xs text-slate-500">
-        {answered}/{totalQuestions} answered
+        {t('sideGames.answered', { answered, total: totalQuestions })}
       </p>
     </div>
   )

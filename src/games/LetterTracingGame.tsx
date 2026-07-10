@@ -312,7 +312,7 @@ export function LetterTracingGame() {
         <div className="flex items-center gap-4">
           <button
             type="button"
-            aria-label="Erase and try again"
+            aria-label={t('games.traceLetter.erase')}
             onClick={handleErase}
             className="flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white bg-slate-500 text-white shadow-lg transition hover:bg-slate-400 md:h-24 md:w-24"
           >
@@ -327,7 +327,7 @@ export function LetterTracingGame() {
                 ? 'bg-amber-300 hover:bg-amber-200'
                 : 'bg-amber-100 hover:bg-amber-200'
             }`}
-            title={showHint ? 'Hide hint' : 'Show letter hint'}
+            title={showHint ? t('games.traceLetter.hideHint') : t('games.traceLetter.showHint')}
           >
             {showHint ? '🙈' : '👁️'}
           </button>

@@ -155,6 +155,18 @@ export interface SessionQuestionOption {
   imagePath?: string
 }
 
+export type ComparisonSymbol = '>' | '<'
+
+/** Structured greater/less-than payload for quiz UI + future DB rows. */
+export interface ComparisonPayload {
+  mode: 'symbol' | 'complete'
+  left: number
+  /** Present for symbol mode; blank side for complete mode. */
+  right: number | null
+  /** Present for complete mode; blank for symbol mode. */
+  symbol: ComparisonSymbol | null
+}
+
 export interface SessionQuestion {
   id: string
   prompt: string
@@ -164,6 +176,7 @@ export interface SessionQuestion {
   imagePath?: string
   visualItems?: QuestionVisualItem[]
   addends?: number[]
+  comparison?: ComparisonPayload
   options: SessionQuestionOption[]
   correctOptionId: string
   explanation?: string

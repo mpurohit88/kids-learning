@@ -5,7 +5,7 @@ import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
 import { useTranslation } from '../hooks/useTranslation'
 import { getLocalizedChallenge } from '../utils/localizedContent'
 
-export function AdditionMenuScreen() {
+export function GreaterLessThanMenuScreen() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { ready, profileId, subject } = usePlayerSessionGate()
@@ -13,19 +13,23 @@ export function AdditionMenuScreen() {
 
   if (!ready || !profile || subject !== 'maths') return null
 
-  const practices = dataService.getGroupedChallenges('maths', 'addition', profile.ageGroup)
-  const hubChallenge = dataService.getChallenge('maths', 'addition')
+  const practices = dataService.getGroupedChallenges(
+    'maths',
+    'greater-less-than',
+    profile.ageGroup,
+  )
+  const hubChallenge = dataService.getChallenge('maths', 'greater-less-than')
   const localizedHub = hubChallenge ? getLocalizedChallenge(t, hubChallenge) : null
 
   return (
     <AppShell
-      title={localizedHub?.title ?? t('challenges.addition.title')}
+      title={localizedHub?.title ?? t('challenges.greater-less-than.title')}
       showBack
       backTo="/activities"
     >
       <div className="flex flex-1 flex-col gap-6">
         <p className="text-center text-xl text-slate-600">
-          {t('maths.additionPickPractice')}
+          {t('maths.comparisonPickPractice')}
         </p>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">

@@ -1,6 +1,7 @@
 import type { SessionQuestion } from '../types'
 import type { TranslateFn } from './translate'
 import { getAdditionSpeechText, getQuestionAddends } from './additionProblems'
+import { getQuestionComparison } from './comparisonProblems'
 
 export function isHeavyAndLightQuestion(question: SessionQuestion): boolean {
   return (question.visualItems?.length ?? 0) >= 2
@@ -14,6 +15,14 @@ export function getChallengeQuizDisplayPrompt(
   question: SessionQuestion,
   t: TranslateFn,
 ): string {
+  const comparison = getQuestionComparison(question)
+  if (comparison?.mode === 'symbol') {
+    return t('maths.compareNumbersPrompt', undefined, 'Which symbol is correct?')
+  }
+  if (comparison?.mode === 'complete') {
+    return t('maths.completeComparisonPrompt', undefined, 'Which number makes this true?')
+  }
+
   if (!isHeavyAndLightQuestion(question)) {
     return question.prompt
   }
@@ -27,6 +36,28 @@ export function getChallengeQuizSpeechText(
   question: SessionQuestion,
   t: TranslateFn,
 ): string {
+  const comparison = getQuestionComparison(question)
+  if (comparison?.mode === 'symbol' && comparison.right !== null) {
+    return t(
+      'maths.compareSpeech',
+      { left: comparison.left, right: comparison.right },
+      `Compare ${comparison.left} and ${comparison.right}. Greater than or less than?`,
+    )
+  }
+  if (comparison?.mode === 'complete' && comparison.symbol) {
+    return comparison.symbol === '>'
+      ? t(
+          'maths.completeSpeechGreater',
+          { left: comparison.left },
+          `Which number makes ${comparison.left} greater than blank?`,
+        )
+      : t(
+          'maths.completeSpeechLess',
+          { left: comparison.left },
+          `Which number makes ${comparison.left} less than blank?`,
+        )
+  }
+
   if (isHeavyAndLightQuestion(question)) {
     const [first, second] = question.visualItems!
     const prompt = getChallengeQuizDisplayPrompt(question, t)
@@ -43,3 +74,4 @@ export function getChallengeQuizSpeechText(
 }
 
 export { getQuestionAddends } from './additionProblems'
+export { getQuestionComparison } from './comparisonProblems'

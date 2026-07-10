@@ -4,6 +4,7 @@ import { AccessibleExamCursor } from './components/accessibility/AccessibleExamC
 import { GAME_REGISTRY } from './config/gameRegistry'
 import { ChallengeQuizGame } from './games/ChallengeQuizGame'
 import { AdditionMenuScreen } from './pages/AdditionMenuScreen'
+import { GreaterLessThanMenuScreen } from './pages/GreaterLessThanMenuScreen'
 import { ActivityMenuScreen } from './pages/ActivityMenuScreen'
 import { HomeScreen } from './pages/HomeScreen'
 import { LaunchScreen } from './pages/LaunchScreen'
@@ -43,6 +44,10 @@ function App() {
           <Route path="/learn/numbers" element={<NumberLearnerPage />} />
           <Route path="/progress" element={<ProgressScreen />} />
           <Route path="/games/challenge/addition" element={<AdditionMenuScreen />} />
+          <Route
+            path="/games/challenge/greater-less-than"
+            element={<GreaterLessThanMenuScreen />}
+          />
           <Route path="/games/challenge/:challengeId" element={<ChallengeQuizGame />} />
           {GAME_REGISTRY.map((game) => {
             const GameComponent = game.component

@@ -80,8 +80,8 @@ export function PictureWordMatchGame() {
     recordAnswer({
       selectedId: wordId,
       correctId: targetWord.id,
-      correctMessage: 'Wonderful! You got it!',
-      wrongMessage: 'Nice try! It was ' + targetWord.word,
+      correctMessage: t('feedback.pictureCorrect'),
+      wrongMessage: t('feedback.pictureWrong', { word: targetWord.word }),
       onAdvance: (nextIndex) => setupRound(nextIndex, roundWords),
     })
   }

@@ -71,13 +71,16 @@ export function ExamPracticeGame() {
     if (!subject || !isLanguageSubject(subject) || letters.length === 0 || vocabulary.length === 0) {
       return
     }
-    const built = buildExamQuestions(subject, letters, vocabulary, roundCount)
+    const built = buildExamQuestions(subject, letters, vocabulary, roundCount, {
+      vowel: t('exam.swar'),
+      consonant: t('exam.vyanjan'),
+    })
     if (built.length === 0) return
 
     setQuestions(built)
     resetSession()
-    resetRoundUi('Get ready for exam practice!')
-  }, [subject, letters, vocabulary, roundCount, resetSession, resetRoundUi])
+    resetRoundUi(t('exam.getReady'))
+  }, [subject, letters, vocabulary, roundCount, resetSession, resetRoundUi, t])
 
   useEffect(() => {
     if (!ready) return
@@ -107,13 +110,13 @@ export function ExamPracticeGame() {
     if (!currentQuestion || !content) return
 
     if (currentQuestion.type === 'first-letter') {
-      resetRoundUi('Which letter does this word START with?')
+      resetRoundUi(t('exam.firstLetter'))
     } else {
-      resetRoundUi('Is this letter a Swar or Vyanjan?')
+      resetRoundUi(t('exam.letterTypeShort'))
     }
 
     playQuestionAudio()
-  }, [currentQuestion, content, resetRoundUi, playQuestionAudio])
+  }, [currentQuestion, content, resetRoundUi, playQuestionAudio, t])
 
   const handleAnswer = (choiceId: string) => {
     if (!currentQuestion) return
@@ -121,8 +124,8 @@ export function ExamPracticeGame() {
     recordAnswer({
       selectedId: choiceId,
       correctId: currentQuestion.answerId,
-      correctMessage: 'Super star! You got it!',
-      wrongMessage: 'Good try! Keep practicing for the exam.',
+      correctMessage: t('feedback.examCorrect'),
+      wrongMessage: t('feedback.examWrong'),
       onAdvance: () => {},
     })
   }
@@ -131,7 +134,7 @@ export function ExamPracticeGame() {
 
   return (
     <QuizGameShell
-      title="Exam Practice"
+      title={t('games.examPractice.title')}
       challengeId="exam-practice"
       roundIndex={roundIndex}
       roundCount={questions.length}
@@ -145,7 +148,7 @@ export function ExamPracticeGame() {
       message={message}
       result={result}
       onPlayAgain={() => handlePlayAgain(startGame)}
-      roundLabel={t('common.question', undefined, 'Question')}
+      roundLabel={t('common.question')}
     >
       {currentQuestion.type === 'first-letter' ? (
         <FirstLetterQuestionView

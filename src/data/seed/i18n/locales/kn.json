@@ -26,6 +26,11 @@
     "classLkg": "LKG / UKG",
     "class12": "ತರಗತಿ 1 / 2",
     "saveProfile": "ಪ್ರೊಫೈಲ್ ಉಳಿಸಿ",
+    "switchKid": "ಮಗು ಬದಲಾಯಿಸಿ",
+    "switchSubtitle": "ಕಲಿಯುತ್ತಲೇ ಇರಲು ಸ್ನೇಹಿತರನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ",
+    "switchTo": "{{name}} ಗೆ ಬದಲಾಯಿಸಿ",
+    "playingAs": "{{name}} ಆಡುತ್ತಿದ್ದಾರೆ",
+    "you": "ನೀವು",
     "nameSetupTitle": "ನಿಮ್ಮ ಹೆಸರೇನು?",
     "nameSetupSubtitle": "ಪ್ರತಿ ವಿದ್ಯಾರ್ಥಿಯ ಹೆಸರನ್ನು ನಮೂದಿಸಿ. ನಂತರ ಬದಲಾಯಿಸಬಹುದು.",
     "nameSetupContinue": "ಮುಂದುವರಿಸಿ",
@@ -43,6 +48,7 @@
     "lettersIntro": "ಅಭ್ಯಾಸಕ್ಕೂ ಮೊದಲು ಎಲ್ಲ ಅಕ್ಷರಗಳನ್ನು ಉದಾಹರಣೆಗಳೊಂದಿಗೆ ನೋಡಿ!",
     "tabPractice": "ಅಭ್ಯಾಸ",
     "tabLetters": "ಎಲ್ಲ ಅಕ್ಷರಗಳು",
+    "tabLearn": "ಕಲಿಯಿರಿ",
     "comingSoon": "ಶೀಘ್ರದಲ್ಲೇ ಬರುತ್ತದೆ!",
     "comingSoonDetail": "{{subject}} ಗಾಗಿ ಸವಾಲುಗಳನ್ನು ಸೇರಿಸಲಾಗುತ್ತಿದೆ.",
     "viewAllLetters": "ಎಲ್ಲ ಅಕ್ಷರಗಳನ್ನು ನೋಡಿ →",
@@ -55,7 +61,14 @@
     "playedTimes_one": "{{count}} ಬಾರಿ ಆಟವಾಡಿದ್ದಾರೆ",
     "playedTimes_other": "{{count}} ಬಾರಿ ಆಟವಾಡಿದ್ದಾರೆ",
     "starsCount": "{{count}} ನಕ್ಷತ್ರಗಳು",
-    "switchProfile": "ಮಗು ಬದಲಾಯಿಸಿ"
+    "switchProfile": "ಮಗು ಬದಲಾಯಿಸಿ",
+    "noProfiles": "ಇನ್ನೂ ಪ್ರೊಫೈಲ್ ಇಲ್ಲ. ನಕ್ಷತ್ರಗಳನ್ನು ನೋಡಲು ಒಂದನ್ನು ರಚಿಸಿ."
+  },
+  "learn": {
+    "numbersTitle": "ಸಂಖ್ಯೆಗಳನ್ನು ಕಲಿಯಿರಿ",
+    "numbersIntro": "ಸಂಖ್ಯೆ 1 – {{maxNumber}}. ಕಲಿಯಲು ಯಾವುದೇ ಸಂಖ್ಯೆಯನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ!",
+    "numbersBadgeLkg": "ಸಂಖ್ಯೆ 1 – 20",
+    "numbersBadgeClass2": "ಸಂಖ್ಯೆ 1 – 100"
   },
   "common": {
     "goBack": "ಹಿಂದಕ್ಕೆ",
@@ -75,7 +88,16 @@
     "backToGames": "ಆಟಗಳಿಗೆ ಹಿಂತಿರುಗಿ",
     "goHome": "ಮನೆಗೆ ಹೋಗಿ",
     "soundsLike": "ಇಂತೆ ಧ್ವನಿಸುತ್ತದೆ",
-    "changeLanguage": "ಭಾಷೆ ಬದಲಾಯಿಸಿ"
+    "changeLanguage": "ಭಾಷೆ ಬದಲಾಯಿಸಿ",
+    "close": "ಮುಚ್ಚಿ",
+    "playSound": "ಧ್ವನಿ ಪ್ಲೇ ಮಾಡಿ",
+    "previous": "ಹಿಂದಿನ",
+    "next": "ಮುಂದಿನ",
+    "previousLetter": "ಹಿಂದಿನ ಅಕ್ಷರ",
+    "nextLetter": "ಮುಂದಿನ ಅಕ್ಷರ",
+    "playLetter": "{{name}} ಪ್ಲೇ ಮಾಡಿ",
+    "mascotAria": "ಮಾಸ್ಕಟ್ ಕರಡಿ",
+    "plus": "ಜೊತೆಗೆ"
   },
   "whatsNext": {
     "heading": "ಚೆನ್ನಾಗಿದೆ, {{name}}!",
@@ -93,20 +115,28 @@
     "letterCorrect": "ಹೌದು! ಚೆನ್ನಾಗಿದೆ!",
     "letterWrong": "ಒಳ್ಳೆಯ ಪ್ರಯತ್ನ! ಸರಿಯಾದ ಉತ್ತರ {{letter}}",
     "greatJob": "ಚೆನ್ನಾಗಿದೆ!",
-    "letsBegin": "ಪ್ರಾರಂಭಿಸೋಣ!"
+    "letsBegin": "ಪ್ರಾರಂಭಿಸೋಣ!",
+    "pictureCorrect": "ಅದ್ಭುತ! ಸರಿಯಾದ ಉತ್ತರ!",
+    "pictureWrong": "ಒಳ್ಳೆಯ ಪ್ರಯತ್ನ! ಸರಿಯಾದ ಪದ {{word}}",
+    "examCorrect": "ಸೂಪರ್ ಸ್ಟಾರ್! ಸರಿಯಾದ ಉತ್ತರ!",
+    "examWrong": "ಒಳ್ಳೆಯ ಪ್ರಯತ್ನ! ಪರೀಕ್ಷೆಗಾಗಿ ಅಭ್ಯಾಸ ಮುಂದುವರಿಸಿ."
   },
   "games": {
     "findLetter": {
       "title": "ಅಕ್ಷರ ಹುಡುಕಿ",
       "prompt": "ಕೇಳಿ ಮತ್ತು ಸರಿಯಾದ ಅಕ್ಷರ ಹುಡುಕಿ!",
       "instruction": "ಸರಿಯಾದ ಅಕ್ಷರವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.",
-      "instructionWithHints": "ಸರಿಯಾದ ಅಕ್ಷರವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ. ಪ್ರತಿ ಆಯ್ಕೆಯ ಕೆಳಗೆ ಹಿಂದಿ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಸಹಾಯ ಇದೆ."
+      "instructionWithHints": "ಸರಿಯಾದ ಅಕ್ಷರವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ. ಪ್ರತಿ ಆಯ್ಕೆಯ ಕೆಳಗೆ ಹಿಂದಿ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಸಹಾಯ ಇದೆ.",
+      "noLetters": "ಇನ್ನೂ ಅಕ್ಷರಗಳು ಲಭ್ಯವಿಲ್ಲ."
     },
     "traceLetter": {
       "title": "ಅಕ್ಷರ ಬರೆಯಿರಿ",
       "prompt": "ಬೆರಳು ಅಥವಾ ಮೌಸ್‌ನಿಂದ ಅಕ್ಷರ ಬರೆಯಿರಿ!",
       "traceSuccess": "ಚೆನ್ನಾಗಿ ಬರೆದಿರಿ!",
-      "traceEmpty": "ಒಳ್ಳೆಯ ಪ್ರಯತ್ನ! ಮ nächst ಬಾರಿ ಇನ್ನಷ್ಟು ಬರೆಯಿರಿ!"
+      "traceEmpty": "ಒಳ್ಳೆಯ ಪ್ರಯತ್ನ! ಮುಂದಿನ ಬಾರಿ ಇನ್ನಷ್ಟು ಬರೆಯಿರಿ!",
+      "erase": "ಅಳಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+      "showHint": "ಅಕ್ಷರ ಸಹಾಯ ತೋರಿಸಿ",
+      "hideHint": "ಸಹಾಯ ಮರೆಮಾಡಿ"
     },
     "pictureMatch": {
       "title": "ಚಿತ್ರ ಹೊಂದಿಸಿ",
@@ -119,6 +149,8 @@
   "exam": {
     "firstLetter": "ಈ ಪದ ಯಾವ ಅಕ್ಷರದಿಂದ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ?",
     "letterType": "ಇದು ಸ್ವರವಾ ಅಥವಾ ವ್ಯಂಜನವಾ?",
+    "letterTypeShort": "ಇದು ಸ್ವರವಾ ಅಥವಾ ವ್ಯಂಜನವಾ?",
+    "getReady": "ಪರೀಕ್ಷಾ ಅಭ್ಯಾಸಕ್ಕೆ ಸಿದ್ಧರಾಗಿ!",
     "swar": "ಸ್ವರ",
     "vyanjan": "ವ್ಯಂಜನ"
   },
@@ -135,7 +167,10 @@
     "swara": "ಸ್ವರ",
     "vyanjana": "ವ್ಯಂಜನ",
     "vowel": "ಸ್ವರ",
-    "consonant": "ವ್ಯಂಜನ"
+    "consonant": "ವ್ಯಂಜನ",
+    "vowelsGroup": "ಸ್ವರಗಳು",
+    "consonantsGroup": "ವ್ಯಂಜನಗಳು",
+    "englishForWord": "{{letter}} for {{word}}"
   },
   "maths": {
     "whichIsHeavier": "ಯಾವುದು ಭಾರಿಯಾಗಿದೆ?",
@@ -143,8 +178,15 @@
     "or": "ಅಥವಾ",
     "hearQuestion": "ಪ್ರಶ್ನೆ ಕೇಳಿ",
     "additionPickPractice": "ಕೂಡಿಕೆ ಅಭ್ಯಾಸ ಆಯ್ಕೆಮಾಡಿ!",
+    "comparisonPickPractice": "ದೊಡ್ಡದು ಅಥವಾ ಚಿಕ್ಕದು ಅಭ್ಯಾಸ ಆಯ್ಕೆಮಾಡಿ!",
+    "compareNumbersPrompt": "ಯಾವ ಚಿಹ್ನೆ ಸರಿ?",
+    "completeComparisonPrompt": "ಯಾವ ಸಂಖ್ಯೆ ಇದನ್ನು ಸರಿ ಮಾಡುತ್ತದೆ?",
+    "compareSpeech": "{{left}} ಮತ್ತು {{right}} ಹೋಲಿಸಿ. ದೊಡ್ಡದು ಅಥವಾ ಚಿಕ್ಕದು?",
+    "completeSpeechGreater": "{{left}} ಖಾಲಿಗಿಂತ ದೊಡ್ಡದಾಗುವ ಸಂಖ್ಯೆ ಯಾವುದು?",
+    "completeSpeechLess": "{{left}} ಖಾಲಿಗಿಂತ ಚಿಕ್ಕದಾಗುವ ಸಂಖ್ಯೆ ಯಾವುದು?",
     "notes": "ಟಿಪ್ಪಣಿಗಳು",
-    "clearNotes": "ಟಿಪ್ಪಣಿಗಳನ್ನು ಅಳಿಸಿ"
+    "clearNotes": "ಟಿಪ್ಪಣಿಗಳನ್ನು ಅಳಿಸಿ",
+    "addendsAria": "{{parts}}"
   },
   "challenges": {
     "letter-recognition": {
@@ -216,6 +258,19 @@
       "description": "ಅಡ್ಡ ಕೂಡಿಕೆ ಅಭ್ಯಾಸ",
       "badge": "2ನೇ ತರಗತಿ"
     },
+    "greater-less-than": {
+      "title": "ದೊಡ್ಡದು ಮತ್ತು ಚಿಕ್ಕದು",
+      "description": "ದೊಡ್ಡದು ಮತ್ತು ಚಿಕ್ಕದು ಚಿಹ್ನೆಯಿಂದ ಸಂಖ್ಯೆಗಳನ್ನು ಹೋಲಿಸಿ",
+      "badge": "2ನೇ ತರಗತಿ"
+    },
+    "compare-numbers": {
+      "title": "ಸಂಖ್ಯೆ ಹೋಲಿಕೆ",
+      "description": "ಎರಡು ಸಂಖ್ಯೆಗಳ ನಡುವೆ > ಅಥವಾ < ಆಯ್ಕೆಮಾಡಿ"
+    },
+    "complete-comparison": {
+      "title": "ಸರಿ ಮಾಡಿ",
+      "description": "ಹೋಲಿಕೆಯನ್ನು ಸರಿ ಮಾಡುವ ಸಂಖ್ಯೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+    },
     "counting-objects": {
       "title": "ವಸ್ತುಗಳನ್ನು ಎಣಿಸಿ",
       "description": "ವಸ್ತುಗಳನ್ನು ಎಣಿಸಿ ಸಂಖ್ಯೆ ಆಯ್ಕೆಮಾಡಿ",
@@ -250,18 +305,27 @@
     "class12": "ತರಗತಿ 1 / 2"
   },
   "sideGames": {
+    "answered": "{{answered}}/{{total}} ಉತ್ತರಿಸಲಾಗಿದೆ",
     "mango": {
       "title": "ಮಾವಿನ ಹಣ್ಣುಗಳನ್ನು ಸಂಗ್ರಹಿಸಿ",
-      "goal": "3+ ಮಾವಿನ ಹಣ್ಣುಗಳನ್ನು ಸಂಗ್ರಹಿಸಿ!",
+      "ariaLabel": "ಮಾವಿನ ಹಣ್ಣು ಸಂಗ್ರಹ ಮಿನಿ ಆಟ",
+      "goal": "{{count}}+ ಮಾವಿನ ಹಣ್ಣುಗಳನ್ನು ಸಂಗ್ರಹಿಸಿ!",
       "allCollected": "ಎಲ್ಲ ಮಾವಿನ ಹಣ್ಣುಗಳು ಸಂಗ್ರಹ!",
+      "basketFull": "ಬುಟ್ಟಿ ತುಂಬಿದೆ!",
+      "needMore": "ಇನ್ನಷ್ಟು ಮಾವಿನ ಹಣ್ಣುಗಳು ಬೇಕು!",
       "soClose": "ಸ್ವಲ್ಪ ದೂರ! ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!",
       "keepGoing": "ಮುಂದುವರಿಯಿರಿ!"
     },
     "goat": {
       "title": "ಆಡನ್ನು ರಕ್ಷಿಸಿ",
+      "ariaLabel": "ಆಡು ರಕ್ಷಣೆ ಮಿನಿ ಆಟ",
       "safe": "ಗನು ಸುರಕ್ಷಿತ!",
-      "chomp": "ಚomp!",
-      "saveGanu": "ಗನು ಅನ್ನು ರಕ್ಷಿಸಿ! {{count}}+ ಸರಿ"
+      "tigerWin": "ಹುಲಿ ಗನುವನ್ನು ಹಿಡಿಯಿತು!",
+      "chomp": "ಚಂಪ್!",
+      "chompTooMany": "ಚಂಪ್! ತುಂಬಾ ತಪ್ಪುಗಳು!",
+      "saveGanu": "ಗನು ಅನ್ನು ರಕ್ಷಿಸಿ! {{count}}+ ಸರಿ",
+      "goatAria": "ಆಡು",
+      "tigerAria": "ಹುಲಿ"
     }
   }
 }

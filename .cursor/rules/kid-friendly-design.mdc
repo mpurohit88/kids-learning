@@ -1,0 +1,30 @@
+---
+description: Kid-friendly UI — keep changes aligned with existing design
+alwaysApply: true
+---
+
+# Kid-friendly design consistency
+
+Ages ~4–7. Match existing screens (`LaunchScreen`, `HomeScreen`, `AppShell`, letter cards) — do not invent a new visual system.
+
+## Layout & components
+
+- Prefer existing primitives: `AppShell`, `BigButton`, `Mascot`, `QuizGameShell`, shared modals
+- Large touch targets (`h-12+`, `rounded-2xl` / `rounded-[2rem]`)
+- Soft pastel / warm gradient backgrounds already used in the app — avoid flat purple-on-white AI defaults
+- Visual-first: emoji/avatar, short text, one clear action per section
+- Motion: light hover/tap (`active:scale-95`, small translate) — not noisy effects
+
+## Patterns to preserve
+
+- Profile cards: colored tiles, big emoji avatar, white border, shadow
+- Games: `QuizGameShell` + mascot feedback; mid-game profile badge goes **home**, not profile switch
+- Audio: import from `src/utils/audio` only (`playLetterSound`, `playWordSound`, `speakText`, `prepareAudio`) — do not fork speak/play paths per page
+
+## Do not
+
+- Add dashboard-style clutter, dense cards in heroes, or new design languages
+- Hardcode a second audio/unlock path beside the shared facade
+- Switch profiles mid-round without returning to Home (subject clears on `setProfile`)
+
+When unsure, copy structure/spacing/classes from the nearest existing screen of the same type.

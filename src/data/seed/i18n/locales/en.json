@@ -26,6 +26,11 @@
     "classLkg": "LKG / UKG",
     "class12": "Class 1 / 2",
     "saveProfile": "Save profile",
+    "switchKid": "Switch kid",
+    "switchSubtitle": "Tap a friend to keep learning",
+    "switchTo": "Switch to {{name}}",
+    "playingAs": "Playing as {{name}}",
+    "you": "You",
     "nameSetupTitle": "What's your name?",
     "nameSetupSubtitle": "Enter a name for each learner. You can change it later.",
     "nameSetupContinue": "Continue",
@@ -43,6 +48,7 @@
     "lettersIntro": "See all letters with examples before you practice!",
     "tabPractice": "Practice",
     "tabLetters": "All Letters",
+    "tabLearn": "Learn",
     "comingSoon": "Coming soon!",
     "comingSoonDetail": "Challenges for {{subject}} are being added.",
     "viewAllLetters": "View All Letters →",
@@ -55,7 +61,14 @@
     "playedTimes_one": "Played {{count}} time",
     "playedTimes_other": "Played {{count}} times",
     "starsCount": "{{count}} stars",
-    "switchProfile": "Switch Child Profile"
+    "switchProfile": "Switch Child Profile",
+    "noProfiles": "No kid profiles yet. Create one to track stars."
+  },
+  "learn": {
+    "numbersTitle": "Learn Numbers",
+    "numbersIntro": "Numbers 1 – {{maxNumber}}. Tap any number to learn it!",
+    "numbersBadgeLkg": "Numbers 1 – 20",
+    "numbersBadgeClass2": "Numbers 1 – 100"
   },
   "common": {
     "goBack": "Go back",
@@ -75,7 +88,16 @@
     "backToGames": "Back to Games",
     "goHome": "Go home",
     "soundsLike": "Sounds like",
-    "changeLanguage": "Change Language"
+    "changeLanguage": "Change Language",
+    "close": "Close",
+    "playSound": "Play sound",
+    "previous": "Previous",
+    "next": "Next",
+    "previousLetter": "Previous letter",
+    "nextLetter": "Next letter",
+    "playLetter": "Play {{name}}",
+    "mascotAria": "Mascot bear",
+    "plus": "plus"
   },
   "whatsNext": {
     "heading": "Great job, {{name}}!",
@@ -93,20 +115,28 @@
     "letterCorrect": "Yes! Great job!",
     "letterWrong": "Good try! The answer was {{letter}}",
     "greatJob": "Great job!",
-    "letsBegin": "Let's begin!"
+    "letsBegin": "Let's begin!",
+    "pictureCorrect": "Wonderful! You got it!",
+    "pictureWrong": "Nice try! It was {{word}}",
+    "examCorrect": "Super star! You got it!",
+    "examWrong": "Good try! Keep practicing for the exam."
   },
   "games": {
     "findLetter": {
       "title": "Find the Letter",
       "prompt": "Listen and find the letter!",
       "instruction": "Tap the matching letter.",
-      "instructionWithHints": "Tap the matching letter. Hindi and English hints are shown below each option."
+      "instructionWithHints": "Tap the matching letter. Hindi and English hints are shown below each option.",
+      "noLetters": "No letters available yet."
     },
     "traceLetter": {
       "title": "Trace the Letter",
       "prompt": "Trace the letter with your finger or mouse!",
       "traceSuccess": "Great job tracing!",
-      "traceEmpty": "Good try! You can trace more next time!"
+      "traceEmpty": "Good try! You can trace more next time!",
+      "erase": "Erase and try again",
+      "showHint": "Show letter hint",
+      "hideHint": "Hide hint"
     },
     "pictureMatch": {
       "title": "Picture Match",
@@ -119,6 +149,8 @@
   "exam": {
     "firstLetter": "Which letter does this word start with?",
     "letterType": "Is this letter a Swar (vowel) or Vyanjan (consonant)?",
+    "letterTypeShort": "Is this letter a Swar or Vyanjan?",
+    "getReady": "Get ready for exam practice!",
     "swar": "Swar (Vowel)",
     "vyanjan": "Vyanjan (Consonant)"
   },
@@ -128,8 +160,15 @@
     "or": "or",
     "hearQuestion": "Listen to question",
     "additionPickPractice": "Pick an addition practice!",
+    "comparisonPickPractice": "Pick a greater than or less than practice!",
+    "compareNumbersPrompt": "Which symbol is correct?",
+    "completeComparisonPrompt": "Which number makes this true?",
+    "compareSpeech": "Compare {{left}} and {{right}}. Greater than or less than?",
+    "completeSpeechGreater": "Which number makes {{left}} greater than blank?",
+    "completeSpeechLess": "Which number makes {{left}} less than blank?",
     "notes": "Notes",
-    "clearNotes": "Clear notes"
+    "clearNotes": "Clear notes",
+    "addendsAria": "{{parts}}"
   },
   "lettersTable": {
     "capital": "Capital",
@@ -144,7 +183,10 @@
     "swara": "Swara",
     "vyanjana": "Vyanjana",
     "vowel": "Vowel",
-    "consonant": "Consonant"
+    "consonant": "Consonant",
+    "vowelsGroup": "Vowels",
+    "consonantsGroup": "Consonants",
+    "englishForWord": "{{letter}} for {{word}}"
   },
   "challenges": {
     "letter-recognition": {
@@ -216,6 +258,19 @@
       "description": "Practice column addition step by step",
       "badge": "Class 2"
     },
+    "greater-less-than": {
+      "title": "Greater and Less Than",
+      "description": "Compare numbers with greater than and less than",
+      "badge": "Class 2"
+    },
+    "compare-numbers": {
+      "title": "Compare Numbers",
+      "description": "Choose > or < between two numbers"
+    },
+    "complete-comparison": {
+      "title": "Make It True",
+      "description": "Pick a number that makes the comparison true"
+    },
     "counting-objects": {
       "title": "Count the Objects",
       "description": "Count objects and pick the number",
@@ -250,18 +305,27 @@
     "class12": "Class 1 / 2"
   },
   "sideGames": {
+    "answered": "{{answered}}/{{total}} answered",
     "mango": {
       "title": "Collect the Mangoes",
-      "goal": "Collect 3+ mangoes!",
+      "ariaLabel": "Collect the mangoes mini game",
+      "goal": "Collect {{count}}+ mangoes!",
       "allCollected": "All mangoes collected!",
+      "basketFull": "Basket is full enough!",
+      "needMore": "Need more mangoes!",
       "soClose": "So close! Try again!",
       "keepGoing": "Keep going!"
     },
     "goat": {
       "title": "Save the Goat",
+      "ariaLabel": "Save the goat mini game",
       "safe": "Ganu is safe!",
+      "tigerWin": "Tiger got Ganu!",
       "chomp": "Chomp!",
-      "saveGanu": "Save Ganu! {{count}}+ correct"
+      "chompTooMany": "Chomp! Too many wrong!",
+      "saveGanu": "Save Ganu! {{count}}+ correct",
+      "goatAria": "Goat",
+      "tigerAria": "Tiger"
     }
   }
 }

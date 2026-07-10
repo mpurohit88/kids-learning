@@ -6,6 +6,10 @@ import {
   generateAdditionTwoDigit,
   generateAdditionWithin10,
 } from '../../utils/additionProblems'
+import {
+  generateCompareNumbers,
+  generateCompleteComparison,
+} from '../../utils/comparisonProblems'
 import type { SessionQuestion } from '../../types'
 
 const COUNTING_EMOJIS = ['🍎', '⭐', '🌸', '🐶', '🎈', '🍌', '🦋', '🍊']
@@ -73,6 +77,10 @@ export function generateMathsQuestions(
       return generateAdditionThreeDigitTwoDigit(count, optionCount)
     case 'addition-three-two-digit-numbers':
       return generateAdditionThreeTwoDigitNumbers(count, optionCount)
+    case 'compare-numbers':
+      return generateCompareNumbers(count, optionCount)
+    case 'complete-comparison':
+      return generateCompleteComparison(count, optionCount)
     case 'counting-objects':
       return generateCountingObjects(count, optionCount)
     case 'number-recognition':
