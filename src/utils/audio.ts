@@ -10,10 +10,13 @@ export {
   playEncouragementSound,
   SPEECH_RATE,
   SPEECH_RATE_MOBILE,
+  SPEECH_RATE_ANDROID,
   SPEECH_PITCH,
   getSpeechRate,
+  getSpeechPitch,
   prepareSpokenText,
   isMobileBrowser,
+  isAndroidBrowser,
 } from './audioPlayer'
 export {
   unlockAudio,

@@ -235,20 +235,25 @@ describe('audioPlayer mobile speech clarity', () => {
     vi.unstubAllGlobals()
   })
 
-  it('uses a slower rate and pads short phrases on mobile', async () => {
+  it('uses a milder mobile rate and repeats short phrases', async () => {
     vi.useFakeTimers()
     const { speak } = installWindowSpeech([
       { name: 'Google हिन्दी', lang: 'hi-IN' },
     ])
-    const { speakText, SPEECH_RATE_MOBILE } = await import('./audioPlayer')
+    const { speakText, SPEECH_RATE_ANDROID, SPEECH_PITCH_ANDROID } = await import(
+      './audioPlayer'
+    )
 
     const pending = speakText('क', 'hi-IN')
     await vi.advanceTimersByTimeAsync(100)
     await pending
 
     const utterance = speak.mock.calls[0][0] as FakeUtterance
-    expect(utterance.rate).toBe(SPEECH_RATE_MOBILE)
-    expect(utterance.text).toBe('क…')
+    expect(utterance.rate).toBe(SPEECH_RATE_ANDROID)
+    expect(utterance.pitch).toBe(SPEECH_PITCH_ANDROID)
+    expect(utterance.text).toBe('क, क')
+    // Android should not force a voice — OS default is clearer.
+    expect(utterance.voice).toBeNull()
   })
 
   it('does not race Howler against TTS on mobile (avoids cut-off speech)', async () => {
