@@ -5,6 +5,7 @@ import { AppShell } from '../components/layout/AppShell'
 import { dataService } from '../data'
 import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
+import { prepareAudio } from '../utils/audio'
 import { getLocalizedSubject } from '../utils/localizedContent'
 import type { Subject } from '../types'
 
@@ -12,17 +13,20 @@ export function HomeScreen() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const profileId = useAppStore((state) => state.profileId)
+  const clearProfile = useAppStore((state) => state.clearProfile)
   const setSubject = useAppStore((state) => state.setSubject)
   const profile = dataService.getProfileById(profileId)
   const subjects = dataService.getSubjects()
 
   useEffect(() => {
-    if (!profileId) {
+    if (!profileId || !profile) {
+      if (profileId && !profile) clearProfile()
       navigate('/', { replace: true })
     }
-  }, [profileId, navigate])
+  }, [profileId, profile, clearProfile, navigate])
 
   const handleSubjectSelect = (subject: Subject) => {
+    void prepareAudio()
     setSubject(subject)
     navigate('/activities')
   }

@@ -1,29 +1,17 @@
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { dataService } from '../data'
+import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
 import { useTranslation } from '../hooks/useTranslation'
-import { useAppStore } from '../store/useAppStore'
 import { getLocalizedChallenge } from '../utils/localizedContent'
 
 export function AdditionMenuScreen() {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const profileId = useAppStore((state) => state.profileId)
-  const subject = useAppStore((state) => state.subject)
+  const { ready, profileId, subject } = usePlayerSessionGate()
   const profile = dataService.getProfileById(profileId)
 
-  useEffect(() => {
-    if (!profileId) {
-      navigate('/', { replace: true })
-      return
-    }
-    if (!subject || subject !== 'maths') {
-      navigate('/home', { replace: true })
-    }
-  }, [profileId, subject, navigate])
-
-  if (!profile || subject !== 'maths') return null
+  if (!ready || !profile || subject !== 'maths') return null
 
   const practices = dataService.getGroupedChallenges('maths', 'addition', profile.ageGroup)
   const hubChallenge = dataService.getChallenge('maths', 'addition')

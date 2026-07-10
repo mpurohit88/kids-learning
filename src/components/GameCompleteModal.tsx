@@ -5,17 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import { dataService } from '../data'
 import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
-import type { GameRoundResult, UiLocale } from '../types'
-import { speakText } from '../utils/audioPlayer'
+import type { GameRoundResult } from '../types'
+import { speakText, speechLangForLocale } from '../utils/audio'
 import { pickSurpriseChallenge } from '../utils/surpriseChallenge'
 import { Mascot } from './Mascot'
 import { StarDisplay } from './StarDisplay'
-
-const SPEECH_LANG: Record<UiLocale, string> = {
-  en: 'en-IN',
-  hi: 'hi-IN',
-  kn: 'kn-IN',
-}
 
 interface GameCompleteModalProps {
   result: GameRoundResult
@@ -73,7 +67,7 @@ export function GameCompleteModal({
 
   useEffect(() => {
     const prompt = t('whatsNext.spokenPrompt', { name })
-    void speakText(prompt, SPEECH_LANG[locale])
+    void speakText(prompt, speechLangForLocale(locale))
     return () => {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel()

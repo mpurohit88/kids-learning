@@ -2,6 +2,52 @@ import { create } from 'zustand'
 import { dataService } from '../data'
 import type { ProgressMap, Subject, UiLocale } from '../types'
 
+const SESSION_STORAGE_KEY = 'kids-learning-player-session'
+
+interface PersistedSession {
+  profileId: string | null
+  subject: Subject | null
+}
+
+function readPersistedSession(): PersistedSession {
+  if (typeof sessionStorage === 'undefined') {
+    return { profileId: null, subject: null }
+  }
+  try {
+    const raw = sessionStorage.getItem(SESSION_STORAGE_KEY)
+    if (!raw) return { profileId: null, subject: null }
+    const parsed = JSON.parse(raw) as Partial<PersistedSession>
+    const profileId = typeof parsed.profileId === 'string' ? parsed.profileId : null
+    const subject =
+      parsed.subject === 'hindi' ||
+      parsed.subject === 'kannada' ||
+      parsed.subject === 'english' ||
+      parsed.subject === 'maths'
+        ? parsed.subject
+        : null
+
+    // Drop stale profile ids left over from older hardcoded profiles.
+    if (profileId && !dataService.getProfileById(profileId)) {
+      return { profileId: null, subject: null }
+    }
+
+    return { profileId, subject }
+  } catch {
+    return { profileId: null, subject: null }
+  }
+}
+
+function writePersistedSession(session: PersistedSession) {
+  if (typeof sessionStorage === 'undefined') return
+  try {
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session))
+  } catch {
+    // ignore quota / private mode failures
+  }
+}
+
+const initialSession = readPersistedSession()
+
 interface AppState {
   profileId: string | null
   subject: Subject | null
@@ -25,22 +71,32 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
-  profileId: null,
-  subject: null,
+  profileId: initialSession.profileId,
+  subject: initialSession.subject,
   progress: dataService.getProgress(),
   uiLocale: null,
   localeReady: false,
 
-  setProfile: (profileId) => set({ profileId, subject: null }),
+  setProfile: (profileId) => {
+    const next = { profileId, subject: null as Subject | null }
+    writePersistedSession(next)
+    set(next)
+  },
 
-  clearProfile: () => set({ profileId: null, subject: null }),
+  clearProfile: () => {
+    const next = { profileId: null, subject: null }
+    writePersistedSession(next)
+    set(next)
+  },
 
-  setSubject: (subject) => set({ subject }),
+  setSubject: (subject) => {
+    const profileId = get().profileId
+    writePersistedSession({ profileId, subject })
+    set({ subject })
+  },
 
   initLocale: () => {
-    // Default to English; multi-language UI is preserved but not forced on first launch.
     const DEFAULT_LOCALE: UiLocale = 'en'
-    // const saved = dataService.getSavedUiLocale()
     set({
       uiLocale: DEFAULT_LOCALE,
       localeReady: true,

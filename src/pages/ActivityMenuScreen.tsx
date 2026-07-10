@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BigButton } from '../components/BigButton'
 import { LetterCardGrid } from '../components/letters/LetterCardGrid'
 import { AppShell } from '../components/layout/AppShell'
 import { dataService } from '../data'
+import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
 import { useTranslation } from '../hooks/useTranslation'
-import { useAppStore } from '../store/useAppStore'
+import { prepareAudio } from '../utils/audio'
 import {
   getLocalizedChallenge,
   getLocalizedSubject,
@@ -17,22 +18,11 @@ type ActivityTab = 'practice' | 'letters'
 export function ActivityMenuScreen() {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const profileId = useAppStore((state) => state.profileId)
-  const subject = useAppStore((state) => state.subject)
+  const { ready, profileId, subject } = usePlayerSessionGate()
   const profile = dataService.getProfileById(profileId)
-  const [activeTab, setActiveTab] = useState<ActivityTab>('letters')
+  const [activeTab, setActiveTab] = useState<ActivityTab>('practice')
 
-  useEffect(() => {
-    if (!profileId) {
-      navigate('/', { replace: true })
-      return
-    }
-    if (!subject) {
-      navigate('/home', { replace: true })
-    }
-  }, [profileId, subject, navigate])
-
-  if (!subject || !profile) return null
+  if (!ready || !subject || !profile) return null
 
   const subjectInfo = dataService.getSubject(subject)
   const localizedSubject = subjectInfo ? getLocalizedSubject(t, subjectInfo) : null
@@ -121,7 +111,11 @@ export function ActivityMenuScreen() {
                 <button
                   key={challenge.id}
                   type="button"
-                  onClick={() => navigate(challenge.route)}
+                  onClick={() => {
+                    // Unlock speech inside this tap so the next game can auto-speak on mobile.
+                    void prepareAudio()
+                    navigate(challenge.route)
+                  }}
                   className="group relative flex min-h-52 flex-col items-center justify-center rounded-[2rem] border-4 border-white p-6 text-white shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
                   style={{ backgroundColor: challenge.color }}
                 >

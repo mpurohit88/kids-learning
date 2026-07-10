@@ -49,15 +49,35 @@ function clearLegacyStorage() {
   }
 }
 
+let profilesCacheRaw: string | null = null
+let profilesCache: Profile[] = []
+
+function invalidateProfilesCache() {
+  profilesCacheRaw = null
+  profilesCache = []
+}
+
 export function readStoredProfiles(): Profile[] {
   clearLegacyStorage()
   try {
     const raw = localStorage.getItem(PROFILES_STORAGE_KEY)
-    if (!raw) return []
+    if (!raw) {
+      invalidateProfilesCache()
+      return []
+    }
+    if (profilesCacheRaw === raw) return profilesCache
+
     const parsed = JSON.parse(raw) as unknown
-    if (!Array.isArray(parsed)) return []
-    return parsed.filter(isValidProfile).slice(0, MAX_PROFILES)
+    if (!Array.isArray(parsed)) {
+      invalidateProfilesCache()
+      return []
+    }
+
+    profilesCacheRaw = raw
+    profilesCache = parsed.filter(isValidProfile).slice(0, MAX_PROFILES)
+    return profilesCache
   } catch {
+    invalidateProfilesCache()
     return []
   }
 }
@@ -65,7 +85,8 @@ export function readStoredProfiles(): Profile[] {
 export function writeStoredProfiles(profiles: Profile[]): Profile[] {
   const next = profiles.filter(isValidProfile).slice(0, MAX_PROFILES)
   localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(next))
-  return next
+  invalidateProfilesCache()
+  return readStoredProfiles()
 }
 
 export function createProfileId(): string {

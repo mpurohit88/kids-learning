@@ -1,22 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
 import { AnswerOptionButton } from '../components/game/AnswerOptionButton'
 import { QuizGameShell } from '../components/game/QuizGameShell'
 import { dataService } from '../data'
 import { useGameSession } from '../hooks/useGameSession'
+import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
 import { useTranslation } from '../hooks/useTranslation'
-import { useAppStore } from '../store/useAppStore'
-import { playAudio } from '../utils/audioPlayer'
+import { playWordSound } from '../utils/audio'
 import { pickDistractors, shuffleArray } from '../utils/arrayUtils'
 import type { VocabularyWord } from '../types'
 import { isLanguageSubject } from '../types'
 
 export function PictureWordMatchGame() {
-  const navigate = useNavigate()
   const { t } = useTranslation()
-  const profileId = useAppStore((state) => state.profileId)
-  const subject = useAppStore((state) => state.subject)
+  const { ready, profileId, subject } = usePlayerSessionGate()
 
   const profile = dataService.getProfileById(profileId)
   const content =
@@ -43,14 +40,9 @@ export function PictureWordMatchGame() {
 
   const { resetSession, resetRoundUi, recordAnswer, handlePlayAgain } = session
 
-  useEffect(() => {
-    if (!profileId || !subject) {
-      navigate('/', { replace: true })
-    }
-  }, [profileId, subject, navigate])
-
   const setupRound = useCallback(
     (index: number, wordsPool: VocabularyWord[]) => {
+      if (wordsPool.length === 0) return
       const target = wordsPool[index % wordsPool.length]
       const distractors = pickDistractors(wordsPool, target, optionCount)
       const nextOptions = shuffleArray([target, ...distractors])
@@ -59,12 +51,11 @@ export function PictureWordMatchGame() {
       setOptions(nextOptions)
       resetRoundUi(t('games.pictureMatch.prompt', undefined, 'What word matches the picture?'))
 
-      void playAudio(
-        target.audioPath,
-        target.word,
-        content?.speechLang,
-        target.transliteration,
-      )
+      try {
+        playWordSound(target, content?.speechLang)
+      } catch {
+        // ignore audio failures
+      }
     },
     [content?.speechLang, optionCount, resetRoundUi, t],
   )
@@ -79,8 +70,9 @@ export function PictureWordMatchGame() {
   }, [vocabulary, roundCount, resetSession, setupRound])
 
   useEffect(() => {
+    if (!ready) return
     startGame()
-  }, [startGame])
+  }, [ready, startGame])
 
   const handleSelect = (wordId: string) => {
     if (!targetWord) return
@@ -96,16 +88,11 @@ export function PictureWordMatchGame() {
 
   const replayAudio = () => {
     if (targetWord) {
-      void playAudio(
-        targetWord.audioPath,
-        targetWord.word,
-        content?.speechLang,
-        targetWord.transliteration,
-      )
+      playWordSound(targetWord, content?.speechLang)
     }
   }
 
-  if (!profile || !content || !targetWord) return null
+  if (!ready || !profile || !content || !targetWord) return null
 
   return (
     <QuizGameShell

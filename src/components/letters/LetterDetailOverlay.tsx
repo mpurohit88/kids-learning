@@ -2,8 +2,7 @@ import { useEffect } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Language, Letter } from '../../types'
-import { playAudio, speakText } from '../../utils/audioPlayer'
-import { getKannadaSoundHints } from '../../utils/kannadaLetterHints'
+import { playLetterSound } from '../../utils/audio'
 
 interface LetterDetailOverlayProps {
   letters: Letter[]
@@ -21,34 +20,8 @@ const CARD_COLORS = [
   '#f4511e', '#039be5', '#00897b', '#d81b60',
 ]
 
-function buildPhrase(letter: Letter, subject: Language): { text: string; lang: string } {
-  const ex = letter.example
-  if (subject === 'english') {
-    const word = ex?.word ?? letter.name.toUpperCase()
-    return { text: `${letter.name.toUpperCase()} for ${word}`, lang: 'en-IN' }
-  }
-  if (subject === 'hindi') {
-    const word = ex?.word ?? letter.character
-    return { text: `${letter.character} से ${word}`, lang: 'hi-IN' }
-  }
-  if (subject === 'kannada') {
-    const hints = getKannadaSoundHints(letter.name)
-    if (hints.hindi) {
-      const exWord = ex?.word ?? ''
-      return { text: hints.hindi + (exWord ? ` से ${exWord}` : ''), lang: 'hi-IN' }
-    }
-    return { text: letter.character + (ex?.word ? ` ${ex.word}` : ''), lang: 'kn-IN' }
-  }
-  return { text: letter.name, lang: 'en-IN' }
-}
-
 function playLetter(letter: Letter, subject: Language, speechLang: string) {
-  const { text, lang } = buildPhrase(letter, subject)
-  if (subject !== 'kannada') {
-    void playAudio(letter.audioPath, text, speechLang, letter.name)
-  } else {
-    void speakText(text, lang)
-  }
+  playLetterSound(letter, subject, { mode: 'phrase', speechLang })
 }
 
 export function LetterDetailOverlay({

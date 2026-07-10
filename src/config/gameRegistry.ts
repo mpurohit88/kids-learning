@@ -24,6 +24,19 @@ export const GAME_REGISTRY: GameDefinition[] = dataService.getGames().map((game)
   component: GAME_COMPONENTS[game.id],
 }))
 
+/** Paths registered for dedicated language mini-games (leading slash). */
+export function getRegisteredGameRoutes(): string[] {
+  return GAME_REGISTRY.map((game) => game.route)
+}
+
+/**
+ * Every challenge menu card must navigate to a route the router knows about.
+ * Language games use GAME_REGISTRY routes; maths uses /games/challenge/:id (or addition hub).
+ */
+export function getPlayableChallengeRoutes(subject: 'hindi' | 'kannada' | 'english' | 'maths', grade: AgeGroup): string[] {
+  return dataService.getChallenges(subject, grade).map((challenge) => challenge.route)
+}
+
 export function getGamesForGrade(grade: AgeGroup): GameDefinition[] {
   return GAME_REGISTRY.filter((game) => game.gradeLevels.includes(grade))
 }

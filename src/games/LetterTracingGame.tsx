@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Eraser } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { AppShell } from '../components/layout/AppShell'
 import { ConfettiBurst } from '../components/ConfettiBurst'
 import { GameCompleteModal } from '../components/GameCompleteModal'
 import { Mascot } from '../components/Mascot'
 import { KannadaSoundHints } from '../components/game/KannadaSoundHints'
 import { dataService } from '../data'
+import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
 import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
-import { playAudio, playCelebrationSound } from '../utils/audioPlayer'
-import { playKannadaLetterAudio } from '../utils/kannadaLetterAudio'
+import { playCelebrationSound, playLetterSound } from '../utils/audio'
 import { buildRoundResult, shuffleArray } from '../utils/gameHelpers'
 import type { Letter } from '../types'
 import { isLanguageSubject } from '../types'
@@ -19,11 +18,8 @@ import { isLanguageSubject } from '../types'
 export function LetterTracingGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const isDrawingRef = useRef(false)
-  const navigate = useNavigate()
   const { t } = useTranslation()
-
-  const profileId = useAppStore((state) => state.profileId)
-  const subject = useAppStore((state) => state.subject)
+  const { ready, profileId, subject } = usePlayerSessionGate()
   const saveGameResult = useAppStore((state) => state.saveGameResult)
 
   const profile = dataService.getProfileById(profileId)
@@ -51,12 +47,6 @@ export function LetterTracingGame() {
   const [showConfetti, setShowConfetti] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
   const [result, setResult] = useState(buildRoundResult(0, roundCount))
-
-  useEffect(() => {
-    if (!profileId || !subject) {
-      navigate('/', { replace: true })
-    }
-  }, [profileId, subject, navigate])
 
   const clearCanvas = useCallback(() => {
     const canvas = canvasRef.current
@@ -97,19 +87,13 @@ export function LetterTracingGame() {
 
   const playLetterAudio = useCallback(
     (letter: Letter) => {
-      if (showSoundHints) {
-        playKannadaLetterAudio(letter, content?.speechLang)
-        return
-      }
-
-      void playAudio(
-        letter.audioPath,
-        letter.character,
-        content?.speechLang,
-        letter.name,
-      )
+      if (!subject || !isLanguageSubject(subject)) return
+      playLetterSound(letter, subject, {
+        mode: 'character',
+        speechLang: content?.speechLang,
+      })
     },
-    [content?.speechLang, showSoundHints],
+    [content?.speechLang, subject],
   )
 
   const setupRound = useCallback(
@@ -137,8 +121,9 @@ export function LetterTracingGame() {
   }, [letters, roundCount, setupRound])
 
   useEffect(() => {
+    if (!ready) return
     startGame()
-  }, [startGame])
+  }, [ready, startGame])
 
   useEffect(() => {
     clearCanvas()
@@ -253,7 +238,7 @@ export function LetterTracingGame() {
     }
   }
 
-  if (!profile || !content || !currentLetter) return null
+  if (!ready || !profile || !content || !currentLetter) return null
 
   return (
     <AppShell

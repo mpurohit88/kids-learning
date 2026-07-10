@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { QuizGameShell } from '../../components/game/QuizGameShell'
 import { dataService } from '../../data'
 import { useGameSession } from '../../hooks/useGameSession'
+import { usePlayerSessionGate } from '../../hooks/usePlayerSessionGate'
 import { useTranslation } from '../../hooks/useTranslation'
-import { useAppStore } from '../../store/useAppStore'
-import { playAudio } from '../../utils/audioPlayer'
+import { playLetterSound, playWordSound } from '../../utils/audio'
 import { buildExamQuestions } from './buildExamQuestions'
 import { FirstLetterQuestionView } from './FirstLetterQuestion'
 import { LetterTypeQuestionView } from './LetterTypeQuestion'
@@ -15,8 +15,7 @@ import { isLanguageSubject } from '../../types'
 export function ExamPracticeGame() {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const profileId = useAppStore((state) => state.profileId)
-  const subject = useAppStore((state) => state.subject)
+  const { ready, profileId, subject } = usePlayerSessionGate()
 
   const profile = dataService.getProfileById(profileId)
   const content =
@@ -62,14 +61,11 @@ export function ExamPracticeGame() {
   const currentQuestion = questions[roundIndex]
 
   useEffect(() => {
-    if (!profileId || !subject) {
-      navigate('/', { replace: true })
-      return
-    }
+    if (!ready) return
     if (profile?.ageGroup !== 'class2') {
       navigate('/activities', { replace: true })
     }
-  }, [profileId, subject, profile?.ageGroup, navigate])
+  }, [ready, profile?.ageGroup, navigate])
 
   const startGame = useCallback(() => {
     if (!subject || !isLanguageSubject(subject) || letters.length === 0 || vocabulary.length === 0) {
@@ -84,52 +80,41 @@ export function ExamPracticeGame() {
   }, [subject, letters, vocabulary, roundCount, resetSession, resetRoundUi])
 
   useEffect(() => {
+    if (!ready) return
     startGame()
-  }, [startGame])
+  }, [ready, startGame])
 
   const replayPrompt = useCallback(() => {
     if (!currentQuestion || !content) return
 
     if (currentQuestion.type === 'first-letter') {
-      void playAudio(
-        currentQuestion.word.audioPath,
-        currentQuestion.word.word,
-        content.speechLang,
-        currentQuestion.word.transliteration,
-      )
+      playWordSound(currentQuestion.word, content.speechLang)
       return
     }
 
-    void playAudio(
-      currentQuestion.letter.audioPath,
-      currentQuestion.letter.character,
-      content.speechLang,
-      currentQuestion.letter.name,
-    )
-  }, [content, currentQuestion])
+    if (!subject || !isLanguageSubject(subject)) return
+    playLetterSound(currentQuestion.letter, subject, {
+      mode: 'character',
+      speechLang: content.speechLang,
+    })
+  }, [content, currentQuestion, subject])
 
   useEffect(() => {
     if (!currentQuestion || !content) return
 
     if (currentQuestion.type === 'first-letter') {
       resetRoundUi('Which letter does this word START with?')
-      void playAudio(
-        currentQuestion.word.audioPath,
-        currentQuestion.word.word,
-        content.speechLang,
-        currentQuestion.word.transliteration,
-      )
+      playWordSound(currentQuestion.word, content.speechLang)
       return
     }
 
     resetRoundUi('Is this letter a Swar or Vyanjan?')
-    void playAudio(
-      currentQuestion.letter.audioPath,
-      currentQuestion.letter.character,
-      content.speechLang,
-      currentQuestion.letter.name,
-    )
-  }, [currentQuestion, content, resetRoundUi])
+    if (!subject || !isLanguageSubject(subject)) return
+    playLetterSound(currentQuestion.letter, subject, {
+      mode: 'character',
+      speechLang: content.speechLang,
+    })
+  }, [currentQuestion, content, resetRoundUi, subject])
 
   const handleAnswer = (choiceId: string) => {
     if (!currentQuestion) return
@@ -143,7 +128,7 @@ export function ExamPracticeGame() {
     })
   }
 
-  if (!profile || !content || !currentQuestion) return null
+  if (!ready || !profile || !content || !currentQuestion) return null
 
   return (
     <QuizGameShell

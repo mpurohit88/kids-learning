@@ -6,7 +6,7 @@ import { AppShell } from '../components/layout/AppShell'
 import { dataService } from '../data'
 import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
-import { speakText } from '../utils/audioPlayer'
+import { speakText } from '../utils/audio'
 
 const NUMBER_WORDS: Record<number, string> = {
   1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five',

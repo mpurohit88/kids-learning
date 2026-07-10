@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AnswerOptionButton } from '../components/game/AnswerOptionButton'
@@ -8,22 +8,17 @@ import { QuizGameShell } from '../components/game/QuizGameShell'
 import { VerticalAdditionQuestion } from '../components/game/VerticalAdditionQuestion'
 import { dataService } from '../data'
 import { useGameSession } from '../hooks/useGameSession'
+import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
 import { useTranslation } from '../hooks/useTranslation'
-import { useAppStore } from '../store/useAppStore'
-import { speakText } from '../utils/audioPlayer'
+import { speakText, speechLangForLocale } from '../utils/audio'
 import {
   getChallengeQuizDisplayPrompt,
   getChallengeQuizSpeechText,
   getQuestionAddends,
 } from '../utils/challengeQuizPrompt'
 import { getLocalizedChallenge } from '../utils/localizedContent'
-import type { SessionQuestion, SessionQuestionOption, QuestionVisualItem, UiLocale } from '../types'
-
-const SPEECH_LANG: Record<UiLocale, string> = {
-  en: 'en-IN',
-  hi: 'hi-IN',
-  kn: 'kn-IN',
-}
+import { getChallengeRoundCount, buildChallengeSessionKey, shouldStartChallengeSession } from '../utils/challengeRoundCount'
+import type { SessionQuestion, SessionQuestionOption, QuestionVisualItem } from '../types'
 
 function VisualItemDisplay({ item }: { item: QuestionVisualItem }) {
   return (
@@ -76,21 +71,27 @@ export function ChallengeQuizGame() {
   const navigate = useNavigate()
   const { challengeId = '' } = useParams()
   const { t, locale } = useTranslation()
-  const profileId = useAppStore((state) => state.profileId)
-  const subject = useAppStore((state) => state.subject)
+  const { ready, profileId, subject } = usePlayerSessionGate()
 
   const profile = dataService.getProfileById(profileId)
+  const ageGroup = profile?.ageGroup
   const challenge =
     subject && challengeId
       ? dataService.getChallenge(subject, challengeId)
       : undefined
   const localizedChallenge = challenge ? getLocalizedChallenge(t, challenge) : undefined
 
+  const roundCount = useMemo(
+    () => getChallengeRoundCount(challengeId, ageGroup, subject),
+    [challengeId, ageGroup, subject],
+  )
+
   const [questions, setQuestions] = useState<SessionQuestion[]>([])
   const [currentQuestion, setCurrentQuestion] = useState<SessionQuestion | null>(null)
+  const startedKeyRef = useRef<string | null>(null)
 
   const session = useGameSession({
-    roundCount: questions.length || 5,
+    roundCount,
     challengeId,
   })
 
@@ -98,34 +99,27 @@ export function ChallengeQuizGame() {
 
   const speakQuestion = useCallback(
     (question: SessionQuestion) => {
-      void speakText(getChallengeQuizSpeechText(question, t), SPEECH_LANG[locale])
+      void speakText(getChallengeQuizSpeechText(question, t), speechLangForLocale(locale))
     },
     [locale, t],
   )
 
   useEffect(() => {
-    if (!profileId || !subject) {
-      navigate('/', { replace: true })
-      return
-    }
+    if (!ready) return
+    if (!profileId || !subject) return
     if (!challenge) {
       navigate('/activities', { replace: true })
     }
-  }, [profileId, subject, challenge, navigate])
+  }, [ready, profileId, subject, challenge, navigate])
 
   const startGame = useCallback(() => {
-    if (!subject || !profile || !challengeId) return
-
-    const questionCount =
-      challengeId === 'heavy-and-light'
-        ? 8
-        : dataService.getRoundCount(profile.ageGroup, subject)
+    if (!subject || !ageGroup || !challengeId) return
 
     const generated = dataService.generateSession({
       subject,
       challengeId,
-      grade: profile.ageGroup,
-      count: questionCount,
+      grade: ageGroup,
+      count: roundCount,
     })
 
     if (generated.length === 0) return
@@ -134,11 +128,23 @@ export function ChallengeQuizGame() {
     setCurrentQuestion(generated[0])
     resetSession()
     resetRoundUi(getChallengeQuizDisplayPrompt(generated[0], t))
-  }, [subject, profile, challengeId, resetSession, resetRoundUi, t])
+  }, [subject, ageGroup, challengeId, roundCount, resetSession, resetRoundUi, t])
 
+  // Start once per challenge/session key — avoids Maximum update depth loops when
+  // callbacks recreate after setState (e.g. questions length changing roundCount).
   useEffect(() => {
+    if (!ready || !subject || !ageGroup || !challengeId) return
+    const key = buildChallengeSessionKey({
+      profileId,
+      subject,
+      challengeId,
+      ageGroup,
+      roundCount,
+    })
+    if (!shouldStartChallengeSession(startedKeyRef.current, key)) return
+    startedKeyRef.current = key
     startGame()
-  }, [startGame])
+  }, [ready, profileId, subject, ageGroup, challengeId, roundCount, startGame])
 
   useEffect(() => {
     const question = questions[session.roundIndex]
@@ -166,7 +172,22 @@ export function ChallengeQuizGame() {
     }
   }
 
-  if (!profile || !challenge || !currentQuestion || !localizedChallenge) return null
+  const handlePlayAgainClick = () => {
+    startedKeyRef.current = null
+    handlePlayAgain(() => {
+      const key = buildChallengeSessionKey({
+        profileId,
+        subject,
+        challengeId,
+        ageGroup,
+        roundCount,
+      })
+      startedKeyRef.current = key
+      startGame()
+    })
+  }
+
+  if (!ready || !profile || !challenge || !currentQuestion || !localizedChallenge) return null
 
   const optionGridClass =
     currentQuestion.options.length <= 2
@@ -185,7 +206,7 @@ export function ChallengeQuizGame() {
       title={localizedChallenge.title}
       challengeId={challengeId}
       roundIndex={session.roundIndex}
-      roundCount={questions.length}
+      roundCount={roundCount}
       correctCount={session.correctCount}
       wrongCount={session.wrongCount}
       isComplete={session.isComplete}
@@ -195,7 +216,7 @@ export function ChallengeQuizGame() {
       mood={session.mood}
       message={session.message}
       result={session.result}
-      onPlayAgain={() => handlePlayAgain(startGame)}
+      onPlayAgain={handlePlayAgainClick}
       roundLabel={t('common.question', undefined, 'Question')}
     >
       <motion.div
@@ -256,7 +277,7 @@ export function ChallengeQuizGame() {
         />
       </motion.div>
 
-      <div className={`grid w-full max-w-3xl gap-4 ${optionGridClass}`}>
+      <div className={`grid w-full max-w-5xl gap-4 ${optionGridClass}`}>
         {currentQuestion.options.map((option) => (
           <AnswerOptionButton
             key={option.id}

@@ -1,25 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
 import { AnswerOptionButton } from '../components/game/AnswerOptionButton'
 import { LetterOptionLabel } from '../components/game/LetterOptionLabel'
 import { QuizGameShell } from '../components/game/QuizGameShell'
 import { dataService } from '../data'
 import { useGameSession } from '../hooks/useGameSession'
+import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
 import { useTranslation } from '../hooks/useTranslation'
-import { useAppStore } from '../store/useAppStore'
-import { playAudio } from '../utils/audioPlayer'
-import { playKannadaLetterAudio } from '../utils/kannadaLetterAudio'
+import { playLetterSound } from '../utils/audio'
 import { pickDistractors, shuffleArray } from '../utils/arrayUtils'
 import { getOptionButtonClass, getOptionGridClass } from '../utils/gameConfig'
+import { buildRoundResult } from '../utils/scoring'
 import type { Letter } from '../types'
 import { isLanguageSubject } from '../types'
 
 export function LetterRecognitionGame() {
-  const navigate = useNavigate()
   const { t } = useTranslation()
-  const profileId = useAppStore((state) => state.profileId)
-  const subject = useAppStore((state) => state.subject)
+  const { ready, profileId, subject } = usePlayerSessionGate()
 
   const profile = dataService.getProfileById(profileId)
   const content =
@@ -48,33 +45,22 @@ export function LetterRecognitionGame() {
 
   const { resetSession, resetRoundUi, recordAnswer, handlePlayAgain } = session
 
-  useEffect(() => {
-    if (!profileId || !subject) {
-      navigate('/', { replace: true })
-    }
-  }, [profileId, subject, navigate])
-
   const showSoundHints = subject === 'kannada'
 
   const playTargetLetterAudio = useCallback(
     (letter: Letter) => {
-      if (showSoundHints) {
-        playKannadaLetterAudio(letter, content?.speechLang)
-        return
-      }
-
-      void playAudio(
-        letter.audioPath,
-        letter.character,
-        content?.speechLang,
-        letter.name,
-      )
+      if (!subject || !isLanguageSubject(subject)) return
+      playLetterSound(letter, subject, {
+        mode: 'character',
+        speechLang: content?.speechLang,
+      })
     },
-    [content?.speechLang, showSoundHints],
+    [content?.speechLang, subject],
   )
 
   const setupRound = useCallback(
     (index: number, lettersPool: Letter[]) => {
+      if (lettersPool.length === 0) return
       const target = lettersPool[index % lettersPool.length]
       const distractors = pickDistractors(lettersPool, target, optionCount)
       const nextOptions = shuffleArray([target, ...distractors])
@@ -98,8 +84,9 @@ export function LetterRecognitionGame() {
   }, [letters, roundCount, resetSession, setupRound])
 
   useEffect(() => {
+    if (!ready) return
     startGame()
-  }, [startGame])
+  }, [ready, startGame])
 
   const handleSelect = (letterId: string) => {
     if (!targetLetter) return
@@ -119,7 +106,34 @@ export function LetterRecognitionGame() {
     }
   }
 
-  if (!profile || !content || !targetLetter) return null
+  if (!ready || !profile || !content) return null
+
+  if (!targetLetter) {
+    return (
+      <QuizGameShell
+        title={t('games.findLetter.title')}
+        challengeId="letter-recognition"
+        roundIndex={0}
+        roundCount={roundCount}
+        correctCount={0}
+        wrongCount={0}
+        isComplete={false}
+        challengeSession={0}
+        feedbackType={null}
+        showConfetti={false}
+        mood="idle"
+        message={
+          letters.length === 0
+            ? t('games.findLetter.noLetters', undefined, 'No letters available yet.')
+            : t('app.loading', undefined, 'Loading...')
+        }
+        result={buildRoundResult(0, roundCount)}
+        onPlayAgain={startGame}
+      >
+        <div />
+      </QuizGameShell>
+    )
+  }
 
   return (
     <QuizGameShell

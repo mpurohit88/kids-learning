@@ -1,21 +1,16 @@
 import type { Letter } from '../types'
-import { playAudio, speakText } from './audioPlayer'
-import { getHindiLetterHint } from './kannadaLetterHints'
+import { playLetterSound } from './letterSound'
 
+/**
+ * @deprecated Prefer `playLetterSound(letter, 'kannada', { speechLang })` from audioPlayer.
+ * Kept as a thin alias so older call sites keep working during migration.
+ */
 export function playKannadaLetterAudio(
   letter: Letter,
   fallbackSpeechLang?: string,
 ): void {
-  const hindiHint = getHindiLetterHint(letter.name)
-  if (hindiHint) {
-    void speakText(hindiHint, 'hi-IN')
-    return
-  }
-
-  void playAudio(
-    letter.audioPath,
-    letter.character,
-    fallbackSpeechLang,
-    letter.name,
-  )
+  playLetterSound(letter, 'kannada', {
+    mode: 'character',
+    speechLang: fallbackSpeechLang,
+  })
 }

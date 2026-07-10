@@ -4,7 +4,7 @@ import type { MascotMood } from '../components/Mascot'
 import { useAppStore } from '../store/useAppStore'
 import type { GameRoundResult } from '../types'
 import { buildRoundResult } from '../utils/scoring'
-import { playCelebrationSound, playEncouragementSound } from '../utils/audioPlayer'
+import { playCelebrationSound, playEncouragementSound } from '../utils/audio'
 
 interface UseGameSessionOptions {
   roundCount: number

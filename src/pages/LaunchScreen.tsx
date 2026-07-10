@@ -6,7 +6,7 @@ import { dataService } from '../data'
 import { MAX_PROFILES } from '../data/repositories/local/profileStorage'
 import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
-import { unlockAudio } from '../utils/audioUnlock'
+import { prepareAudio } from '../utils/audio'
 import type { Profile } from '../types'
 import type { ClassChoice } from '../data/repositories/local/profileStorage'
 
@@ -75,7 +75,7 @@ export function LaunchScreen() {
       })
     }
 
-    void unlockAudio()
+    void prepareAudio()
     refreshProfiles()
     setForm(null)
   }
@@ -91,7 +91,7 @@ export function LaunchScreen() {
   }
 
   const selectProfile = (profile: Profile) => {
-    void unlockAudio()
+    void prepareAudio()
     setProfile(profile.id)
     navigate('/home')
   }

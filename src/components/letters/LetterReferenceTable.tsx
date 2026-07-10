@@ -1,8 +1,7 @@
 import { Volume2 } from 'lucide-react'
 import type { Language, Letter } from '../../types'
 import { useTranslation } from '../../hooks/useTranslation'
-import { playAudio } from '../../utils/audioPlayer'
-import { playKannadaLetterAudio } from '../../utils/kannadaLetterAudio'
+import { playLetterSound } from '../../utils/audio'
 import { getKannadaSoundHints } from '../../utils/kannadaLetterHints'
 import type { TranslateFn } from '../../utils/translate'
 
@@ -72,17 +71,7 @@ function LetterAudioButton({
   t: TranslateFn
 }) {
   const handlePlay = () => {
-    if (subject === 'kannada') {
-      playKannadaLetterAudio(letter, speechLang)
-      return
-    }
-
-    void playAudio(
-      letter.audioPath,
-      letter.character,
-      speechLang,
-      letter.name,
-    )
+    playLetterSound(letter, subject, { mode: 'character', speechLang })
   }
 
   return (

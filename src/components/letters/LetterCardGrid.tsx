@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Volume2 } from 'lucide-react'
 import type { Language, Letter } from '../../types'
-import { playAudio, speakText } from '../../utils/audioPlayer'
+import { playLetterSound } from '../../utils/audio'
 import { getKannadaSoundHints } from '../../utils/kannadaLetterHints'
 import { LetterDetailOverlay } from './LetterDetailOverlay'
 
@@ -17,47 +17,6 @@ const CARD_COLORS = [
   '#ec407a', '#00acc1', '#43a047', '#5e35b1',
   '#f4511e', '#039be5', '#00897b', '#d81b60',
 ]
-
-/** Build the full spoken phrase, e.g. "A for Apple", "क से कमल" */
-function buildPhrase(letter: Letter, subject: Language): { text: string; lang: string } {
-  const ex = letter.example
-
-  if (subject === 'english') {
-    const word = ex?.word ?? letter.name.toUpperCase()
-    return { text: `${letter.name.toUpperCase()} for ${word}`, lang: 'en-IN' }
-  }
-
-  if (subject === 'hindi') {
-    const word = ex?.word ?? letter.character
-    return { text: `${letter.character} से ${word}`, lang: 'hi-IN' }
-  }
-
-  if (subject === 'kannada') {
-    const hints = getKannadaSoundHints(letter.name)
-    const word = ex?.word ?? letter.character
-    // Prefer Hindi hint for Kannada (e.g. "क" sound → speak in Hindi)
-    if (hints.hindi) {
-      const exWord = ex?.word ?? ''
-      return {
-        text: hints.hindi + (exWord ? ` से ${exWord}` : ''),
-        lang: 'hi-IN',
-      }
-    }
-    return { text: `${letter.character} ${word}`, lang: 'kn-IN' }
-  }
-
-  return { text: letter.name, lang: 'en-IN' }
-}
-
-function playLetterPhrase(letter: Letter, subject: Language, speechLang: string) {
-  const { text, lang } = buildPhrase(letter, subject)
-  // One voice only: prefer file when present, otherwise speech (never both at once)
-  if (subject === 'kannada') {
-    void speakText(text, lang)
-    return
-  }
-  void playAudio(letter.audioPath, text, speechLang, letter.name)
-}
 
 interface LetterCardProps {
   letter: Letter
@@ -131,7 +90,7 @@ function LetterCard({ letter, index, subject, speechLang, onTap }: LetterCardPro
           aria-label={`Play ${letter.name}`}
           onClick={(e) => {
             e.stopPropagation()
-            playLetterPhrase(letter, subject, speechLang)
+            playLetterSound(letter, subject, { mode: 'phrase', speechLang })
           }}
           className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-white/40 bg-white/25 text-white transition hover:bg-white/45 active:scale-90"
         >

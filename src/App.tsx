@@ -46,9 +46,9 @@ function App() {
           <Route path="/games/challenge/:challengeId" element={<ChallengeQuizGame />} />
           {GAME_REGISTRY.map((game) => {
             const GameComponent = game.component
-            return (
-              <Route key={game.id} path={game.route} element={<GameComponent />} />
-            )
+            // Use path without a leading slash so RR matches consistently with basename.
+            const path = game.route.replace(/^\//, '')
+            return <Route key={game.id} path={path} element={<GameComponent />} />
           })}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

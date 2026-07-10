@@ -35,13 +35,33 @@ function notifyUnlocked() {
   unlockListeners.clear()
 }
 
+/**
+ * Mobile browsers (especially iOS/Android Chrome) only enable speechSynthesis
+ * after speak() runs inside a real user gesture. Kannada worked first because
+ * it called speakText() immediately on tap; Hindi waited on missing MP3s.
+ * Call this synchronously from click/touch handlers.
+ */
+export function primeSpeechSynthesis(): void {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+  try {
+    void window.speechSynthesis.getVoices()
+    const priming = new SpeechSynthesisUtterance(' ')
+    priming.volume = 0
+    priming.rate = 1
+    priming.pitch = 1
+    // Do NOT cancel afterward — canceling can wipe the unlock on some mobiles.
+    window.speechSynthesis.speak(priming)
+  } catch {
+    // ignore
+  }
+}
+
 async function primeHowler(): Promise<void> {
   Howler.autoUnlock = true
   Howler.html5PoolSize = 10
   Howler.mute(false)
   Howler.volume(1)
 
-  // Creating + playing a silent clip forces AudioContext creation and unlocks HTML5 pool.
   await new Promise<void>((resolve) => {
     let done = false
     const finish = () => {
@@ -102,10 +122,13 @@ async function primeHowler(): Promise<void> {
 }
 
 /**
- * Mobile browsers block Web Audio / speech until a real user gesture.
- * Safe to call repeatedly — no-ops after the first successful unlock.
+ * Unlock Web Audio + speech. Safe to call repeatedly.
+ * When called from a tap, speech priming runs synchronously first.
  */
 export async function unlockAudio(): Promise<void> {
+  // Always try speech prime — cheap, and required on mobile first gesture.
+  primeSpeechSynthesis()
+
   if (unlocked) {
     if (Howler.ctx?.state === 'suspended') {
       try {
@@ -121,13 +144,9 @@ export async function unlockAudio(): Promise<void> {
   unlockPromise = (async () => {
     try {
       await primeHowler()
-
-      // Warm speech voices only — do NOT speak+cancel here.
-      // Canceling during unlock was silencing real speech on desktop Chrome.
       if ('speechSynthesis' in window) {
         void window.speechSynthesis.getVoices()
       }
-
       notifyUnlocked()
     } catch {
       unlockPromise = null
@@ -144,6 +163,8 @@ export function installAudioUnlockListeners(): () => void {
   const events: Array<keyof WindowEventMap> = ['pointerdown', 'touchend', 'click', 'keydown']
 
   const onGesture = () => {
+    // Sync prime inside the gesture, then finish Howler unlock.
+    primeSpeechSynthesis()
     void unlockAudio().then(() => {
       for (const event of events) {
         window.removeEventListener(event, onGesture, true)
