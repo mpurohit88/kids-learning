@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type RefObject } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { QuestionHearButton } from '../game/QuestionHearButton'
+import { FoodVisual } from './FoodVisual'
 import { TapHereHint } from './TapHereHint'
 
 export interface SyllableChunk {
@@ -12,8 +13,10 @@ export interface SyllableChunk {
 
 interface FeedBearSyllableBoardProps {
   word: string
+  emoji?: string
+  imagePath?: string
   chunks: SyllableChunk[]
-  fedOrderIndexes: number[]
+  fedChunkIds: string[]
   activeListenIndex: number
   disabled?: boolean
   showFeedHint?: boolean
@@ -22,6 +25,8 @@ interface FeedBearSyllableBoardProps {
   bowlLabel: string
   trayLabel: string
   wrongChunkLabel: string
+  foodRef?: RefObject<HTMLDivElement | null>
+  foodFlying?: boolean
   onHearWord: () => void
   onFeedChunk: (chunk: SyllableChunk) => void
   onWrongChunk: () => void
@@ -38,8 +43,10 @@ function shuffleChunks(chunks: SyllableChunk[]): SyllableChunk[] {
 
 export function FeedBearSyllableBoard({
   word,
+  emoji,
+  imagePath,
   chunks,
-  fedOrderIndexes,
+  fedChunkIds,
   activeListenIndex,
   disabled = false,
   showFeedHint = false,
@@ -48,6 +55,8 @@ export function FeedBearSyllableBoard({
   bowlLabel,
   trayLabel,
   wrongChunkLabel,
+  foodRef,
+  foodFlying = false,
   onHearWord,
   onFeedChunk,
   onWrongChunk,
@@ -55,13 +64,14 @@ export function FeedBearSyllableBoard({
   const [trayOrder] = useState(() => shuffleChunks(chunks))
   const [shakeId, setShakeId] = useState<string | null>(null)
 
-  const fedSet = useMemo(() => new Set(fedOrderIndexes), [fedOrderIndexes])
-  const nextExpected = fedOrderIndexes.length
-  const remaining = trayOrder.filter((chunk) => !fedSet.has(chunk.orderIndex))
+  const fedSet = useMemo(() => new Set(fedChunkIds), [fedChunkIds])
+  const nextExpected = fedChunkIds.length
+  const expectedText = chunks[nextExpected]?.text
+  const remaining = trayOrder.filter((chunk) => !fedSet.has(chunk.id))
 
   const handleTap = (chunk: SyllableChunk) => {
     if (disabled) return
-    if (chunk.orderIndex !== nextExpected) {
+    if (!expectedText || chunk.text !== expectedText) {
       setShakeId(chunk.id)
       window.setTimeout(() => setShakeId((current) => (current === chunk.id ? null : current)), 450)
       onWrongChunk()
@@ -72,9 +82,20 @@ export function FeedBearSyllableBoard({
 
   return (
     <div className="flex w-full max-w-xl flex-col items-center gap-5">
-      <div className="flex items-center justify-center gap-3">
-        <p className="text-4xl font-bold capitalize text-slate-800 md:text-5xl">{word}</p>
-        <QuestionHearButton onClick={onHearWord} ariaLabel={hearWordLabel} size="md" />
+      <div className="flex flex-col items-center gap-3">
+        <motion.div
+          ref={foodRef}
+          animate={{ opacity: foodFlying ? 0.25 : 1, scale: foodFlying ? 0.88 : 1 }}
+          transition={{ duration: 0.25 }}
+          className="flex h-24 w-24 items-center justify-center rounded-3xl border-4 border-amber-100 bg-gradient-to-b from-amber-50 to-orange-50 shadow-md md:h-28 md:w-28"
+          aria-label={word}
+        >
+          <FoodVisual word={word} emoji={emoji} imagePath={imagePath} size="board" />
+        </motion.div>
+        <div className="flex items-center justify-center gap-3">
+          <p className="text-2xl font-bold capitalize text-slate-800 md:text-3xl">{word}</p>
+          <QuestionHearButton onClick={onHearWord} ariaLabel={hearWordLabel} size="md" />
+        </div>
       </div>
 
       <div
@@ -86,7 +107,7 @@ export function FeedBearSyllableBoard({
         </span>
         <div className="flex flex-wrap items-center justify-center gap-2">
           {chunks.map((chunk, index) => {
-            const fed = fedSet.has(index)
+            const fed = index < fedChunkIds.length
             const isNext = index === nextExpected && !fed
             const listening = activeListenIndex === index
             return (
@@ -117,9 +138,10 @@ export function FeedBearSyllableBoard({
           <AnimatePresence mode="popLayout">
             {remaining.map((chunk) => {
               const isWrongShake = shakeId === chunk.id
-              const isNextOption = chunk.orderIndex === nextExpected
+              const isNextOption = expectedText !== undefined && chunk.text === expectedText
               const hintThis = showFeedHint && isNextOption
-              const isListening = activeListenIndex === chunk.orderIndex
+              const isListening =
+                activeListenIndex >= 0 && chunks[activeListenIndex]?.text === chunk.text
               return (
                 <div key={chunk.id} className="relative">
                   <motion.button

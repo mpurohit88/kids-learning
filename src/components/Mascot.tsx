@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type Ref } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslation } from '../hooks/useTranslation'
 import { QuestionHearButton } from './game/QuestionHearButton'
@@ -12,6 +12,8 @@ interface MascotProps {
   hearAgainLabel?: string
   /** Horizontal layout with a smaller bear — saves vertical space in tracing games. */
   compact?: boolean
+  /** Attach to the bear face circle — used for feed-the-bear fly animations. */
+  bearRef?: Ref<HTMLDivElement>
 }
 
 type BearFace = 'idle' | 'happy' | 'sad'
@@ -150,6 +152,7 @@ export function Mascot({
   onHearAgain,
   hearAgainLabel,
   compact = false,
+  bearRef,
 }: MascotProps) {
   const { t } = useTranslation()
   const targetFace = faceForMood(mood)
@@ -189,6 +192,7 @@ export function Mascot({
 
   const bearCircle = (
     <motion.div
+      ref={bearRef}
       animate={
         isHappy && !spinning
           ? { y: [0, -18, -6, 0], scale: [1, 1.08, 1.04, 1] }

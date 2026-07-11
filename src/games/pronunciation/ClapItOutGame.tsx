@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { AppShell } from '../../components/layout/AppShell'
 import {
   AnswerFeedbackOverlay,
@@ -13,7 +13,7 @@ import {
   type SyllableChunk,
 } from '../../components/pronunciation/FeedBearSyllableBoard'
 import { PronunciationProgress } from '../../components/pronunciation/PronunciationProgress'
-import { TapHereHint } from '../../components/pronunciation/TapHereHint'
+import { FoodFlyToMascot } from '../../components/pronunciation/FoodFlyToMascot'
 import { dataService } from '../../data'
 import { usePlayerSessionGate } from '../../hooks/usePlayerSessionGate'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -23,7 +23,6 @@ import { buildRoundResult } from '../../utils/gameHelpers'
 import { speakSyllableBreakdown, speakWordNormal } from '../../utils/pronunciationSpeech'
 import type { PronunciationWord } from '../../types'
 
-const HEAR_HINT_IDLE_MS = 4000
 const FEED_HINT_IDLE_MS = 3000
 
 function toChunks(word: PronunciationWord): SyllableChunk[] {
@@ -47,8 +46,7 @@ export function ClapItOutGame() {
   const [roundIndex, setRoundIndex] = useState(0)
   const [completedCount, setCompletedCount] = useState(0)
   const [activeChunk, setActiveChunk] = useState(-1)
-  const [fedOrderIndexes, setFedOrderIndexes] = useState<number[]>([])
-  const [hasHeard, setHasHeard] = useState(false)
+  const [fedChunkIds, setFedChunkIds] = useState<string[]>([])
   const [isPlaying, setIsPlaying] = useState(false)
   const [isAdvancing, setIsAdvancing] = useState(false)
   const [mood, setMood] = useState<'idle' | 'happy' | 'encourage'>('idle')
@@ -57,12 +55,21 @@ export function ClapItOutGame() {
   const [feedbackType, setFeedbackType] = useState<AnswerFeedbackType>(null)
   const [isComplete, setIsComplete] = useState(false)
   const [result, setResult] = useState(buildRoundResult(0, roundCount))
-  const [showHearHint, setShowHearHint] = useState(false)
   const [showFeedHint, setShowFeedHint] = useState(false)
   const [idleEpoch, setIdleEpoch] = useState(0)
+  const [flyFood, setFlyFood] = useState<{
+    word: string
+    emoji?: string
+    imagePath?: string
+    key: number
+  } | null>(null)
+  const [isFlying, setIsFlying] = useState(false)
+  const [bearChomp, setBearChomp] = useState(false)
   const playTokenRef = useRef(0)
   const advanceTimerRef = useRef<number | null>(null)
   const wrongFeedbackTimerRef = useRef<number | null>(null)
+  const foodRef = useRef<HTMLDivElement>(null)
+  const bearRef = useRef<HTMLDivElement>(null)
 
   const currentWord = words[roundIndex] ?? null
   const chunks = useMemo(
@@ -91,13 +98,15 @@ export function ClapItOutGame() {
       clearAdvanceTimer()
       clearWrongFeedbackTimer()
       setActiveChunk(-1)
-      setFedOrderIndexes([])
-      setHasHeard(false)
+      setFedChunkIds([])
       setIsAdvancing(false)
       setMood('idle')
       setMessage(t('games.sayIt.feed.prompt'))
       setShowConfetti(false)
       setFeedbackType(null)
+      setFlyFood(null)
+      setIsFlying(false)
+      setBearChomp(false)
     },
     [t],
   )
@@ -126,28 +135,13 @@ export function ClapItOutGame() {
     }
   }, [])
 
-  const waitingToHear =
-    Boolean(currentWord) && !hasHeard && !isPlaying && !isAdvancing && !isComplete
-
   const waitingToFeed =
     Boolean(currentWord) &&
-    hasHeard &&
     !isPlaying &&
     !isAdvancing &&
+    !isFlying &&
     !isComplete &&
-    fedOrderIndexes.length < currentWord.syllables.length
-
-  useEffect(() => {
-    if (!waitingToHear) {
-      setShowHearHint(false)
-      return
-    }
-    setShowHearHint(false)
-    const timerId = window.setTimeout(() => {
-      setShowHearHint(true)
-    }, HEAR_HINT_IDLE_MS)
-    return () => window.clearTimeout(timerId)
-  }, [waitingToHear, idleEpoch, currentWord?.id])
+    fedChunkIds.length < currentWord.syllables.length
 
   useEffect(() => {
     if (!waitingToFeed) {
@@ -159,16 +153,15 @@ export function ClapItOutGame() {
       setShowFeedHint(true)
     }, FEED_HINT_IDLE_MS)
     return () => window.clearTimeout(timerId)
-  }, [waitingToFeed, idleEpoch, currentWord?.id, fedOrderIndexes.length])
+  }, [waitingToFeed, idleEpoch, currentWord?.id, fedChunkIds.length])
 
   const noteActivity = () => {
-    setShowHearHint(false)
     setShowFeedHint(false)
     setIdleEpoch((value) => value + 1)
   }
 
   const playBreakdown = async () => {
-    if (!currentWord || isPlaying || isAdvancing) return
+    if (!currentWord || isPlaying || isAdvancing || isFlying) return
     void prepareAudio()
     const token = ++playTokenRef.current
     setIsPlaying(true)
@@ -180,7 +173,6 @@ export function ClapItOutGame() {
       })
       if (token !== playTokenRef.current) return
       setActiveChunk(-1)
-      setHasHeard(true)
       setMessage(t('games.sayIt.feed.yourTurn'))
     } finally {
       if (token === playTokenRef.current) setIsPlaying(false)
@@ -247,32 +239,51 @@ export function ClapItOutGame() {
     words,
   ])
 
+  const celebrateWordFed = useCallback(() => {
+    setIsAdvancing(true)
+    setMood('happy')
+    setMessage(t('games.sayIt.feed.yum'))
+    setShowConfetti(true)
+    setFeedbackType('success')
+    playCelebrationSound()
+    clearAdvanceTimer()
+    advanceTimerRef.current = window.setTimeout(() => {
+      advanceAfterWord()
+    }, 1100)
+  }, [advanceAfterWord, t])
+
+  const handleFlyComplete = useCallback(() => {
+    setFlyFood(null)
+    setIsFlying(false)
+    setBearChomp(true)
+    window.setTimeout(() => setBearChomp(false), 420)
+    celebrateWordFed()
+  }, [celebrateWordFed])
+
   const handleFeedChunk = (chunk: SyllableChunk) => {
-    if (!currentWord || isPlaying || isAdvancing) return
-    const nextFed = [...fedOrderIndexes, chunk.orderIndex]
-    setFedOrderIndexes(nextFed)
+    if (!currentWord || isPlaying || isAdvancing || isFlying) return
+    const nextFed = [...fedChunkIds, chunk.id]
+    setFedChunkIds(nextFed)
     setMood('idle')
     void prepareAudio()
     void speakWordNormal(chunk.text)
 
     if (nextFed.length >= currentWord.syllables.length) {
-      setIsAdvancing(true)
-      setMood('happy')
-      setMessage(t('games.sayIt.feed.yum'))
-      setShowConfetti(true)
-      setFeedbackType('success')
-      playCelebrationSound()
-      clearAdvanceTimer()
-      advanceTimerRef.current = window.setTimeout(() => {
-        advanceAfterWord()
-      }, 1100)
+      setIsFlying(true)
+      setFlyFood({
+        word: currentWord.word,
+        emoji: currentWord.emoji,
+        imagePath: currentWord.imagePath,
+        key: Date.now(),
+      })
+      setMessage(t('games.sayIt.feed.feeding'))
     } else {
       setMessage(t('games.sayIt.feed.keepFeeding'))
     }
   }
 
   const handleWrongChunk = () => {
-    if (isPlaying || isAdvancing) return
+    if (isPlaying || isAdvancing || isFlying) return
     setMood('encourage')
     setMessage(t('games.sayIt.feed.wrongOrder'))
     setFeedbackType('wrong')
@@ -286,7 +297,7 @@ export function ClapItOutGame() {
   }
 
   const handleSkipToNext = () => {
-    if (!currentWord || isPlaying || isAdvancing || !hasHeard) return
+    if (!currentWord || isPlaying || isAdvancing || isFlying) return
     setMood('encourage')
     setMessage(t('games.sayIt.keepGoing'))
     setIsAdvancing(true)
@@ -295,7 +306,7 @@ export function ClapItOutGame() {
 
   if (!ready || subject !== 'english' || !currentWord) return null
 
-  const controlsLocked = isPlaying || isAdvancing
+  const controlsLocked = isPlaying || isAdvancing || isFlying
 
   return (
     <AppShell title={t('challenges.clap-it-out.title')} showBack backTo="/games/say-it">
@@ -318,25 +329,54 @@ export function ClapItOutGame() {
             })}
           />
 
-          <Mascot mood={mood} message={message || t('games.sayIt.feed.prompt')} />
+          <motion.div
+            animate={
+              bearChomp
+                ? { scale: [1, 1.2, 0.94, 1.06, 1], rotate: [0, -4, 4, 0] }
+                : { scale: 1, rotate: 0 }
+            }
+            transition={{ duration: 0.42, ease: 'easeOut' }}
+          >
+            <Mascot
+              bearRef={bearRef}
+              mood={mood}
+              message={message || t('games.sayIt.feed.prompt')}
+            />
+          </motion.div>
+
+          {flyFood ? (
+            <FoodFlyToMascot
+              key={flyFood.key}
+              word={flyFood.word}
+              emoji={flyFood.emoji}
+              imagePath={flyFood.imagePath}
+              sourceRef={foodRef}
+              targetRef={bearRef}
+              onComplete={handleFlyComplete}
+            />
+          ) : null}
 
           <div
             className="flex w-full max-w-xl flex-col items-center gap-4 rounded-[2rem] border-4 border-white bg-white px-6 py-8 shadow-xl"
-            onPointerDown={waitingToHear || waitingToFeed ? noteActivity : undefined}
+            onPointerDown={waitingToFeed ? noteActivity : undefined}
           >
-            {currentWord.priority ? (
+            {/* {currentWord.priority ? (
               <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-800">
                 {t('games.sayIt.priorityBadge')}
               </span>
-            ) : null}
+            ) : null} */}
 
             <FeedBearSyllableBoard
               key={currentWord.id}
               word={currentWord.word}
+              emoji={currentWord.emoji}
+              imagePath={currentWord.imagePath}
+              foodRef={foodRef}
+              foodFlying={isFlying}
               chunks={chunks}
-              fedOrderIndexes={fedOrderIndexes}
+              fedChunkIds={fedChunkIds}
               activeListenIndex={activeChunk}
-              disabled={controlsLocked || !hasHeard}
+              disabled={controlsLocked}
               showFeedHint={showFeedHint}
               tapHereLabel={t('games.sayIt.feed.tapChunk')}
               hearWordLabel={t('games.sayIt.feed.hearWord')}
@@ -349,33 +389,22 @@ export function ClapItOutGame() {
             />
 
             <div className="mt-2 flex w-full flex-col gap-3 sm:flex-row">
-              <div className="relative flex-1">
-                <button
-                  type="button"
-                  onClick={() => void playBreakdown()}
-                  disabled={controlsLocked}
-                  className={`w-full rounded-3xl bg-teal-500 px-5 py-4 text-xl font-bold text-white shadow-lg transition hover:bg-teal-400 active:scale-95 disabled:opacity-60 ${
-                    showHearHint ? 'ring-4 ring-amber-300 ring-offset-2' : ''
-                  }`}
-                >
-                  {t('games.sayIt.feed.hearChunks')}
-                </button>
-                <AnimatePresence>
-                  {showHearHint ? (
-                    <TapHereHint label={t('games.sayIt.feed.tapHere')} />
-                  ) : null}
-                </AnimatePresence>
-              </div>
-              {hasHeard ? (
-                <button
-                  type="button"
-                  onClick={handleSkipToNext}
-                  disabled={controlsLocked}
-                  className="flex-1 rounded-3xl bg-slate-200 px-5 py-4 text-xl font-bold text-slate-700 shadow-md transition hover:bg-slate-100 active:scale-95 disabled:opacity-60"
-                >
-                  {t('games.sayIt.feed.skipWord')}
-                </button>
-              ) : null}
+              <button
+                type="button"
+                onClick={() => void playBreakdown()}
+                disabled={controlsLocked}
+                className="flex-1 rounded-3xl bg-teal-500 px-5 py-4 text-xl font-bold text-white shadow-lg transition hover:bg-teal-400 active:scale-95 disabled:opacity-60"
+              >
+                {t('games.sayIt.feed.hearChunks')}
+              </button>
+              <button
+                type="button"
+                onClick={handleSkipToNext}
+                disabled={controlsLocked}
+                className="flex-1 rounded-3xl bg-slate-200 px-5 py-4 text-xl font-bold text-slate-700 shadow-md transition hover:bg-slate-100 active:scale-95 disabled:opacity-60"
+              >
+                {t('games.sayIt.feed.skipWord')}
+              </button>
             </div>
           </div>
         </div>

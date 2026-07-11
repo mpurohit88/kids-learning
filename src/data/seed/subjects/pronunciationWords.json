@@ -1,208 +1,172 @@
 {
-  "subject": "english",
+  "subject": "food",
   "words": [
     {
-      "id": "cats",
-      "word": "cats",
-      "syllables": ["cats"],
+      "id": "milk",
+      "word": "milk",
+      "syllables": ["milk"],
       "difficulty": "simple",
-      "priority": false
+      "priority": false,
+      "emoji": "🥛"
     },
     {
-      "id": "bats",
-      "word": "bats",
-      "syllables": ["bats"],
+      "id": "egg",
+      "word": "egg",
+      "syllables": ["egg"],
       "difficulty": "simple",
-      "priority": false
+      "priority": false,
+      "emoji": "🥚"
     },
     {
-      "id": "frogs",
-      "word": "frogs",
-      "syllables": ["frogs"],
+      "id": "rice",
+      "word": "rice",
+      "syllables": ["rice"],
       "difficulty": "simple",
-      "priority": false
+      "priority": false,
+      "emoji": "🍚"
     },
     {
-      "id": "boys",
-      "word": "boys",
-      "syllables": ["boys"],
+      "id": "bread",
+      "word": "bread",
+      "syllables": ["bread"],
       "difficulty": "simple",
-      "priority": false
+      "priority": false,
+      "emoji": "🍞"
     },
     {
-      "id": "girls",
-      "word": "girls",
-      "syllables": ["girls"],
+      "id": "cheese",
+      "word": "cheese",
+      "syllables": ["cheese"],
       "difficulty": "simple",
-      "priority": false
+      "priority": false,
+      "emoji": "🧀"
     },
     {
-      "id": "shoes",
-      "word": "shoes",
-      "syllables": ["shoes"],
+      "id": "cake",
+      "word": "cake",
+      "syllables": ["cake"],
       "difficulty": "simple",
-      "priority": false
+      "priority": false,
+      "emoji": "🍰"
     },
     {
-      "id": "bags",
-      "word": "bags",
-      "syllables": ["bags"],
-      "difficulty": "simple",
-      "priority": false
+      "id": "apple",
+      "word": "apple",
+      "syllables": ["ap", "ple"],
+      "difficulty": "medium",
+      "priority": false,
+      "emoji": "🍎"
     },
     {
-      "id": "mangoes",
-      "word": "mangoes",
-      "syllables": ["man", "goes"],
-      "difficulty": "simple",
+      "id": "mango",
+      "word": "mango",
+      "syllables": ["man", "go"],
+      "difficulty": "medium",
       "priority": false,
       "emoji": "🥭"
     },
     {
-      "id": "apples",
-      "word": "apples",
-      "syllables": ["ap", "ples"],
-      "difficulty": "simple",
+      "id": "carrot",
+      "word": "carrot",
+      "syllables": ["car", "rot"],
+      "difficulty": "medium",
       "priority": false,
-      "emoji": "🍎",
-      "imagePath": "/assets/images/apple.svg"
+      "emoji": "🥕"
     },
     {
-      "id": "oranges",
-      "word": "oranges",
-      "syllables": ["or", "an", "ges"],
-      "difficulty": "simple",
+      "id": "orange",
+      "word": "orange",
+      "syllables": ["or", "ange"],
+      "difficulty": "medium",
       "priority": false,
       "emoji": "🍊"
     },
     {
-      "id": "shelter",
-      "word": "shelter",
-      "syllables": ["shel", "ter"],
-      "difficulty": "medium",
-      "priority": false
-    },
-    {
-      "id": "brought",
-      "word": "brought",
-      "syllables": ["brought"],
-      "difficulty": "medium",
-      "priority": false
-    },
-    {
-      "id": "colony",
-      "word": "colony",
-      "syllables": ["col", "o", "ny"],
-      "difficulty": "medium",
-      "priority": false
-    },
-    {
-      "id": "joined",
-      "word": "joined",
-      "syllables": ["joined"],
-      "difficulty": "medium",
-      "priority": false
-    },
-    {
-      "id": "pond",
-      "word": "pond",
-      "syllables": ["pond"],
-      "difficulty": "medium",
-      "priority": false
-    },
-    {
-      "id": "total",
-      "word": "total",
-      "syllables": ["to", "tal"],
-      "difficulty": "medium",
-      "priority": false
-    },
-    {
-      "id": "sugar",
-      "word": "sugar",
-      "syllables": ["sug", "ar"],
-      "difficulty": "medium",
-      "priority": false
-    },
-    {
-      "id": "cookies",
-      "word": "cookies",
-      "syllables": ["cook", "ies"],
+      "id": "cookie",
+      "word": "cookie",
+      "syllables": ["cook", "ie"],
       "difficulty": "medium",
       "priority": false,
       "emoji": "🍪"
     },
     {
-      "id": "sold",
-      "word": "sold",
-      "syllables": ["sold"],
+      "id": "butter",
+      "word": "butter",
+      "syllables": ["but", "ter"],
       "difficulty": "medium",
-      "priority": false
+      "priority": false,
+      "emoji": "🧈"
     },
     {
-      "id": "bars",
-      "word": "bars",
-      "syllables": ["bars"],
+      "id": "yogurt",
+      "word": "yogurt",
+      "syllables": ["yo", "gurt"],
       "difficulty": "medium",
-      "priority": false
+      "priority": false,
+      "emoji": "🥣"
+    },
+    {
+      "id": "sandwich",
+      "word": "sandwich",
+      "syllables": ["sand", "wich"],
+      "difficulty": "medium",
+      "priority": false,
+      "emoji": "🥪"
+    },
+    {
+      "id": "banana",
+      "word": "banana",
+      "syllables": ["ba", "na", "na"],
+      "difficulty": "harder",
+      "priority": true,
+      "emoji": "🍌"
+    },
+    {
+      "id": "tomato",
+      "word": "tomato",
+      "syllables": ["to", "ma", "to"],
+      "difficulty": "harder",
+      "priority": true,
+      "emoji": "🍅"
+    },
+    {
+      "id": "papaya",
+      "word": "papaya",
+      "syllables": ["pa", "pa", "ya"],
+      "difficulty": "harder",
+      "priority": true
     },
     {
       "id": "chocolate",
       "word": "chocolate",
       "syllables": ["choc", "o", "late"],
-      "difficulty": "medium",
-      "priority": false,
+      "difficulty": "harder",
+      "priority": true,
       "emoji": "🍫"
     },
     {
-      "id": "students",
-      "word": "students",
-      "syllables": ["stu", "dents"],
-      "difficulty": "medium",
-      "priority": false
-    },
-    {
-      "id": "school",
-      "word": "school",
-      "syllables": ["school"],
-      "difficulty": "medium",
-      "priority": false
-    },
-    {
-      "id": "respectively",
-      "word": "respectively",
-      "syllables": ["re", "spec", "tive", "ly"],
-      "difficulty": "harder",
-      "priority": true
-    },
-    {
-      "id": "collected",
-      "word": "collected",
-      "syllables": ["col", "lect", "ed"],
-      "difficulty": "harder",
-      "priority": true
-    },
-    {
-      "id": "oatmeal",
-      "word": "oatmeal",
-      "syllables": ["oat", "meal"],
+      "id": "broccoli",
+      "word": "broccoli",
+      "syllables": ["broc", "co", "li"],
       "difficulty": "harder",
       "priority": true,
-      "emoji": "🥣"
+      "emoji": "🥦"
     },
     {
-      "id": "charity",
-      "word": "charity",
-      "syllables": ["char", "i", "ty"],
+      "id": "strawberry",
+      "word": "strawberry",
+      "syllables": ["straw", "ber", "ry"],
       "difficulty": "harder",
-      "priority": true
+      "priority": true,
+      "emoji": "🍓"
     },
     {
-      "id": "shopkeeper",
-      "word": "shopkeeper",
-      "syllables": ["shop", "keep", "er"],
+      "id": "watermelon",
+      "word": "watermelon",
+      "syllables": ["wa", "ter", "mel", "on"],
       "difficulty": "harder",
-      "priority": true
+      "priority": true,
+      "emoji": "🍉"
     }
   ]
 }
