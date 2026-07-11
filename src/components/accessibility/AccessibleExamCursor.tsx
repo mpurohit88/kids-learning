@@ -15,7 +15,7 @@ function hasFinePointer(): boolean {
 
 function resolveCursorMode(target: EventTarget | null): CursorMode {
   if (!(target instanceof Element)) return 'default'
-  if (target.closest('.math-notes-cursor')) return 'pencil'
+  if (target.closest('.math-notes-cursor, .letter-trace-cursor')) return 'pencil'
   if (target.closest('button, a, [role="button"], label, summary, input[type="button"], input[type="submit"], select')) {
     return 'pointer'
   }

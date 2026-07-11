@@ -15,6 +15,8 @@ interface AppShellProps {
   profileGoesHome?: boolean
   showProgressLink?: boolean
   showLanguageButton?: boolean
+  /** Tighter header for gameplay screens that need more vertical room. */
+  denseHeader?: boolean
 }
 
 export function AppShell({
@@ -25,6 +27,7 @@ export function AppShell({
   profileGoesHome = false,
   showProgressLink = true,
   showLanguageButton = true,
+  denseHeader = false,
 }: AppShellProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -54,24 +57,38 @@ export function AppShell({
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-6 md:px-8">
-      <header className="mb-6 flex items-center justify-between gap-4">
+      <header
+        className={`flex items-center justify-between gap-4 ${denseHeader ? 'mb-3' : 'mb-6'}`}
+      >
         <div className="flex items-center gap-3">
           {showBack ? (
             <button
               type="button"
               aria-label={t('common.goBack')}
               onClick={() => navigate(backTo)}
-              className="flex h-12 items-center gap-2 rounded-2xl bg-white/90 px-4 text-base font-bold text-slate-700 shadow-md transition hover:bg-white active:scale-95 md:text-lg"
+              className={`flex items-center gap-2 rounded-2xl bg-white/90 font-bold text-slate-700 shadow-md transition hover:bg-white active:scale-95 ${
+                denseHeader
+                  ? 'h-10 px-3 text-sm md:text-base'
+                  : 'h-12 px-4 text-base md:text-lg'
+              }`}
             >
-              <ArrowLeft size={22} strokeWidth={2.5} aria-hidden />
+              <ArrowLeft size={denseHeader ? 20 : 22} strokeWidth={2.5} aria-hidden />
               <span>{t('common.back')}</span>
             </button>
           ) : (
-            <div className="h-12 w-12 shrink-0" />
+            <div className={denseHeader ? 'h-10 w-10 shrink-0' : 'h-12 w-12 shrink-0'} />
           )}
           <div>
-            <p className="text-sm font-medium text-slate-500">{t('app.tagline')}</p>
-            <h1 className="text-2xl font-bold text-slate-800 md:text-3xl">{title}</h1>
+            {denseHeader ? null : (
+              <p className="text-sm font-medium text-slate-500">{t('app.tagline')}</p>
+            )}
+            <h1
+              className={`font-bold text-slate-800 ${
+                denseHeader ? 'text-xl md:text-2xl' : 'text-2xl md:text-3xl'
+              }`}
+            >
+              {title}
+            </h1>
           </div>
         </div>
 

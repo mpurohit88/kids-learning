@@ -3,7 +3,8 @@ import { AnswerFeedbackOverlay, type AnswerFeedbackType } from '../AnswerFeedbac
 import { ConfettiBurst } from '../ConfettiBurst'
 import { GameChallengeSidebar } from '../challenges/GameChallengeSidebar'
 import { GameCompleteModal } from '../GameCompleteModal'
-import { Mascot, type MascotMood } from '../Mascot'
+import { GameMascotHeader } from './GameMascotHeader'
+import type { MascotMood } from '../Mascot'
 import { AppShell } from '../layout/AppShell'
 import { GameSideLayout } from '../layout/GameSideLayout'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -65,9 +66,10 @@ export function QuizGameShell({
       profileGoesHome
       showProgressLink={false}
       showLanguageButton={false}
+      denseHeader
     >
       <AnswerFeedbackOverlay type={feedbackType} />
-      <div className="relative flex flex-1 flex-col gap-4">
+      <div className="relative flex min-h-0 flex-1 flex-col gap-2">
         <ConfettiBurst active={showConfetti} />
 
         <GameSideLayout
@@ -81,13 +83,10 @@ export function QuizGameShell({
             />
           }
         >
-          <div className="flex w-full items-center justify-start">
-            <p className="rounded-full bg-white/80 px-4 py-2 font-semibold text-slate-600 shadow">
-              {resolvedRoundLabel} {Math.min(roundIndex + 1, roundCount)} / {roundCount}
-            </p>
-          </div>
-
-          <Mascot
+          <GameMascotHeader
+            roundIndex={roundIndex}
+            roundCount={roundCount}
+            roundLabel={resolvedRoundLabel}
             mood={mood}
             message={message}
             onHearAgain={onHearAgain}

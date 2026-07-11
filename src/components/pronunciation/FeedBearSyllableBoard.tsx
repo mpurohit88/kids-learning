@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { QuestionHearButton } from '../game/QuestionHearButton'
 import { TapHereHint } from './TapHereHint'
 
 export interface SyllableChunk {
@@ -17,9 +18,11 @@ interface FeedBearSyllableBoardProps {
   disabled?: boolean
   showFeedHint?: boolean
   tapHereLabel: string
+  hearWordLabel: string
   bowlLabel: string
   trayLabel: string
   wrongChunkLabel: string
+  onHearWord: () => void
   onFeedChunk: (chunk: SyllableChunk) => void
   onWrongChunk: () => void
 }
@@ -41,9 +44,11 @@ export function FeedBearSyllableBoard({
   disabled = false,
   showFeedHint = false,
   tapHereLabel,
+  hearWordLabel,
   bowlLabel,
   trayLabel,
   wrongChunkLabel,
+  onHearWord,
   onFeedChunk,
   onWrongChunk,
 }: FeedBearSyllableBoardProps) {
@@ -67,7 +72,10 @@ export function FeedBearSyllableBoard({
 
   return (
     <div className="flex w-full max-w-xl flex-col items-center gap-5">
-      <p className="text-4xl font-bold capitalize text-slate-800 md:text-5xl">{word}</p>
+      <div className="flex items-center justify-center gap-3">
+        <p className="text-4xl font-bold capitalize text-slate-800 md:text-5xl">{word}</p>
+        <QuestionHearButton onClick={onHearWord} ariaLabel={hearWordLabel} size="md" />
+      </div>
 
       <div
         className="relative flex w-full flex-col items-center gap-3 rounded-[2rem] border-4 border-amber-200 bg-gradient-to-b from-amber-50 to-orange-50 px-4 py-5 shadow-inner"

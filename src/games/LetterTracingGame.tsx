@@ -1,16 +1,23 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Eraser } from 'lucide-react'
+import { Eraser, ChevronDown } from 'lucide-react'
 import { AppShell } from '../components/layout/AppShell'
+import { AnswerFeedbackOverlay } from '../components/AnswerFeedbackOverlay'
 import { ConfettiBurst } from '../components/ConfettiBurst'
 import { GameCompleteModal } from '../components/GameCompleteModal'
-import { Mascot } from '../components/Mascot'
+import { GameMascotHeader } from '../components/game/GameMascotHeader'
 import { KannadaSoundHints } from '../components/game/KannadaSoundHints'
 import { dataService } from '../data'
+import { useAnswerFeedback } from '../hooks/useAnswerFeedback'
 import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
 import { useTranslation } from '../hooks/useTranslation'
 import { useAppStore } from '../store/useAppStore'
-import { playCelebrationSound, playLetterSound } from '../utils/audio'
+import {
+  playLetterSound,
+  prepareAudio,
+  speakText,
+  speechLangForLocale,
+} from '../utils/audio'
 import { buildRoundResult, shuffleArray } from '../utils/gameHelpers'
 import type { Letter } from '../types'
 import { isLanguageSubject } from '../types'
@@ -18,7 +25,7 @@ import { isLanguageSubject } from '../types'
 export function LetterTracingGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const isDrawingRef = useRef(false)
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const { ready, profileId, subject } = usePlayerSessionGate()
   const saveGameResult = useAppStore((state) => state.saveGameResult)
 
@@ -42,9 +49,14 @@ export function LetterTracingGame() {
   const [currentLetter, setCurrentLetter] = useState<Letter | null>(null)
   const [hasDrawn, setHasDrawn] = useState(false)
   const [showHint, setShowHint] = useState(false)
-  const [mood, setMood] = useState<'idle' | 'happy' | 'encourage'>('idle')
-  const [message, setMessage] = useState(t('games.traceLetter.prompt'))
-  const [showConfetti, setShowConfetti] = useState(false)
+  const {
+    mood,
+    message,
+    showConfetti,
+    feedbackType,
+    resetFeedback,
+    applyAnswerFeedback,
+  } = useAnswerFeedback()
   const [isComplete, setIsComplete] = useState(false)
   const [result, setResult] = useState(buildRoundResult(0, roundCount))
 
@@ -96,28 +108,44 @@ export function LetterTracingGame() {
     [content?.speechLang, subject],
   )
 
+  const tracePromptFor = useCallback(
+    (letter: Letter) => t('games.traceLetter.prompt', { letter: letter.character }),
+    [t],
+  )
+
+  const speakTracePrompt = useCallback(
+    (letter: Letter) => {
+      void prepareAudio()
+      const text = t('games.traceLetter.spokenPrompt', { letter: letter.character })
+      const lang = content?.speechLang ?? speechLangForLocale(locale)
+      void speakText(text, lang)
+    },
+    [content?.speechLang, locale, t],
+  )
+
   const setupRound = useCallback(
-    (index: number, lettersPool: Letter[]) => {
+    (index: number, lettersPool: Letter[], options?: { speakPrompt?: boolean }) => {
       const letter = lettersPool[index % lettersPool.length]
       setCurrentLetter(letter)
       setHasDrawn(false)
       setShowHint(false)
-      setMood('idle')
-      setMessage(t('games.traceLetter.prompt'))
-      setShowConfetti(false)
-      playLetterAudio(letter)
+      resetFeedback(tracePromptFor(letter))
+      if (options?.speakPrompt !== false) {
+        speakTracePrompt(letter)
+      }
     },
-    [playLetterAudio],
+    [resetFeedback, speakTracePrompt, tracePromptFor],
   )
 
   const startGame = useCallback(() => {
     if (letters.length === 0) return
     const shuffled = shuffleArray(letters).slice(0, roundCount)
-    setRoundLetters(shuffled.length > 0 ? shuffled : letters)
+    const pool = shuffled.length > 0 ? shuffled : letters
+    setRoundLetters(pool)
     setRoundIndex(0)
     setCompletedCount(0)
     setIsComplete(false)
-    setupRound(0, shuffled.length > 0 ? shuffled : letters)
+    setupRound(0, pool)
   }, [letters, roundCount, setupRound])
 
   useEffect(() => {
@@ -194,13 +222,25 @@ export function LetterTracingGame() {
   const handleDone = () => {
     if (!currentLetter) return
 
-    setCompletedCount((count) => count + 1)
-    setMood('happy')
-    setMessage(hasDrawn ? t('games.traceLetter.traceSuccess') : t('games.traceLetter.traceEmpty'))
-    setShowConfetti(true)
-    playCelebrationSound()
+    const tracedOk = hasDrawn
+    applyAnswerFeedback({
+      isCorrect: tracedOk,
+      correctMessage: t('feedback.letterCorrect'),
+      wrongMessage: t('games.traceLetter.traceEmpty'),
+    })
+
+    if (tracedOk) {
+      setCompletedCount((count) => count + 1)
+    }
 
     window.setTimeout(() => {
+      if (!tracedOk) {
+        if (currentLetter) {
+          resetFeedback(tracePromptFor(currentLetter))
+        }
+        return
+      }
+
       const nextIndex = roundIndex + 1
       if (nextIndex >= roundCount) {
         const finalCompleted = completedCount + 1
@@ -222,21 +262,30 @@ export function LetterTracingGame() {
 
       setRoundIndex(nextIndex)
       setupRound(nextIndex, roundLetters)
-    }, 1200)
+    }, tracedOk ? 1200 : 1100)
   }
 
   const handleErase = () => {
     clearCanvas()
     setHasDrawn(false)
-    setMood('idle')
-    setMessage(t('games.traceLetter.prompt'))
+    if (currentLetter) {
+      resetFeedback(tracePromptFor(currentLetter))
+    }
   }
 
   const replayAudio = () => {
+    if (mood === 'idle') {
+      if (currentLetter) {
+        speakTracePrompt(currentLetter)
+      }
+      return
+    }
     if (currentLetter) {
       playLetterAudio(currentLetter)
     }
   }
+
+  const showTraceGuide = mood === 'idle' && !showConfetti
 
   if (!ready || !profile || !content || !currentLetter) return null
 
@@ -248,22 +297,39 @@ export function LetterTracingGame() {
       profileGoesHome
       showProgressLink={false}
       showLanguageButton={false}
+      denseHeader
     >
-      <div className="relative flex flex-1 flex-col items-center gap-5">
+      <AnswerFeedbackOverlay type={feedbackType} />
+      <div className="relative flex flex-col items-center justify-start gap-2">
         <ConfettiBurst active={showConfetti} />
 
-        <div className="flex w-full items-center justify-between">
-          <p className="rounded-full bg-white/80 px-4 py-2 font-semibold text-slate-600 shadow">
-            {t('common.letter')} {Math.min(roundIndex + 1, roundCount)} / {roundCount}
-          </p>
+        <div className="w-full max-w-2xl shrink-0">
+          <GameMascotHeader
+            roundIndex={roundIndex}
+            roundCount={roundCount}
+            roundLabel={t('common.letter')}
+            mood={mood}
+            message={message}
+            onHearAgain={replayAudio}
+            hearAgainLabel={t('games.traceLetter.hearPrompt')}
+          />
         </div>
 
-        <Mascot
-          mood={mood}
-          message={message}
-          onHearAgain={replayAudio}
-          hearAgainLabel={t('common.hearAgain')}
-        />
+        {showTraceGuide ? (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="-my-0.5 text-amber-500"
+            aria-hidden
+          >
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <ChevronDown size={24} strokeWidth={3} />
+            </motion.div>
+          </motion.div>
+        ) : null}
 
         {showSoundHints ? (
           <KannadaSoundHints letter={currentLetter} layout="inline" />
@@ -294,52 +360,54 @@ export function LetterTracingGame() {
           </motion.div>
         ) : null}
 
-        <motion.div
-          key={currentLetter.id}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-2xl"
-        >
-          <canvas
-            ref={canvasRef}
-            className="h-72 w-full touch-none rounded-[2rem] border-4 border-white bg-white shadow-xl md:h-96"
-            onPointerDown={startDrawing}
-            onPointerMove={draw}
-            onPointerUp={stopDrawing}
-            onPointerLeave={stopDrawing}
-          />
-        </motion.div>
-
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            aria-label={t('games.traceLetter.erase')}
-            onClick={handleErase}
-            className="flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white bg-slate-500 text-white shadow-lg transition hover:bg-slate-400 md:h-24 md:w-24"
+        <div className="flex w-full max-w-2xl shrink-0 flex-col items-center gap-2">
+          <motion.div
+            key={currentLetter.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full"
           >
-            <Eraser size={36} strokeWidth={2.5} />
-          </button>
+            <canvas
+              ref={canvasRef}
+              className="letter-trace-cursor h-[min(42vh,16rem)] w-full min-h-[11rem] touch-none rounded-[2rem] border-4 border-white bg-white shadow-xl md:h-[min(46vh,18rem)]"
+              onPointerDown={startDrawing}
+              onPointerMove={draw}
+              onPointerUp={stopDrawing}
+              onPointerLeave={stopDrawing}
+            />
+          </motion.div>
 
-          <button
-            type="button"
-            onClick={() => setShowHint((v) => !v)}
-            className={`flex h-20 w-20 items-center justify-center rounded-3xl border-4 border-white text-3xl shadow-lg transition md:h-24 md:w-24 ${
-              showHint
-                ? 'bg-amber-300 hover:bg-amber-200'
-                : 'bg-amber-100 hover:bg-amber-200'
-            }`}
-            title={showHint ? t('games.traceLetter.hideHint') : t('games.traceLetter.showHint')}
-          >
-            {showHint ? '🙈' : '👁️'}
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              aria-label={t('games.traceLetter.erase')}
+              onClick={handleErase}
+              className="flex h-16 w-16 items-center justify-center rounded-3xl border-4 border-white bg-slate-500 text-white shadow-lg transition hover:bg-slate-400 md:h-20 md:w-20"
+            >
+              <Eraser size={30} strokeWidth={2.5} />
+            </button>
 
-          <button
-            type="button"
-            onClick={handleDone}
-            className="rounded-3xl bg-purple-500 px-10 py-5 text-2xl font-bold text-white shadow-lg transition hover:bg-purple-400"
-          >
-            {t('common.done')}
-          </button>
+            <button
+              type="button"
+              onClick={() => setShowHint((v) => !v)}
+              className={`flex h-16 w-16 items-center justify-center rounded-3xl border-4 border-white text-2xl shadow-lg transition md:h-20 md:w-20 ${
+                showHint
+                  ? 'bg-amber-300 hover:bg-amber-200'
+                  : 'bg-amber-100 hover:bg-amber-200'
+              }`}
+              title={showHint ? t('games.traceLetter.hideHint') : t('games.traceLetter.showHint')}
+            >
+              {showHint ? '🙈' : '👁️'}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleDone}
+              className="rounded-3xl bg-purple-500 px-8 py-4 text-xl font-bold text-white shadow-lg transition hover:bg-purple-400 md:px-10 md:py-5 md:text-2xl"
+            >
+              {t('common.done')}
+            </button>
+          </div>
         </div>
       </div>
 

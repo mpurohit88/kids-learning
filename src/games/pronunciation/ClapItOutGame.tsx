@@ -18,7 +18,7 @@ import { dataService } from '../../data'
 import { usePlayerSessionGate } from '../../hooks/usePlayerSessionGate'
 import { useTranslation } from '../../hooks/useTranslation'
 import { useAppStore } from '../../store/useAppStore'
-import { playCelebrationSound, prepareAudio, stopAudio } from '../../utils/audio'
+import { playCelebrationSound, playEncouragementSound, prepareAudio, speakText, speechLangForLocale, stopAudio } from '../../utils/audio'
 import { buildRoundResult } from '../../utils/gameHelpers'
 import { speakSyllableBreakdown, speakWordNormal } from '../../utils/pronunciationSpeech'
 import type { PronunciationWord } from '../../types'
@@ -35,7 +35,7 @@ function toChunks(word: PronunciationWord): SyllableChunk[] {
 }
 
 export function ClapItOutGame() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const { ready, profileId, subject } = usePlayerSessionGate()
   const saveGameResult = useAppStore((state) => state.saveGameResult)
   const profile = dataService.getProfileById(profileId)
@@ -62,6 +62,7 @@ export function ClapItOutGame() {
   const [idleEpoch, setIdleEpoch] = useState(0)
   const playTokenRef = useRef(0)
   const advanceTimerRef = useRef<number | null>(null)
+  const wrongFeedbackTimerRef = useRef<number | null>(null)
 
   const currentWord = words[roundIndex] ?? null
   const chunks = useMemo(
@@ -76,11 +77,19 @@ export function ClapItOutGame() {
     }
   }
 
+  const clearWrongFeedbackTimer = () => {
+    if (wrongFeedbackTimerRef.current !== null) {
+      window.clearTimeout(wrongFeedbackTimerRef.current)
+      wrongFeedbackTimerRef.current = null
+    }
+  }
+
   const setupRound = useCallback(
     (index: number, pool: PronunciationWord[]) => {
       const word = pool[index]
       if (!word) return
       clearAdvanceTimer()
+      clearWrongFeedbackTimer()
       setActiveChunk(-1)
       setFedOrderIndexes([])
       setHasHeard(false)
@@ -112,6 +121,7 @@ export function ClapItOutGame() {
     return () => {
       playTokenRef.current += 1
       clearAdvanceTimer()
+      clearWrongFeedbackTimer()
       stopAudio()
     }
   }, [])
@@ -177,6 +187,34 @@ export function ClapItOutGame() {
     }
   }
 
+  const playFullWord = useCallback(
+    async (word: PronunciationWord) => {
+      if (isAdvancing) return
+      void prepareAudio()
+      const token = ++playTokenRef.current
+      setIsPlaying(true)
+      setActiveChunk(-1)
+      setMessage(t('games.sayIt.feed.listenWord'))
+      try {
+        await speakWordNormal(word.word)
+        if (token !== playTokenRef.current) return
+        setMessage(t('games.sayIt.feed.prompt'))
+      } finally {
+        if (token === playTokenRef.current) setIsPlaying(false)
+      }
+    },
+    [isAdvancing, t],
+  )
+
+  // Play the complete word when each new round appears.
+  useEffect(() => {
+    if (!ready || subject !== 'english' || !currentWord || isComplete) return
+    void playFullWord(currentWord)
+    // Only re-run when the word identity changes (new round).
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: play once per word id
+  }, [ready, subject, currentWord?.id, isComplete])
+
+
   const advanceAfterWord = useCallback(() => {
     const nextCompleted = completedCount + 1
     setCompletedCount(nextCompleted)
@@ -237,6 +275,14 @@ export function ClapItOutGame() {
     if (isPlaying || isAdvancing) return
     setMood('encourage')
     setMessage(t('games.sayIt.feed.wrongOrder'))
+    setFeedbackType('wrong')
+    playEncouragementSound()
+    void prepareAudio()
+    void speakText(t('games.sayIt.feed.wrongSpoken'), speechLangForLocale(locale))
+    clearWrongFeedbackTimer()
+    wrongFeedbackTimerRef.current = window.setTimeout(() => {
+      setFeedbackType((current) => (current === 'wrong' ? null : current))
+    }, 1000)
   }
 
   const handleSkipToNext = () => {
@@ -293,9 +339,11 @@ export function ClapItOutGame() {
               disabled={controlsLocked || !hasHeard}
               showFeedHint={showFeedHint}
               tapHereLabel={t('games.sayIt.feed.tapChunk')}
+              hearWordLabel={t('games.sayIt.feed.hearWord')}
               bowlLabel={t('games.sayIt.feed.bowlLabel')}
               trayLabel={t('games.sayIt.feed.trayLabel')}
               wrongChunkLabel={t('games.sayIt.feed.wrongOrder')}
+              onHearWord={() => void playFullWord(currentWord)}
               onFeedChunk={handleFeedChunk}
               onWrongChunk={handleWrongChunk}
             />

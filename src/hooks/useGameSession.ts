@@ -1,10 +1,8 @@
 import { useCallback, useRef, useState } from 'react'
-import type { AnswerFeedbackType } from '../components/AnswerFeedbackOverlay'
-import type { MascotMood } from '../components/Mascot'
+import { useAnswerFeedback } from './useAnswerFeedback'
 import { useAppStore } from '../store/useAppStore'
 import type { GameRoundResult } from '../types'
 import { buildRoundResult } from '../utils/scoring'
-import { playCelebrationSound, playEncouragementSound } from '../utils/audio'
 
 interface UseGameSessionOptions {
   roundCount: number
@@ -33,10 +31,14 @@ export function useGameSession({
   const [roundIndex, setRoundIndex] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
   const [wrongCount, setWrongCount] = useState(0)
-  const [mood, setMood] = useState<MascotMood>('idle')
-  const [message, setMessage] = useState('')
-  const [showConfetti, setShowConfetti] = useState(false)
-  const [feedbackType, setFeedbackType] = useState<AnswerFeedbackType>(null)
+  const {
+    mood,
+    message,
+    showConfetti,
+    feedbackType,
+    resetFeedback,
+    applyAnswerFeedback,
+  } = useAnswerFeedback()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [isLocked, setIsLocked] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
@@ -56,14 +58,14 @@ export function useGameSession({
     setResult(buildRoundResult(0, roundCount))
   }, [roundCount])
 
-  const resetRoundUi = useCallback((prompt: string) => {
-    setSelectedId(null)
-    setIsLocked(false)
-    setMood('idle')
-    setMessage(prompt)
-    setShowConfetti(false)
-    setFeedbackType(null)
-  }, [])
+  const resetRoundUi = useCallback(
+    (prompt: string) => {
+      setSelectedId(null)
+      setIsLocked(false)
+      resetFeedback(prompt)
+    },
+    [resetFeedback],
+  )
 
   const recordAnswer = useCallback(
     ({
@@ -83,18 +85,15 @@ export function useGameSession({
 
       if (isCorrect) {
         setCorrectCount((count) => count + 1)
-        setMood('happy')
-        setMessage(correctMessage)
-        setShowConfetti(true)
-        setFeedbackType('success')
-        playCelebrationSound()
       } else {
         setWrongCount((count) => count + 1)
-        setMood('sad')
-        setMessage(wrongMessage)
-        setFeedbackType('wrong')
-        playEncouragementSound()
       }
+
+      applyAnswerFeedback({
+        isCorrect,
+        correctMessage,
+        wrongMessage,
+      })
 
       window.setTimeout(() => {
         const nextIndex = roundIndexRef.current + 1
@@ -122,7 +121,7 @@ export function useGameSession({
         onAdvance(nextIndex)
       }, advanceDelay)
     },
-    [challengeId, saveGameResult, advanceDelay, isLocked, subject, profileId, roundCount],
+    [challengeId, saveGameResult, advanceDelay, isLocked, subject, profileId, roundCount, applyAnswerFeedback],
   )
 
   const handlePlayAgain = useCallback((restartFn: () => void) => {
