@@ -68,7 +68,120 @@
     "numbersTitle": "Learn Numbers",
     "numbersIntro": "Numbers 1 – {{maxNumber}}. Tap any number to learn it!",
     "numbersBadgeLkg": "Numbers 1 – 20",
-    "numbersBadgeClass2": "Numbers 1 – 100"
+    "numbersBadgeClass2": "Numbers 1 – 100",
+    "alphabetSection": "Alphabet",
+    "questionWords": {
+      "title": "Question Words",
+      "hubIntro": "Tap a word to learn what it means and when to use it!",
+      "sectionTitle": "Question Words",
+      "wordTitle": "{{word}}",
+      "examplesListTitle": "{{count}} examples — tap any to explore!",
+      "hearIntro": "Hear about this word",
+      "hearQuestion": "Hear the question",
+      "hearQuestionBoth": "Hear English & Hindi",
+      "playQuestion": "Play question",
+      "explainQuestion": "Explain",
+      "playQuestionAria": "Play this question",
+      "explainQuestionAria": "Explain this question",
+      "hearQuestionWordByWord": "Hear each word slowly",
+      "hearQuestionWordByWordAria": "Hear each word slowly, then the full question",
+      "exampleProgress": "Example {{current}} / {{total}}",
+      "nextExample": "Next example",
+      "words": {
+        "what": {
+          "hint": "Asks about things",
+          "meaning": "What asks about a thing, name, or choice.",
+          "whenToUse": "Use What when you want to know about something you see or think about."
+        },
+        "who": {
+          "hint": "Asks about people",
+          "meaning": "Who asks about a person.",
+          "whenToUse": "Use Who when you want to know about someone."
+        },
+        "where": {
+          "hint": "Asks about place",
+          "meaning": "Where asks about a place or location.",
+          "whenToUse": "Use Where when you want to find where something is."
+        },
+        "when": {
+          "hint": "Asks about time",
+          "meaning": "When asks about time or day.",
+          "whenToUse": "Use When when you want to know the time something happens."
+        },
+        "why": {
+          "hint": "Asks about reason",
+          "meaning": "Why asks about a reason.",
+          "whenToUse": "Use Why when you want to know why something happens."
+        },
+        "how": {
+          "hint": "Asks about way",
+          "meaning": "How asks about the way something is done or feels.",
+          "whenToUse": "Use How when you want to know the way, amount, or feeling."
+        }
+      },
+      "contexts": {
+        "what-name": "Ask about someone's name",
+        "what-this": "Ask about a thing you point to",
+        "what-color": "Ask about color",
+        "what-food": "Ask about a favorite food",
+        "what-see": "Ask about what you notice",
+        "what-animal": "Ask what kind of animal it is",
+        "what-bag": "Ask what is inside",
+        "what-game": "Ask about a game you like",
+        "what-weather": "Ask about today's weather",
+        "what-drink": "Ask about a drink choice",
+        "who-friend": "Ask about a friend",
+        "who-this": "Ask who a person is",
+        "who-teacher": "Ask about your teacher",
+        "who-family": "Ask about family members",
+        "who-helps": "Ask who helps at home",
+        "who-crying": "Ask who is crying",
+        "who-laughing": "Ask who is laughing",
+        "who-best-friend": "Ask about a best friend",
+        "who-doctor": "Ask who the doctor is",
+        "who-party": "Ask who is coming",
+        "where-ball": "Ask where a ball is",
+        "where-live": "Ask where someone lives",
+        "where-school": "Ask where school is",
+        "where-cat": "Ask where a cat is",
+        "where-shoes": "Ask where shoes are",
+        "where-park": "Ask where the park is",
+        "where-books": "Ask where books are kept",
+        "where-mom": "Ask where Mom is",
+        "where-birds": "Ask where birds live",
+        "where-bathroom": "Ask where the bathroom is",
+        "when-birthday": "Ask when a birthday is",
+        "when-sleep": "Ask when you sleep",
+        "when-school": "Ask when you go to school",
+        "when-lunch": "Ask when lunch is",
+        "when-play": "Ask when you play",
+        "when-story": "Ask when story time is",
+        "when-wake": "Ask when you wake up",
+        "when-holiday": "Ask when a holiday is",
+        "when-dinner": "Ask when dinner is",
+        "when-class": "Ask when class is",
+        "why-happy": "Ask why someone is happy",
+        "why-sad": "Ask why someone is sad",
+        "why-sky": "Ask why the sky is blue",
+        "why-wash": "Ask why we wash hands",
+        "why-tired": "Ask why someone is tired",
+        "why-fly": "Ask why birds fly",
+        "why-rain": "Ask why it is raining",
+        "why-school": "Ask why school is liked",
+        "why-laugh": "Ask why someone is laughing",
+        "why-sleep": "Ask why we sleep",
+        "how-are-you": "Ask how someone is feeling",
+        "how-many": "Ask how many there are",
+        "how-old": "Ask someone's age",
+        "how-feel": "Ask how you feel",
+        "how-weather": "Ask how the weather is",
+        "how-school": "Ask how you go to school",
+        "how-big": "Ask how big something is",
+        "how-run": "Ask how fast you can run",
+        "how-draw": "Ask how to draw something",
+        "how-help": "Ask how to help someone"
+      }
+    }
   },
   "common": {
     "back": "Back",
@@ -191,6 +304,35 @@
         "micUnsupported": "This device can't record yet. You can still listen and practice!",
         "micDenied": "Microphone permission is needed to hear yourself back.",
         "recordFailed": "Couldn't save that try. Tap to speak again!"
+      }
+    },
+    "wordRace": {
+      "title": "Word Race",
+      "checkpointLabel": "Checkpoint",
+      "boost": "Boost!",
+      "wobble": "Try again!",
+      "hearWord": "Hear the word",
+      "tapToSpeak": "Tap to speak",
+      "stopRecording": "Stop",
+      "hearAgain": "Hear my recording",
+      "gotIt": "Got it!",
+      "tryAgain": "Try again",
+      "finish": "You finished the race!",
+      "micUnsupported": "This device can't record yet. You can still listen and practice!",
+      "micDenied": "Microphone permission is needed to hear yourself back.",
+      "recordFailed": "Couldn't save that try. Tap to speak again!",
+      "prompt": {
+        "fillBlank": "Pick the right sign!",
+        "echo": "Say \"{{word}}\" like the racer!",
+        "picture": "Which question word fits?"
+      },
+      "checkpoints": {
+        "what": "What",
+        "who": "Who",
+        "where": "Where",
+        "when": "When",
+        "why": "Why",
+        "how": "How"
       }
     }
   },
@@ -341,6 +483,11 @@
     "echo-mascot": {
       "title": "Echo the Mascot",
       "description": "Listen, say the word, and compare by ear"
+    },
+    "word-race": {
+      "title": "Word Race",
+      "description": "Ride the track and learn WH question words",
+      "badge": "Class 2"
     }
   },
   "subjects": {

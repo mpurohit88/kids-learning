@@ -11,9 +11,11 @@ import { HomeScreen } from './pages/HomeScreen'
 import { LaunchScreen } from './pages/LaunchScreen'
 import { MotherTongueScreen } from './pages/MotherTongueScreen'
 import { NumberLearnerPage } from './pages/NumberLearnerPage'
+import { QuestionWordLearnPage, QuestionWordsHubPage } from './pages/QuestionWordsLearnPage'
 import { ProgressScreen } from './pages/ProgressScreen'
 import { ClapItOutGame } from './games/pronunciation/ClapItOutGame'
 import { EchoMascotGame } from './games/pronunciation/EchoMascotGame'
+import { WordRaceGame } from './games/english/WordRaceGame'
 import { useAppStore } from './store/useAppStore'
 
 function AppEntry() {
@@ -45,6 +47,8 @@ function App() {
           <Route path="/home" element={<HomeScreen />} />
           <Route path="/activities" element={<ActivityMenuScreen />} />
           <Route path="/learn/numbers" element={<NumberLearnerPage />} />
+          <Route path="/learn/question-words" element={<QuestionWordsHubPage />} />
+          <Route path="/learn/question-words/:wordId" element={<QuestionWordLearnPage />} />
           <Route path="/progress" element={<ProgressScreen />} />
           <Route path="/games/challenge/addition" element={<AdditionMenuScreen />} />
           <Route
@@ -54,6 +58,7 @@ function App() {
           <Route path="/games/say-it" element={<SayItMenuScreen />} />
           <Route path="/games/say-it/clap-it-out" element={<ClapItOutGame />} />
           <Route path="/games/say-it/echo-mascot" element={<EchoMascotGame />} />
+          <Route path="/games/word-race" element={<WordRaceGame />} />
           <Route path="/games/challenge/:challengeId" element={<ChallengeQuizGame />} />
           {GAME_REGISTRY.map((game) => {
             const GameComponent = game.component

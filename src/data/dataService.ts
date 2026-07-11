@@ -2,6 +2,7 @@ import { generateSession as runQuestionEngine } from '../engine/questionEngine'
 import { LocalChallengeRepository } from './repositories/local/challengeRepository'
 import { LocalMathsRepository } from './repositories/local/mathsRepository'
 import { LocalPronunciationRepository } from './repositories/local/pronunciationRepository'
+import { LocalWhQuestionRepository } from './repositories/local/whQuestionRepository'
 import { LocalContentRepository } from './repositories/local/contentRepository'
 import { LocalGameCatalogRepository } from './repositories/local/gameCatalogRepository'
 import { LocalGameSettingsRepository } from './repositories/local/gameSettingsRepository'
@@ -25,6 +26,7 @@ import type {
   SubjectDefinition,
   TranslationDictionary,
   UiLocale,
+  WhCheckpointId,
 } from '../types'
 
 function createLocalRepositories(): DataRepositories {
@@ -38,6 +40,7 @@ function createLocalRepositories(): DataRepositories {
     subjects: new LocalSubjectRepository(),
     maths: new LocalMathsRepository(),
     pronunciation: new LocalPronunciationRepository(),
+    whQuestions: new LocalWhQuestionRepository(),
     locale: new LocalLocaleRepository(),
   }
 }
@@ -151,6 +154,18 @@ class DataService {
 
   getPronunciationRound(count: number, options?: { minSyllables?: number }) {
     return this.repositories.pronunciation.getRound(count, options)
+  }
+
+  getWordRaceSession() {
+    return this.repositories.whQuestions.buildSession()
+  }
+
+  getQuestionWordsForLearn() {
+    return this.repositories.whQuestions.getLearnWords()
+  }
+
+  getQuestionWordById(id: WhCheckpointId) {
+    return this.repositories.whQuestions.getLearnWord(id)
   }
 
   getMotherTongueLanguages() {

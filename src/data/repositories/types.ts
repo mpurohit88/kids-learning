@@ -16,6 +16,9 @@ import type {
   MotherTongueLanguage,
   TranslationDictionary,
   UiLocale,
+  WordRaceRound,
+  WhCheckpoint,
+  WhCheckpointId,
 } from '../../types'
 
 export interface SaveGameResultInput {
@@ -48,6 +51,12 @@ export interface PronunciationRepository {
     count: number,
     options?: { minSyllables?: number },
   ): PronunciationWord[]
+}
+
+export interface WhQuestionRepository {
+  buildSession(): WordRaceRound[]
+  getLearnWords(): WhCheckpoint[]
+  getLearnWord(id: WhCheckpointId): WhCheckpoint | undefined
 }
 
 export interface ProfileRepository {
@@ -112,6 +121,7 @@ export interface DataRepositories {
   subjects: SubjectRepository
   maths: MathsRepository
   pronunciation: PronunciationRepository
+  whQuestions: WhQuestionRepository
   locale: LocaleRepository
 }
 

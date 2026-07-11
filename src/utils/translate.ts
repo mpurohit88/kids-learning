@@ -15,6 +15,13 @@ function getNestedValue(
   return typeof current === 'string' ? current : undefined
 }
 
+export function getNestedTranslation(
+  dictionary: TranslationDictionary,
+  key: string,
+): string | undefined {
+  return getNestedValue(dictionary, key)
+}
+
 function interpolate(
   template: string,
   params?: Record<string, string | number>,

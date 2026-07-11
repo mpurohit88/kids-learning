@@ -1,7 +1,9 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { BigButton } from '../components/BigButton'
+import { LearnSectionLabel } from '../components/learn/LearnSectionLabel'
 import { LetterCardGrid } from '../components/letters/LetterCardGrid'
+import { WhWordCardGrid } from '../components/questionWords/WhWordCardGrid'
 import { AppShell } from '../components/layout/AppShell'
 import { dataService } from '../data'
 import { usePlayerSessionGate } from '../hooks/usePlayerSessionGate'
@@ -17,10 +19,19 @@ type ActivityTab = 'practice' | 'letters'
 
 export function ActivityMenuScreen() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { t } = useTranslation()
   const { ready, profileId, subject } = usePlayerSessionGate()
   const profile = dataService.getProfileById(profileId)
-  const [activeTab, setActiveTab] = useState<ActivityTab>('practice')
+  const [activeTab, setActiveTab] = useState<ActivityTab>(() =>
+    searchParams.get('tab') === 'learn' ? 'letters' : 'practice',
+  )
+
+  useEffect(() => {
+    if (searchParams.get('tab') === 'learn') {
+      setActiveTab('letters')
+    }
+  }, [searchParams])
 
   if (!ready || !subject || !profile) return null
 
@@ -33,6 +44,9 @@ export function ActivityMenuScreen() {
     showLetterTab && activeTab === 'letters'
       ? dataService.getLetterReference(subject, profile.ageGroup)
       : []
+  const showQuestionWords =
+    subject === 'english' && profile.ageGroup === 'class2' && activeTab === 'letters'
+  const questionWords = showQuestionWords ? dataService.getQuestionWordsForLearn() : []
 
   return (
     <AppShell
@@ -75,11 +89,19 @@ export function ActivityMenuScreen() {
         ) : null}
 
         {activeTab === 'letters' && showLetterTab && languageContent ? (
-          <LetterCardGrid
-            subject={subject}
-            letters={letterReference}
-            speechLang={languageContent.speechLang}
-          />
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4">
+              <LearnSectionLabel>{t('learn.alphabetSection')}</LearnSectionLabel>
+              <LetterCardGrid
+                subject={subject}
+                letters={letterReference}
+                speechLang={languageContent.speechLang}
+              />
+            </div>
+            {showQuestionWords && questionWords.length > 0 ? (
+              <WhWordCardGrid words={questionWords} compact />
+            ) : null}
+          </div>
         ) : challenges.length === 0 ? (
           <div className="rounded-[2rem] border-4 border-dashed border-white bg-white/70 p-10 text-center">
             <p className="text-5xl">🚧</p>

@@ -108,6 +108,23 @@ const ENGLISH_SAY_IT_CHALLENGES: ChallengeDefinition[] = [
   },
 ]
 
+/** English Class 1/2 WH-question word race (Activities card). */
+const ENGLISH_WORD_RACE_CHALLENGES: ChallengeDefinition[] = [
+  {
+    id: 'word-race',
+    subject: 'english',
+    topic: 'questions',
+    title: 'Word Race',
+    emoji: '🚲',
+    color: '#ffb300',
+    route: '/games/word-race',
+    description: 'Ride the track and learn WH question words',
+    gradeLevels: ['class2'],
+    source: 'bank',
+    badge: 'Class 2',
+  },
+]
+
 const MATHS_CHALLENGES: ChallengeDefinition[] = [
   {
     id: 'heavy-and-light',
@@ -340,6 +357,7 @@ export const CHALLENGE_CATALOG: ChallengeDefinition[] = [
   ...buildLanguageChallenges('kannada'),
   ...buildLanguageChallenges('english'),
   ...ENGLISH_SAY_IT_CHALLENGES,
+  ...ENGLISH_WORD_RACE_CHALLENGES,
   ...MATHS_CHALLENGES,
 ]
 

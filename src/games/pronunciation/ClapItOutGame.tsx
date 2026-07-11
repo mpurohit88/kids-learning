@@ -1,18 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
-import { AppShell } from '../../components/layout/AppShell'
 import {
   AnswerFeedbackOverlay,
   type AnswerFeedbackType,
 } from '../../components/AnswerFeedbackOverlay'
-import { ConfettiBurst } from '../../components/ConfettiBurst'
-import { GameCompleteModal } from '../../components/GameCompleteModal'
-import { GameMascotHeader } from '../../components/game/GameMascotHeader'
 import {
   FeedBearSyllableBoard,
   type SyllableChunk,
 } from '../../components/pronunciation/FeedBearSyllableBoard'
 import { FoodFlyToMascot } from '../../components/pronunciation/FoodFlyToMascot'
+import { SayItGameCard } from '../../components/pronunciation/SayItGameCard'
+import { SayItGameShell } from '../../components/pronunciation/SayItGameShell'
 import { dataService } from '../../data'
 import { usePlayerSessionGate } from '../../hooks/usePlayerSessionGate'
 import { useTranslation } from '../../hooks/useTranslation'
@@ -308,102 +305,75 @@ export function ClapItOutGame() {
   const controlsLocked = isPlaying || isAdvancing || isFlying
 
   return (
-    <AppShell title={t('challenges.clap-it-out.title')} showBack backTo="/games/say-it" denseHeader>
-      <AnswerFeedbackOverlay type={feedbackType} />
-      <ConfettiBurst active={showConfetti} />
-      {isComplete ? (
-        <GameCompleteModal
-          result={result}
-          challengeId="clap-it-out"
-          onPlayAgain={startGame}
+    <SayItGameShell
+      title={t('challenges.clap-it-out.title')}
+      challengeId="clap-it-out"
+      roundIndex={roundIndex}
+      roundCount={words.length}
+      mood={mood}
+      message={message || t('games.sayIt.feed.prompt')}
+      isComplete={isComplete}
+      result={result}
+      onPlayAgain={startGame}
+      showConfetti={showConfetti}
+      bearRef={bearRef}
+      bearChomp={bearChomp}
+      overlay={<AnswerFeedbackOverlay type={feedbackType} />}
+    >
+      {flyFood ? (
+        <FoodFlyToMascot
+          key={flyFood.key}
+          word={flyFood.word}
+          emoji={flyFood.emoji}
+          imagePath={flyFood.imagePath}
+          sourceRef={foodRef}
+          targetRef={bearRef}
+          onComplete={handleFlyComplete}
         />
-      ) : (
-        <div className="flex flex-1 flex-col items-center gap-2 md:gap-4">
-          <motion.div
-            className="w-full max-w-xl shrink-0"
-            animate={
-              bearChomp
-                ? { scale: [1, 1.2, 0.94, 1.06, 1], rotate: [0, -4, 4, 0] }
-                : { scale: 1, rotate: 0 }
-            }
-            transition={{ duration: 0.42, ease: 'easeOut' }}
+      ) : null}
+
+      <SayItGameCard onPointerDown={waitingToFeed ? noteActivity : undefined}>
+        <FeedBearSyllableBoard
+          key={currentWord.id}
+          word={currentWord.word}
+          emoji={currentWord.emoji}
+          imagePath={currentWord.imagePath}
+          foodRef={foodRef}
+          foodFlying={isFlying}
+          chunks={chunks}
+          fedChunkIds={fedChunkIds}
+          activeListenIndex={activeChunk}
+          disabled={controlsLocked}
+          showFeedHint={showFeedHint}
+          tapHereLabel={t('games.sayIt.feed.tapChunk')}
+          hearWordLabel={t('games.sayIt.feed.hearWord')}
+          bowlLabel={t('games.sayIt.feed.bowlLabel')}
+          trayLabel={t('games.sayIt.feed.trayLabel')}
+          wrongChunkLabel={t('games.sayIt.feed.wrongOrder')}
+          onHearWord={() => void playFullWord(currentWord)}
+          onFeedChunk={handleFeedChunk}
+          onWrongChunk={handleWrongChunk}
+        />
+
+        <div className="mt-2 flex w-full flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => void playBreakdown()}
+            disabled={controlsLocked}
+            className="flex-1 rounded-3xl bg-teal-500 px-5 py-4 text-xl font-bold text-white shadow-lg transition hover:bg-teal-400 active:scale-95 disabled:opacity-60"
           >
-            <GameMascotHeader
-              roundIndex={roundIndex}
-              roundCount={words.length}
-              roundLabel={t('games.sayIt.wordLabel')}
-              mood={mood}
-              message={message || t('games.sayIt.feed.prompt')}
-              denseMessage
-              bearRef={bearRef}
-            />
-          </motion.div>
-
-          {flyFood ? (
-            <FoodFlyToMascot
-              key={flyFood.key}
-              word={flyFood.word}
-              emoji={flyFood.emoji}
-              imagePath={flyFood.imagePath}
-              sourceRef={foodRef}
-              targetRef={bearRef}
-              onComplete={handleFlyComplete}
-            />
-          ) : null}
-
-          <div
-            className="flex w-full max-w-xl flex-col items-center gap-3 rounded-[2rem] border-4 border-white bg-white px-4 py-5 shadow-xl md:gap-4 md:px-6 md:py-6"
-            onPointerDown={waitingToFeed ? noteActivity : undefined}
+            {t('games.sayIt.feed.hearChunks')}
+          </button>
+          <button
+            type="button"
+            onClick={handleSkipToNext}
+            disabled={controlsLocked}
+            className="flex-1 rounded-3xl bg-slate-200 px-5 py-4 text-xl font-bold text-slate-700 shadow-md transition hover:bg-slate-100 active:scale-95 disabled:opacity-60"
           >
-            {/* {currentWord.priority ? (
-              <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-800">
-                {t('games.sayIt.priorityBadge')}
-              </span>
-            ) : null} */}
-
-            <FeedBearSyllableBoard
-              key={currentWord.id}
-              word={currentWord.word}
-              emoji={currentWord.emoji}
-              imagePath={currentWord.imagePath}
-              foodRef={foodRef}
-              foodFlying={isFlying}
-              chunks={chunks}
-              fedChunkIds={fedChunkIds}
-              activeListenIndex={activeChunk}
-              disabled={controlsLocked}
-              showFeedHint={showFeedHint}
-              tapHereLabel={t('games.sayIt.feed.tapChunk')}
-              hearWordLabel={t('games.sayIt.feed.hearWord')}
-              bowlLabel={t('games.sayIt.feed.bowlLabel')}
-              trayLabel={t('games.sayIt.feed.trayLabel')}
-              wrongChunkLabel={t('games.sayIt.feed.wrongOrder')}
-              onHearWord={() => void playFullWord(currentWord)}
-              onFeedChunk={handleFeedChunk}
-              onWrongChunk={handleWrongChunk}
-            />
-
-            <div className="mt-2 flex w-full flex-col gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={() => void playBreakdown()}
-                disabled={controlsLocked}
-                className="flex-1 rounded-3xl bg-teal-500 px-5 py-4 text-xl font-bold text-white shadow-lg transition hover:bg-teal-400 active:scale-95 disabled:opacity-60"
-              >
-                {t('games.sayIt.feed.hearChunks')}
-              </button>
-              <button
-                type="button"
-                onClick={handleSkipToNext}
-                disabled={controlsLocked}
-                className="flex-1 rounded-3xl bg-slate-200 px-5 py-4 text-xl font-bold text-slate-700 shadow-md transition hover:bg-slate-100 active:scale-95 disabled:opacity-60"
-              >
-                {t('games.sayIt.feed.skipWord')}
-              </button>
-            </div>
-          </div>
+            {t('games.sayIt.feed.skipWord')}
+          </button>
         </div>
-      )}
-    </AppShell>
+      </SayItGameCard>
+    </SayItGameShell>
   )
 }

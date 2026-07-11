@@ -1,0 +1,120 @@
+{
+  "subject": "english",
+  "checkpoints": [
+    {
+      "id": "what",
+      "word": "What",
+      "emoji": "❓",
+      "color": "#42a5f5",
+      "examples": [
+        { "id": "what-name", "prompt": "What is your name?", "emoji": "🧒", "order": 1, "blankIndex": 0, "answerId": "what" },
+        { "id": "what-this", "prompt": "What is this?", "emoji": "👆", "order": 2, "blankIndex": 0, "answerId": "what" },
+        { "id": "what-color", "prompt": "What color is this?", "emoji": "🎨", "order": 3, "blankIndex": 0, "answerId": "what" },
+        { "id": "what-food", "prompt": "What is your favorite food?", "emoji": "🍕", "order": 4, "blankIndex": 0, "answerId": "what" },
+        { "id": "what-see", "prompt": "What do you see?", "emoji": "👀", "order": 5, "blankIndex": 0, "answerId": "what" },
+        { "id": "what-animal", "prompt": "What animal is this?", "emoji": "🐶", "order": 6, "blankIndex": 0, "answerId": "what" },
+        { "id": "what-bag", "prompt": "What is in your bag?", "emoji": "🎒", "order": 7, "blankIndex": 0, "answerId": "what" },
+        { "id": "what-game", "prompt": "What game do you like?", "emoji": "🎲", "order": 8, "blankIndex": 0, "answerId": "what" },
+        { "id": "what-weather", "prompt": "What is the weather today?", "emoji": "☀️", "order": 9, "blankIndex": 0, "answerId": "what" },
+        { "id": "what-drink", "prompt": "What do you want to drink?", "emoji": "🥤", "order": 10, "blankIndex": 0, "answerId": "what" }
+      ]
+    },
+    {
+      "id": "who",
+      "word": "Who",
+      "emoji": "🧑",
+      "color": "#66bb6a",
+      "examples": [
+        { "id": "who-friend", "prompt": "Who is your friend?", "emoji": "🤝", "order": 1, "answerId": "who", "spokenPhrase": "Who" },
+        { "id": "who-this", "prompt": "Who is this?", "emoji": "🧑", "order": 2, "answerId": "who", "spokenPhrase": "Who" },
+        { "id": "who-teacher", "prompt": "Who is your teacher?", "emoji": "👩‍🏫", "order": 3, "answerId": "who", "spokenPhrase": "Who" },
+        { "id": "who-family", "prompt": "Who is in your family?", "emoji": "👨‍👩‍👧", "order": 4, "answerId": "who", "spokenPhrase": "Who" },
+        { "id": "who-helps", "prompt": "Who helps you at home?", "emoji": "🏠", "order": 5, "answerId": "who", "spokenPhrase": "Who" },
+        { "id": "who-crying", "prompt": "Who is crying?", "emoji": "😢", "order": 6, "answerId": "who", "spokenPhrase": "Who" },
+        { "id": "who-laughing", "prompt": "Who is laughing?", "emoji": "😄", "order": 7, "answerId": "who", "spokenPhrase": "Who" },
+        { "id": "who-best-friend", "prompt": "Who is your best friend?", "emoji": "⭐", "order": 8, "answerId": "who", "spokenPhrase": "Who" },
+        { "id": "who-doctor", "prompt": "Who is the doctor?", "emoji": "👨‍⚕️", "order": 9, "answerId": "who", "spokenPhrase": "Who" },
+        { "id": "who-party", "prompt": "Who is coming to the party?", "emoji": "🎉", "order": 10, "answerId": "who", "spokenPhrase": "Who" }
+      ]
+    },
+    {
+      "id": "where",
+      "word": "Where",
+      "emoji": "📍",
+      "color": "#ffa726",
+      "examples": [
+        { "id": "where-ball", "prompt": "Where is the ball?", "emoji": "⚽", "order": 1, "blankIndex": 0, "answerId": "where" },
+        { "id": "where-live", "prompt": "Where do you live?", "emoji": "🏠", "order": 2, "blankIndex": 0, "answerId": "where" },
+        { "id": "where-school", "prompt": "Where is your school?", "emoji": "🏫", "order": 3, "blankIndex": 0, "answerId": "where" },
+        { "id": "where-cat", "prompt": "Where is the cat?", "emoji": "🐱", "order": 4, "blankIndex": 0, "answerId": "where" },
+        { "id": "where-shoes", "prompt": "Where are my shoes?", "emoji": "👟", "order": 5, "blankIndex": 0, "answerId": "where" },
+        { "id": "where-park", "prompt": "Where is the park?", "emoji": "🌳", "order": 6, "blankIndex": 0, "answerId": "where" },
+        { "id": "where-books", "prompt": "Where do you keep your books?", "emoji": "📚", "order": 7, "blankIndex": 0, "answerId": "where" },
+        { "id": "where-mom", "prompt": "Where is Mom?", "emoji": "👩", "order": 8, "blankIndex": 0, "answerId": "where" },
+        { "id": "where-birds", "prompt": "Where do birds live?", "emoji": "🐦", "order": 9, "blankIndex": 0, "answerId": "where" },
+        { "id": "where-bathroom", "prompt": "Where is the bathroom?", "emoji": "🚻", "order": 10, "blankIndex": 0, "answerId": "where" }
+      ]
+    },
+    {
+      "id": "when",
+      "word": "When",
+      "emoji": "🕐",
+      "color": "#ab47bc",
+      "examples": [
+        { "id": "when-birthday", "prompt": "When is your birthday?", "emoji": "🎂", "order": 1, "blankIndex": 0, "answerId": "when" },
+        { "id": "when-sleep", "prompt": "When do you sleep?", "emoji": "😴", "order": 2, "blankIndex": 0, "answerId": "when" },
+        { "id": "when-school", "prompt": "When do you go to school?", "emoji": "🏫", "order": 3, "blankIndex": 0, "answerId": "when" },
+        { "id": "when-lunch", "prompt": "When is lunch time?", "emoji": "🍱", "order": 4, "blankIndex": 0, "answerId": "when" },
+        { "id": "when-play", "prompt": "When do you play?", "emoji": "⚽", "order": 5, "blankIndex": 0, "answerId": "when" },
+        { "id": "when-story", "prompt": "When is story time?", "emoji": "📖", "order": 6, "blankIndex": 0, "answerId": "when" },
+        { "id": "when-wake", "prompt": "When do you wake up?", "emoji": "⏰", "order": 7, "blankIndex": 0, "answerId": "when" },
+        { "id": "when-holiday", "prompt": "When is the holiday?", "emoji": "🎊", "order": 8, "blankIndex": 0, "answerId": "when" },
+        { "id": "when-dinner", "prompt": "When do we eat dinner?", "emoji": "🍽️", "order": 9, "blankIndex": 0, "answerId": "when" },
+        { "id": "when-class", "prompt": "When is your class?", "emoji": "📅", "order": 10, "blankIndex": 0, "answerId": "when" }
+      ]
+    },
+    {
+      "id": "why",
+      "word": "Why",
+      "emoji": "💭",
+      "color": "#ec407a",
+      "examples": [
+        { "id": "why-happy", "prompt": "Why are you happy?", "emoji": "😊", "order": 1, "answerId": "why", "spokenPhrase": "Why" },
+        { "id": "why-sad", "prompt": "Why are you sad?", "emoji": "😢", "order": 2, "answerId": "why", "spokenPhrase": "Why" },
+        { "id": "why-sky", "prompt": "Why is the sky blue?", "emoji": "🌤️", "order": 3, "answerId": "why", "spokenPhrase": "Why" },
+        { "id": "why-wash", "prompt": "Why do we wash hands?", "emoji": "🧼", "order": 4, "answerId": "why", "spokenPhrase": "Why" },
+        { "id": "why-tired", "prompt": "Why are you tired?", "emoji": "😴", "order": 5, "answerId": "why", "spokenPhrase": "Why" },
+        { "id": "why-fly", "prompt": "Why do birds fly?", "emoji": "🐦", "order": 6, "answerId": "why", "spokenPhrase": "Why" },
+        { "id": "why-rain", "prompt": "Why is it raining?", "emoji": "🌧️", "order": 7, "answerId": "why", "spokenPhrase": "Why" },
+        { "id": "why-school", "prompt": "Why do you like school?", "emoji": "🏫", "order": 8, "answerId": "why", "spokenPhrase": "Why" },
+        { "id": "why-laugh", "prompt": "Why are you laughing?", "emoji": "😂", "order": 9, "answerId": "why", "spokenPhrase": "Why" },
+        { "id": "why-sleep", "prompt": "Why do we sleep?", "emoji": "🛏️", "order": 10, "answerId": "why", "spokenPhrase": "Why" }
+      ]
+    },
+    {
+      "id": "how",
+      "word": "How",
+      "emoji": "✨",
+      "color": "#26c6da",
+      "examples": [
+        { "id": "how-are-you", "prompt": "How are you?", "emoji": "👋", "order": 1, "blankIndex": 0, "answerId": "how" },
+        { "id": "how-many", "prompt": "How many apples?", "emoji": "🍎", "order": 2, "blankIndex": 0, "answerId": "how" },
+        { "id": "how-old", "prompt": "How old are you?", "emoji": "🎂", "order": 3, "blankIndex": 0, "answerId": "how" },
+        { "id": "how-feel", "prompt": "How do you feel?", "emoji": "💭", "order": 4, "blankIndex": 0, "answerId": "how" },
+        { "id": "how-weather", "prompt": "How is the weather?", "emoji": "🌤️", "order": 5, "blankIndex": 0, "answerId": "how" },
+        { "id": "how-school", "prompt": "How do you go to school?", "emoji": "🚌", "order": 6, "blankIndex": 0, "answerId": "how" },
+        { "id": "how-big", "prompt": "How big is the dog?", "emoji": "🐕", "order": 7, "blankIndex": 0, "answerId": "how" },
+        { "id": "how-run", "prompt": "How fast can you run?", "emoji": "🏃", "order": 8, "blankIndex": 0, "answerId": "how" },
+        { "id": "how-draw", "prompt": "How do you draw a cat?", "emoji": "✏️", "order": 9, "blankIndex": 0, "answerId": "how" },
+        { "id": "how-help", "prompt": "How can I help you?", "emoji": "🤝", "order": 10, "blankIndex": 0, "answerId": "how" }
+      ]
+    }
+  ],
+  "pictureMatches": [
+    { "id": "pin-where", "emoji": "📍", "answerId": "where", "distractors": ["what", "when"] },
+    { "id": "person-who", "emoji": "🧑", "answerId": "who", "distractors": ["what", "where"] },
+    { "id": "clock-when", "emoji": "🕐", "answerId": "when", "distractors": ["what", "who"] },
+    { "id": "happy-why", "emoji": "😊", "answerId": "why", "distractors": ["how", "what"] },
+    { "id": "apples-how", "emoji": "🍎", "answerId": "how", "distractors": ["why", "where"] }
+  ]
+}

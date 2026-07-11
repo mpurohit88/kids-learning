@@ -117,6 +117,51 @@ export interface PronunciationContent {
   words: PronunciationWord[]
 }
 
+export type WhCheckpointId = 'what' | 'who' | 'where' | 'when' | 'why' | 'how'
+
+export type WordRaceChallengeType = 'fill-blank' | 'echo' | 'picture-match'
+
+export interface WhExample {
+  id: string
+  prompt: string
+  emoji: string
+  order: number
+  blankIndex?: number
+  answerId: WhCheckpointId
+  spokenPhrase?: string
+}
+
+export interface WhCheckpoint {
+  id: WhCheckpointId
+  word: string
+  emoji?: string
+  color?: string
+  examples: WhExample[]
+}
+
+export interface WhPictureMatch {
+  id: string
+  emoji?: string
+  imagePath?: string
+  answerId: WhCheckpointId
+  distractors: WhCheckpointId[]
+}
+
+export interface WhQuestionContent {
+  subject: 'english'
+  checkpoints: WhCheckpoint[]
+  pictureMatches: WhPictureMatch[]
+}
+
+export interface WordRaceRound {
+  checkpointId: WhCheckpointId
+  challengeType: WordRaceChallengeType
+  checkpoint: WhCheckpoint
+  example?: WhExample
+  pictureMatch?: WhPictureMatch
+  options: WhCheckpointId[]
+}
+
 export interface ChallengeDefinition {
   id: string
   subject: Subject
