@@ -14,6 +14,8 @@ interface MascotProps {
   compact?: boolean
   /** Attach to the bear face circle — used for feed-the-bear fly animations. */
   bearRef?: Ref<HTMLDivElement>
+  /** Smaller speech bubble — better for short prompts on mobile. */
+  denseMessage?: boolean
 }
 
 type BearFace = 'idle' | 'happy' | 'sad'
@@ -153,6 +155,7 @@ export function Mascot({
   hearAgainLabel,
   compact = false,
   bearRef,
+  denseMessage = false,
 }: MascotProps) {
   const { t } = useTranslation()
   const targetFace = faceForMood(mood)
@@ -315,7 +318,9 @@ export function Mascot({
         className={`rounded-2xl bg-white/90 font-semibold text-slate-700 shadow-md ${
           compact
             ? 'flex-1 px-3 py-2 text-left text-base'
-            : 'px-5 py-3 text-center text-lg'
+            : denseMessage
+              ? 'max-w-[min(100%,18rem)] px-3 py-2 text-center text-sm md:max-w-md md:text-base'
+              : 'px-5 py-3 text-center text-lg'
         }`}
       >
         {message}

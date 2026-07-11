@@ -66,14 +66,14 @@ export function AppShell({
               type="button"
               aria-label={t('common.goBack')}
               onClick={() => navigate(backTo)}
-              className={`flex items-center gap-2 rounded-2xl bg-white/90 font-bold text-slate-700 shadow-md transition hover:bg-white active:scale-95 ${
+              className={`flex items-center justify-center gap-2 rounded-2xl bg-white/90 font-bold text-slate-700 shadow-md transition hover:bg-white active:scale-95 ${
                 denseHeader
-                  ? 'h-10 px-3 text-sm md:text-base'
-                  : 'h-12 px-4 text-base md:text-lg'
+                  ? 'h-10 w-10 md:h-10 md:w-auto md:px-3 text-sm md:text-base'
+                  : 'h-12 w-12 md:h-12 md:w-auto md:px-4 text-base md:text-lg'
               }`}
             >
               <ArrowLeft size={denseHeader ? 20 : 22} strokeWidth={2.5} aria-hidden />
-              <span>{t('common.back')}</span>
+              <span className="hidden md:inline">{t('common.back')}</span>
             </button>
           ) : (
             <div className={denseHeader ? 'h-10 w-10 shrink-0' : 'h-12 w-12 shrink-0'} />

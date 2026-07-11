@@ -1,4 +1,5 @@
 import { Mascot, type MascotMood } from '../Mascot'
+import type { Ref } from 'react'
 
 interface GameMascotHeaderProps {
   roundIndex: number
@@ -7,6 +8,9 @@ interface GameMascotHeaderProps {
   message?: string
   onHearAgain?: () => void
   hearAgainLabel?: string
+  /** Smaller speech bubble for short mobile prompts. */
+  denseMessage?: boolean
+  bearRef?: Ref<HTMLDivElement>
   /** Label before the counter, e.g. "Round" or "Letter". */
   roundLabel: string
 }
@@ -19,6 +23,8 @@ export function GameMascotHeader({
   onHearAgain,
   hearAgainLabel,
   roundLabel,
+  denseMessage = false,
+  bearRef,
 }: GameMascotHeaderProps) {
   return (
     <div className="relative w-full shrink-0">
@@ -26,10 +32,12 @@ export function GameMascotHeader({
         {roundLabel} {Math.min(roundIndex + 1, roundCount)} / {roundCount}
       </p>
       <Mascot
+        bearRef={bearRef}
         mood={mood}
         message={message}
         onHearAgain={onHearAgain}
         hearAgainLabel={hearAgainLabel}
+        denseMessage={denseMessage}
       />
     </div>
   )

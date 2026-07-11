@@ -151,13 +151,14 @@
     "sayIt": {
       "pickPractice": "Pick a Say It! practice!",
       "progress": "Word {{current}} of {{total}}",
+      "wordLabel": "Word",
       "priorityBadge": "Practice word",
       "keepGoing": "Nice try — let's keep going!",
       "feed": {
-        "prompt": "Tap the chunks in order to feed the bear! Hear the chunks first if you want help.",
+        "prompt": "Tap chunks in order to feed the bear!",
         "listen": "Listen to each chunk…",
         "listenWord": "Listen to the word…",
-        "yourTurn": "Now tap the chunks in order to feed the bear!",
+        "yourTurn": "Your turn — tap the chunks!",
         "hearChunks": "Hear the chunks",
         "hearWord": "Hear the word",
         "keepFeeding": "Yum! Feed the next chunk!",

@@ -7,12 +7,11 @@ import {
 } from '../../components/AnswerFeedbackOverlay'
 import { ConfettiBurst } from '../../components/ConfettiBurst'
 import { GameCompleteModal } from '../../components/GameCompleteModal'
-import { Mascot } from '../../components/Mascot'
+import { GameMascotHeader } from '../../components/game/GameMascotHeader'
 import {
   FeedBearSyllableBoard,
   type SyllableChunk,
 } from '../../components/pronunciation/FeedBearSyllableBoard'
-import { PronunciationProgress } from '../../components/pronunciation/PronunciationProgress'
 import { FoodFlyToMascot } from '../../components/pronunciation/FoodFlyToMascot'
 import { dataService } from '../../data'
 import { usePlayerSessionGate } from '../../hooks/usePlayerSessionGate'
@@ -309,7 +308,7 @@ export function ClapItOutGame() {
   const controlsLocked = isPlaying || isAdvancing || isFlying
 
   return (
-    <AppShell title={t('challenges.clap-it-out.title')} showBack backTo="/games/say-it">
+    <AppShell title={t('challenges.clap-it-out.title')} showBack backTo="/games/say-it" denseHeader>
       <AnswerFeedbackOverlay type={feedbackType} />
       <ConfettiBurst active={showConfetti} />
       {isComplete ? (
@@ -319,17 +318,9 @@ export function ClapItOutGame() {
           onPlayAgain={startGame}
         />
       ) : (
-        <div className="flex flex-1 flex-col items-center gap-5">
-          <PronunciationProgress
-            completed={completedCount}
-            total={words.length}
-            label={t('games.sayIt.progress', {
-              current: Math.min(completedCount + 1, words.length),
-              total: words.length,
-            })}
-          />
-
+        <div className="flex flex-1 flex-col items-center gap-2 md:gap-4">
           <motion.div
+            className="w-full max-w-xl shrink-0"
             animate={
               bearChomp
                 ? { scale: [1, 1.2, 0.94, 1.06, 1], rotate: [0, -4, 4, 0] }
@@ -337,10 +328,14 @@ export function ClapItOutGame() {
             }
             transition={{ duration: 0.42, ease: 'easeOut' }}
           >
-            <Mascot
-              bearRef={bearRef}
+            <GameMascotHeader
+              roundIndex={roundIndex}
+              roundCount={words.length}
+              roundLabel={t('games.sayIt.wordLabel')}
               mood={mood}
               message={message || t('games.sayIt.feed.prompt')}
+              denseMessage
+              bearRef={bearRef}
             />
           </motion.div>
 
@@ -357,7 +352,7 @@ export function ClapItOutGame() {
           ) : null}
 
           <div
-            className="flex w-full max-w-xl flex-col items-center gap-4 rounded-[2rem] border-4 border-white bg-white px-6 py-8 shadow-xl"
+            className="flex w-full max-w-xl flex-col items-center gap-3 rounded-[2rem] border-4 border-white bg-white px-4 py-5 shadow-xl md:gap-4 md:px-6 md:py-6"
             onPointerDown={waitingToFeed ? noteActivity : undefined}
           >
             {/* {currentWord.priority ? (
