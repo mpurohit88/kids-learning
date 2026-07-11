@@ -96,9 +96,11 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   initLocale: () => {
-    const DEFAULT_LOCALE: UiLocale = 'en'
+    if (get().localeReady) return
+    const saved = dataService.getSavedUiLocale()
+    const locale = saved ?? dataService.getDefaultUiLocale()
     set({
-      uiLocale: DEFAULT_LOCALE,
+      uiLocale: locale,
       localeReady: true,
     })
   },

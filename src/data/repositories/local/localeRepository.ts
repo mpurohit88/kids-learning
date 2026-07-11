@@ -27,7 +27,11 @@ function readSavedLocale(): UiLocale | null {
 }
 
 function writeSavedLocale(locale: UiLocale) {
-  localStorage.setItem(UI_LOCALE_STORAGE_KEY, locale)
+  try {
+    localStorage.setItem(UI_LOCALE_STORAGE_KEY, locale)
+  } catch {
+    // ignore quota / private mode failures
+  }
 }
 
 function clearSavedLocaleFromStorage() {

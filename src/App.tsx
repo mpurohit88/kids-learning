@@ -19,6 +19,10 @@ import { WordRaceGame } from './games/english/WordRaceGame'
 import { useAppStore } from './store/useAppStore'
 
 function AppEntry() {
+  return <LaunchScreen />
+}
+
+function App() {
   const localeReady = useAppStore((state) => state.localeReady)
   const initLocale = useAppStore((state) => state.initLocale)
 
@@ -34,10 +38,6 @@ function AppEntry() {
     )
   }
 
-  return <LaunchScreen />
-}
-
-function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AccessibleExamCursor className="min-h-screen">

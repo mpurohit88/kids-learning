@@ -24,7 +24,7 @@ export function MotherTongueScreen() {
   const handleContinue = () => {
     setUiLocale(selected)
     if (isChangeFlow) {
-      navigate('/')
+      navigate('/home')
     }
   }
 
